@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/blue"
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
 
@@ -11,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:textAlignment="center"
         android:textSize="20sp"
@@ -22,6 +22,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
+        android:layout_marginBottom="8dp"
         android:layout_height="match_parent">
 
         <LinearLayout
@@ -32,7 +33,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Satellite" />
+                android:text="@string/satellite" />
 
             <Spinner
                 android:id="@+id/satHeard"
@@ -52,25 +53,26 @@
                     android:id="@+id/uplinkAndDownlinkActiveRadio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Uplink and Downlink Active" />
+                    android:checked="true"
+                    android:text="@string/uplink_and_downlink_active" />
 
                 <RadioButton
                     android:id="@+id/telemetryOnlyRadio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Downlink Only" />
+                    android:text="@string/downlink_only" />
 
                 <RadioButton
                     android:id="@+id/notHeardRadio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Not Heard" />
+                    android:text="@string/not_heard" />
 
                 <RadioButton
                     android:id="@+id/crewActiveRadio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="ISS Crew (Voice) Active" />
+                    android:text="@string/iss_crew_voice_active" />
             </RadioGroup>
 
             <DatePicker
@@ -96,19 +98,23 @@
                 android:id="@+id/callsign"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="callsign" />
+                android:autofillHints="username"
+                android:hint="@string/callsign"
+                android:inputType="textCapCharacters" />
 
             <EditText
                 android:id="@+id/gridsquare"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="grid" />
+                android:hint="@string/grid"
+                android:importantForAutofill="no"
+                android:inputType="textCapCharacters" />
 
             <Button
                 android:id="@+id/button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Submit Report" />
+                android:text="@string/submit_report" />
         </LinearLayout>
     </ScrollView>
 

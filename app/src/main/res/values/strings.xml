@@ -3,6 +3,14 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="uplink_and_downlink_active">Uplink and Downlink Active</string>
+    <string name="downlink_only">Downlink Only</string>
+    <string name="not_heard">Not Heard</string>
+    <string name="iss_crew_voice_active">ISS Crew (Voice) Active</string>
+    <string name="callsign">callsign</string>
+    <string name="grid">grid</string>
+    <string name="satellite">Satellite</string>
+    <string name="submit_report">Submit Report</string>
 
     <string-array name="satellite_list">
         <item>AISAT-1</item>
