@@ -5,15 +5,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.NumberPicker;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import org.northwinds.amsatstatus.R;
@@ -24,12 +25,13 @@ import java.util.ArrayList;
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
+    //private ArrayAdapter<CharSequence>  mSatelliteAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+        final View root = inflater.inflate(R.layout.fragment_home, container, false);
         /*
         final TextView textView = root.findViewById(R.id.text_home);
         homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
@@ -40,11 +42,13 @@ public class HomeFragment extends Fragment {
         });
         */
 
-        Spinner spinner = (Spinner) root.findViewById(R.id.satHeard);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.satellite_list, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        /*
+        final Spinner spinner = (Spinner) root.findViewById(R.id.satHeard);
+        ArrayAdapter<CharSequence> mSatelliteAdapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.satellite_ids, android.R.layout.simple_spinner_item);
+        mSatelliteAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(mSatelliteAdapter);
+        */
 
         TimePicker timePicker = (TimePicker) root.findViewById(R.id.time_fixture);
 //        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener()
@@ -60,6 +64,43 @@ public class HomeFragment extends Fragment {
 //            }
 //        });
         setTimePickerInterval(timePicker);
+
+        Button submit_btn = (Button) root.findViewById(R.id.submit_button);
+        submit_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Spinner spinner = (Spinner) root.findViewById(R.id.satHeard);
+                int id = spinner.getSelectedItemPosition();
+                String[] satellite_ids = getResources().getStringArray(R.array.satellite_ids);
+                RadioGroup report = (RadioGroup) root.findViewById(R.id.report_status);
+                String value;
+                switch(report.getCheckedRadioButtonId()) {
+                    case R.id.uplinkAndDownlinkActiveRadio:
+                        value = "Heard";
+                        break;
+                    case R.id.telemetryOnlyRadio:
+                        value = "Telemetry Only";
+                        break;
+                    case R.id.notHeardRadio:
+                        value = "Not Heard";
+                        break;
+                    case R.id.crewActiveRadio:
+                    default:
+                        value = "Crew Active";
+                }
+
+                DatePicker date_picker = (DatePicker) root.findViewById(R.id.date_fixture);
+                String day = String.valueOf(date_picker.getDayOfMonth());
+                String month = String.format("%02d", date_picker.getMonth()+1);
+                String year = String.valueOf(date_picker.getYear());
+
+                TimePicker time_picker = (TimePicker) root.findViewById(R.id.time_fixture);
+                String hour = String.valueOf(time_picker.getHour());
+                Toast.makeText(getActivity().getApplicationContext(), "Submit SatName: " + satellite_ids[id] + ", SatReport: " + value + ", SatHour: " + hour + ", SatDay: " + day + ", SatMonth: " + month + ", SatYear: " + year, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        Toast.makeText(getActivity().getApplicationContext(), "Application is loaded!", Toast.LENGTH_SHORT).show();
 
         return root;
     }
