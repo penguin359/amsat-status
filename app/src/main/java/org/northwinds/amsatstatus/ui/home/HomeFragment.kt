@@ -4,13 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
-import android.widget.TimePicker
-import android.widget.Spinner
-import android.widget.NumberPicker
-import android.widget.Button
-import android.widget.Toast
-import android.widget.RadioGroup
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import org.northwinds.amsatstatus.R
@@ -57,6 +51,7 @@ class HomeFragment : Fragment() {
 //                view.setOnTimeChangedListener(this);
 //            }
 //        });
+        timePicker.setIs24HourView(true)
         setTimePickerInterval(timePicker)
         val submit_btn =
             root.findViewById<View>(R.id.submit_button) as Button
@@ -84,9 +79,15 @@ class HomeFragment : Fragment() {
             val time_picker =
                 root.findViewById<View>(R.id.time_fixture) as TimePicker
             val hour = time_picker.hour.toString()
+            val period = time_picker.minute.toString()
+
+            val callsign_w = root.findViewById(R.id.callsign) as EditText
+            val callsign = callsign_w.text
+            val grid_w = root.findViewById(R.id.gridsquare) as EditText
+            val grid = grid_w.text
             Toast.makeText(
                 activity!!.applicationContext,
-                "Submit SatName: " + satellite_ids[id] + ", SatReport: " + value + ", SatHour: " + hour + ", SatDay: " + day + ", SatMonth: " + month + ", SatYear: " + year,
+                "Submit SatName: " + satellite_ids[id] + ", SatReport: " + value + ", Period: " + period + ", SatHour: " + hour + ", SatDay: " + day + ", SatMonth: " + month + ", SatYear: " + year + ", SatCall: " + callsign + ", SatGridSquare: " + grid,
                 Toast.LENGTH_LONG
             ).show()
         }
@@ -109,7 +110,7 @@ class HomeFragment : Fragment() {
                 .findViewById<View>(field.getInt(null)) as NumberPicker
             val TIME_PICKER_INTERVAL = 15
             minutePicker.minValue = 0
-            minutePicker.maxValue = 7
+            minutePicker.maxValue = 3
             val displayedValues =
                 ArrayList<String>()
             run {
