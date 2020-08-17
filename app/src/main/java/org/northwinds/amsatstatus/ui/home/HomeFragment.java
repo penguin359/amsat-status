@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import org.northwinds.amsatstatus.R;
+import org.northwinds.amsatstatus.ui.home.HomeViewModel;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
