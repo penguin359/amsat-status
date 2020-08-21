@@ -31,6 +31,9 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+}
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -48,5 +51,12 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-    compile group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'
+    implementation 'com.loopj.android:android-async-http:1.4.11'
+//    compile group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'
+
+    // Use the Kotlin JUnit integration.
+    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.12'
+    implementation 'com.github.paweladamski:HttpClientMock:1.8.1'
+    testImplementation 'org.json:json:20200518'
 }
