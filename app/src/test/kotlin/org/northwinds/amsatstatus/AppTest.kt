@@ -7,6 +7,12 @@ import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertEquals
 
+import java.text.SimpleDateFormat
+import java.text.ParseException
+import java.util.TimeZone
+import java.util.Calendar
+import java.util.GregorianCalendar
+import java.util.Date
 //import java.io.Reader
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -56,8 +62,7 @@ class AppTest {
             val textBuilder = StringBuilder()
             BufferedReader(InputStreamReader
                 (body, Charset.forName(StandardCharsets.UTF_8.name()))).use { reader ->
-                var c = 0
-                c = reader.read()
+                var c = reader.read()
                 while (c != -1) {
                     textBuilder.append(c)
                     c = reader.read()
@@ -76,7 +81,7 @@ class AppTest {
                    "}"
 
         val `object` = JSONTokener(json).nextValue() as JSONObject
-        val query = `object`.getString("query")
+        val _query = `object`.getString("query")
         val locations = `object`.getJSONArray("locations")
         println(locations.getInt(0))
     }
@@ -132,8 +137,7 @@ class AppTest {
             val textBuilder = StringBuilder()
             BufferedReader(InputStreamReader
                 (body, Charset.forName(StandardCharsets.UTF_8.name()))).use { reader ->
-                var c = 0
-                c = reader.read()
+                var c = reader.read()
                 while (c != -1) {
                     textBuilder.append(c.toChar())
                     c = reader.read()
@@ -157,5 +161,37 @@ class AppTest {
 
             EntityUtils.consume(entity1)
         }
+    }
+
+    @Test fun testDateParsing() {
+        val date = "2020-08-20T06:30:00Z"
+        val parser = SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'")
+        val result = parser.parse(date)
+        assertEquals(result.year+1900, 2020)
+        assertEquals(result.month+1, 8)
+        assertEquals(result.date, 20)
+        assertEquals(result.hours, 6)
+        assertEquals(result.minutes, 30)
+        assertEquals(result.seconds, 0)
+    }
+
+    @Test fun testCalendarParsing() {
+        val dateStr = "2020-08-20T06:30:00Z"
+        val calendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"))
+        var s = dateStr.replace("Z", "+00:00")
+        try {
+            s = s.substring(0, 22) + s.substring(23)  // to get rid of the ":"
+        } catch (e: IndexOutOfBoundsException) {
+            throw ParseException("Invalid length", 0)
+        }
+        val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(s)
+        calendar.time = date
+
+        assertEquals(2020, calendar.get(Calendar.YEAR))
+        assertEquals(8, calendar.get(Calendar.MONTH)+1)
+        assertEquals(20, calendar.get(Calendar.DAY_OF_MONTH))
+        assertEquals(6, calendar.get(Calendar.HOUR_OF_DAY))
+        assertEquals(30, calendar.get(Calendar.MINUTE))
+        assertEquals(0, calendar.get(Calendar.SECOND))
     }
 }
