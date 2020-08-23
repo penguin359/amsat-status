@@ -1,7 +1,6 @@
 package org.northwinds.amsatstatus
 
 import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets
 
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.utils.URIBuilder
@@ -18,7 +17,7 @@ class AmsatApi(client: CloseableHttpClient) {
     constructor() : this(HttpClients.createDefault())
 
     fun getReport(name: String, hours: Int) {
-        val charset = Charset.forName(StandardCharsets.UTF_8.name())
+        val charset = Charset.forName("UTF-8")
         val uri = URIBuilder(AMSAT_API_URL, charset)
         uri.addParameter("name", name)
         uri.addParameter("hours", hours.toString())
