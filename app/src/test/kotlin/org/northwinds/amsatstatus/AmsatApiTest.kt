@@ -240,4 +240,25 @@ class AmsatApiTest {
         assertEquals("OE/PE4KH", reports.get(6).callsign)
         assertEquals("JN47", reports.get(6).gridSquare)
     }
+
+    @Test fun `returns details across multiple requests`() {
+        val json = "[{" +
+                        "\"name\":\"AO-91\"," +
+                        "\"reported_time\":\"2020-08-20T06:30:00Z\"," +
+                        "\"callsign\":\"W6WW\"," +
+                        "\"report\":\"Heard\"," + 
+                        "\"grid_square\":\"DM14\"" +
+                   "}]"
+
+        val httpClientMock = HttpClientMock()
+        httpClientMock.onGet().doReturn(json)
+
+        val api = AmsatApi(httpClientMock)
+
+        val reports = api.getReport("AO-91", 1)
+        assertEquals(1, reports.size)
+
+        val reports2 = api.getReport("AO-91", 1)
+        assertEquals(1, reports2.size)
+    }
 }

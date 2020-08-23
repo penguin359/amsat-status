@@ -23,13 +23,13 @@ class AmsatApi(client: CloseableHttpClient) {
 
     constructor() : this(HttpClients.createDefault())
 
-    var list = ArrayList<SatReport>()
     fun getReport(name: String, hours: Int) : List<SatReport> {
         val charset = Charset.forName("UTF-8")
         val uri = URIBuilder(AMSAT_API_URL, charset)
         uri.addParameter("name", name)
         uri.addParameter("hours", hours.toString())
         val httpGet = HttpGet(uri.build())
+        var list = ArrayList<SatReport>()
         this.client.execute(httpGet).use { response1 ->
             val entity1 = response1.getEntity()
             val body = BufferedInputStream(entity1.getContent())
