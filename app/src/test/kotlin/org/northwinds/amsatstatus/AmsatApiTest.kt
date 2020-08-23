@@ -132,10 +132,28 @@ class AmsatApiTest {
     }
 
     @Test fun `returns details on AO-91 satellite`() {
+        val json = "[{" +
+                        "\"name\":\"AO-91\"," +
+                        "\"reported_time\":\"2020-08-20T06:30:00Z\"," +
+                        "\"callsign\":\"W6WW\"," +
+                        "\"report\":\"Heard\"," + 
+                        "\"grid_square\":\"DM14\"" +
+                   "}]"
+
         val httpClientMock = HttpClientMock()
-        httpClientMock.onGet().doReturn("[]")
+        httpClientMock.onGet().doReturn(json)
 
         val api = AmsatApi(httpClientMock)
-        api.getReport("AO-91", 24)
+        val reports = api.getReport("AO-91", 1)
+
+        assertEquals(1, reports.size)
+
+        val entry = reports.get(0)
+        assertEquals("AO-91", entry.name)
+        assertEquals("W6WW", entry.callsign)
+        assertEquals("DM14", entry.gridSquare)
+        //val time = entry.getString("reported_time")
+        //assertEquals(time, "2020-08-20T06:30:00Z")
+        assertEquals(Report.HEARD, entry.report)
     }
 }
