@@ -8,8 +8,14 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import org.northwinds.amsatstatus.R
+import org.northwinds.amsatstatus.AmsatApi
+import org.northwinds.amsatstatus.Report
+import org.northwinds.amsatstatus.SatReport
+import org.northwinds.amsatstatus.makeReportTimeFromComponents
 
 class HomeFragment : Fragment() {
+
+    //var api = AmsatApi()
 
     //private ArrayAdapter<CharSequence>  mSatelliteAdapter;
 
@@ -71,6 +77,13 @@ class HomeFragment : Fragment() {
                 R.id.crewActiveRadio -> "Crew Active"
                 else -> "Crew Active"
             }
+            val reportType = when (report.checkedRadioButtonId) {
+                R.id.uplinkAndDownlinkActiveRadio -> Report.HEARD
+                R.id.telemetryOnlyRadio -> Report.TELEMETRY_ONLY
+                R.id.notHeardRadio -> Report.NOT_HEARD
+                R.id.crewActiveRadio -> Report.CREW_ACTIVE
+                else -> Report.NOT_HEARD
+            }
             val date_picker =
                 root.findViewById<View>(R.id.date_fixture) as DatePicker
             val day = date_picker.dayOfMonth.toString()
@@ -85,11 +98,24 @@ class HomeFragment : Fragment() {
             val callsign = callsign_w.text
             val grid_w = root.findViewById(R.id.gridsquare) as EditText
             val grid = grid_w.text
+            val time = makeReportTimeFromComponents(
+                year = date_picker.year,
+                month = date_picker.month,
+                day = date_picker.dayOfMonth,
+                hour = time_picker.hour,
+                quarter = time_picker.minute)
+            val satReport = SatReport(satellite_ids[id], reportType, time, callsign.toString(), grid.toString())
             Toast.makeText(
                 activity!!.applicationContext,
                 "Submit SatName: " + satellite_ids[id] + ", SatReport: " + value + ", Period: " + period + ", SatHour: " + hour + ", SatDay: " + day + ", SatMonth: " + month + ", SatYear: " + year + ", SatCall: " + callsign + ", SatGridSquare: " + grid,
                 Toast.LENGTH_LONG
             ).show()
+            Toast.makeText(
+                activity!!.applicationContext,
+                satReport.toString(),
+                Toast.LENGTH_LONG
+            ).show()
+            //api.sendReport(satReport)
         }
         Toast.makeText(
             activity!!.applicationContext,

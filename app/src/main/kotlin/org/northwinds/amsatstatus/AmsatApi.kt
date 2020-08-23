@@ -19,6 +19,9 @@ import org.json.JSONTokener
 import org.json.JSONObject
 import org.json.JSONArray
 
+import org.northwinds.amsatstatus.Report
+import org.northwinds.amsatstatus.SatReport
+
 const val AMSAT_API_URL = "https://amsat.org/status/api/v1/sat_info.php"
 const val AMSAT_API_POST_URL = "https://amsat.org/status/submit.php"
 
