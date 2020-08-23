@@ -15,3 +15,9 @@
 .externalNativeBuild
 .cxx
 /app/release/
+
+# Compiled class file
+*.class
+
+# Log file
+*.log
