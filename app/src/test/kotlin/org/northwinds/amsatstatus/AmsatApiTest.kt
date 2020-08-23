@@ -1,12 +1,12 @@
 package org.northwinds.amsatstatus
 
+import java.util.Calendar
+
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertEquals
 
 import com.github.paweladamski.httpclientmock.HttpClientMock
-
-//import org.northwinds.amsatstatus.SatReport
 
 class AmsatApiTest {
     @Test fun `instantiate the AMSAT API`() {
@@ -40,19 +40,23 @@ class AmsatApiTest {
     }
 
     @Test fun `can instantiate a satellite report`() {
-        val report = SatReport("NO-84", Report.HEARD, "", "AB1CD", "CN85")
+        val timeStr = "2018-02-27T02:00:00Z"
+        val time = makeReportTimeFromString(timeStr)
+        val report = SatReport("NO-84", Report.HEARD, time, "AB1CD", "CN85")
         assertEquals("NO-84", report.name)
         assertEquals("Heard", report.report.value)
-        assertEquals("", report.time)
+        assertEquals(timeStr, report.time.toString())
         assertEquals("AB1CD", report.callsign)
         assertEquals("CN85", report.gridSquare)
     }
 
     @Test fun `can instantiate a satellite report without a grid`() {
-        val report = SatReport("PICSat-1", Report.CREW_ACTIVE, "", "X1YZ")
+        val timeStr = "2022-12-01T08:45:00Z"
+        val time = makeReportTimeFromString(timeStr)
+        val report = SatReport("PICSat-1", Report.CREW_ACTIVE, time, "X1YZ")
         assertEquals("PICSat-1", report.name)
         assertEquals("Crew Active", report.report.value)
-        assertEquals("", report.time)
+        assertEquals(timeStr, report.time.toString())
         assertEquals("X1YZ", report.callsign)
         assertEquals("", report.gridSquare)
     }
@@ -74,6 +78,57 @@ class AmsatApiTest {
         assertEquals("Not Heard", Report.NOT_HEARD.value)
         assertEquals("Crew Active", Report.CREW_ACTIVE.value)
         assertEquals("Telemetry Only", Report.TELEMETRY_ONLY.value)
+    }
+
+    @Test fun `can create ReportTime from Calendar`() {
+        val calendar = Calendar.getInstance()
+        val time = ReportTime(calendar)
+
+        assertEquals(calendar.get(Calendar.YEAR), time.year)
+        assertEquals(calendar.get(Calendar.MONTH)+1, time.month+1)
+        assertEquals(calendar.get(Calendar.DAY_OF_MONTH), time.day)
+        assertEquals(calendar.get(Calendar.HOUR_OF_DAY), time.hour)
+        assertEquals(calendar.get(Calendar.MINUTE), time.minute)
+        assertEquals(calendar.get(Calendar.MINUTE) / 15, time.quarter)
+    }
+
+    @Test fun `can create ReportTime from components`() {
+        val time = makeReportTimeFromComponents(
+            year = 2020,
+            month = 6,
+            day = 12,
+            hour = 17,
+            quarter = 3)
+
+        assertEquals(2020, time.year)
+        assertEquals(6+1, time.month+1)
+        assertEquals(12, time.day)
+        assertEquals(17, time.hour)
+        assertEquals(45, time.minute)
+        assertEquals(3, time.quarter)
+    }
+
+    @Test fun `can create ReportTime from string`() {
+        val dateStr = "2019-10-05T21:15:00Z"
+        val time = makeReportTimeFromString(dateStr)
+
+        assertEquals(2019, time.year)
+        assertEquals(10, time.month+1)
+        assertEquals(5, time.day)
+        assertEquals(21, time.hour)
+        assertEquals(15, time.minute)
+        assertEquals(1, time.quarter)
+    }
+
+    @Test fun `can convert ReportTime to text`() {
+        val time = makeReportTimeFromComponents(
+            year = 2021,
+            month = 3-1,
+            day = 29,
+            hour = 23,
+            quarter = 2)
+
+        assertEquals("2021-03-29T23:30:00Z", time.toString())
     }
 
     @Test fun `returns details on AO-91 satellite`() {
