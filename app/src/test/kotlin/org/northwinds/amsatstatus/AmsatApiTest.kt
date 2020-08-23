@@ -152,8 +152,92 @@ class AmsatApiTest {
         assertEquals("AO-91", entry.name)
         assertEquals("W6WW", entry.callsign)
         assertEquals("DM14", entry.gridSquare)
-        //val time = entry.getString("reported_time")
-        //assertEquals(time, "2020-08-20T06:30:00Z")
+        assertEquals("2020-08-20T06:30:00Z", entry.time.toString())
         assertEquals(Report.HEARD, entry.report)
+    }
+
+    @Test fun `returns details on multiple satellites`() {
+        val json = """[
+            {
+                "name": "AO-91",
+                "reported_time": "2020-08-20T06:30:00Z",
+                "callsign": "W6WW",
+                "report": "Heard",
+                "grid_square": "DM14"
+            },
+            {
+                "name": "CAS-4A",
+                "reported_time": "2020-08-20T04:30:00Z",
+                "callsign": "YD0NXX",
+                "report": "Heard",
+                "grid_square": "OI33js"
+            },
+            {
+                "name": "AO-91",
+                "reported_time": "2020-08-19T18:30:00Z",
+                "callsign": "KC7MG",
+                "report": "Heard",
+                "grid_square": "DM42"
+            },
+            {
+                "name": "AO-91",
+                "reported_time": "2020-08-19T18:30:00Z",
+                "callsign": "AA5PK",
+                "report": "Not Heard",
+                "grid_square": "DM91"
+            },
+            {
+                "name": "AO-91",
+                "reported_time": "2020-08-19T17:30:00Z",
+                "callsign": "WA5KBH",
+                "report": "Crew Active",
+                "grid_square": "EM30"
+            },
+            {
+                "name": "AO-91",
+                "reported_time": "2020-08-19T15:30:00Z",
+                "callsign": "KB9STR",
+                "report": "Telemetry Only",
+                "grid_square": "EM69"
+            },
+            {
+                "name": "AO-91",
+                "reported_time": "2020-08-19T10:30:00Z",
+                "callsign": "OE\/PE4KH",
+                "report": "Heard",
+                "grid_square": "JN47"
+            }
+        ]"""
+
+        val httpClientMock = HttpClientMock()
+        httpClientMock.onGet().doReturn(json)
+
+        val api = AmsatApi(httpClientMock)
+        val reports = api.getReport("", 24)
+
+        assertEquals(7, reports.size)
+
+        val entry = reports.get(0)
+        assertEquals("AO-91", reports.get(0).name)
+        assertEquals("2020-08-20T06:30:00Z", reports.get(0).time.toString())
+        assertEquals("W6WW", reports.get(0).callsign)
+        assertEquals(Report.HEARD, reports.get(0).report)
+        assertEquals("DM14", reports.get(0).gridSquare)
+
+        assertEquals("CAS-4A", reports.get(1).name)
+        assertEquals("2020-08-20T04:30:00Z", reports.get(1).time.toString())
+        assertEquals("OI33js", reports.get(1).gridSquare)
+
+        assertEquals(Report.NOT_HEARD, reports.get(3).report)
+
+        assertEquals("WA5KBH", reports.get(4).callsign)
+        assertEquals(Report.CREW_ACTIVE, reports.get(4).report)
+        assertEquals("EM30", reports.get(4).gridSquare)
+
+        assertEquals(Report.TELEMETRY_ONLY, reports.get(5).report)
+
+        assertEquals("2020-08-19T10:30:00Z", reports.get(6).time.toString())
+        assertEquals("OE/PE4KH", reports.get(6).callsign)
+        assertEquals("JN47", reports.get(6).gridSquare)
     }
 }

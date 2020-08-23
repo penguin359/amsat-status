@@ -136,7 +136,7 @@ class AppTest {
             val body = BufferedInputStream(entity1.getContent())
             val textBuilder = StringBuilder()
             BufferedReader(InputStreamReader
-                (body, Charset.forName(StandardCharsets.UTF_8.name()))).use { reader ->
+                (body, Charset.forName("UTF-8"))).use { reader ->
                 var c = reader.read()
                 while (c != -1) {
                     textBuilder.append(c.toChar())
