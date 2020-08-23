@@ -5,7 +5,11 @@ import java.io.BufferedInputStream
 import java.io.InputStreamReader
 import java.nio.charset.Charset
 
+import org.apache.http.NameValuePair
+import org.apache.http.message.BasicNameValuePair
+import org.apache.http.client.entity.UrlEncodedFormEntity
 import org.apache.http.client.methods.HttpGet
+import org.apache.http.client.methods.HttpPost
 import org.apache.http.client.utils.URIBuilder
 import org.apache.http.impl.client.CloseableHttpClient
 import org.apache.http.impl.client.HttpClients
@@ -16,6 +20,7 @@ import org.json.JSONObject
 import org.json.JSONArray
 
 const val AMSAT_API_URL = "https://amsat.org/status/api/v1/sat_info.php"
+const val AMSAT_API_POST_URL = "https://amsat.org/status/submit.php"
 
 class AmsatApi(client: CloseableHttpClient) {
 
@@ -61,5 +66,30 @@ class AmsatApi(client: CloseableHttpClient) {
         }
 
         return list
+    }
+
+    fun sendReport(report: SatReport) {
+        val httpPost = HttpPost(AMSAT_API_POST_URL)
+
+        val postParameters = ArrayList<NameValuePair>()
+        postParameters.add(BasicNameValuePair("SatName", report.name))
+        postParameters.add(BasicNameValuePair("SatReport", report.report.value))
+        postParameters.add(BasicNameValuePair("SatYear", report.time.year.toString()))
+        postParameters.add(BasicNameValuePair("SatMonth", (report.time.month+1).toString().padStart(2, '0')))
+        postParameters.add(BasicNameValuePair("SatDay", report.time.day.toString()))
+        postParameters.add(BasicNameValuePair("SatHour", report.time.hour.toString()))
+        postParameters.add(BasicNameValuePair("SatPeriod", report.time.quarter.toString()))
+        postParameters.add(BasicNameValuePair("SatCall", report.callsign))
+        postParameters.add(BasicNameValuePair("SatGridSquare", report.gridSquare))
+        postParameters.add(BasicNameValuePair("SatSubmit", "yes"))
+        postParameters.add(BasicNameValuePair("Confirm", "yes"))
+
+        httpPost.setEntity(UrlEncodedFormEntity(postParameters, "UTF-8"))
+        this.client.execute(httpPost).use { response1 ->
+            println("Posting report")
+            println(report.toString())
+            val entity1 = response1.getEntity()
+            EntityUtils.consume(entity1)
+        }
     }
 }

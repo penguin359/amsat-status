@@ -261,4 +261,31 @@ class AmsatApiTest {
         val reports2 = api.getReport("AO-91", 1)
         assertEquals(1, reports2.size)
     }
+
+    @Test fun `can send report on a satellite`() {
+        val httpClientMock = HttpClientMock()
+        httpClientMock.onPost().doReturn("Success")
+
+        val api = AmsatApi(httpClientMock)
+        val timeStr = "2018-02-27T02:15:00Z"
+        val time = makeReportTimeFromString(timeStr)
+        val report = SatReport("NO-84", Report.TELEMETRY_ONLY, time, "AB1CD", "CN85")
+        api.sendReport(report)
+
+        var url = "https://amsat.org/status/submit.php"
+        httpClientMock.verify().post(url)
+        .withFormParameter("SatName", "NO-84")
+        .withFormParameter("SatReport", "Telemetry Only")
+        .withFormParameter("SatYear", "2018")
+        .withFormParameter("SatMonth", "02")
+        .withFormParameter("SatDay", "27")
+        .withFormParameter("SatHour", "2")
+        .withFormParameter("SatPeriod", "1")
+        .withFormParameter("SatCall", "AB1CD")
+        .withFormParameter("SatGridSquare", "CN85")
+        .withFormParameter("SatSubmit", "yes")
+        .withFormParameter("Confirm", "yes")
+        .called()
+        // /status/submit.php?SatSubmit=yes&Confirm=yes&SatName=CubeBel-1&SatYear=2020&SatMonth=08&SatDay=23&SatHour=11&SatPeriod=0&SatCall=K7IW&SatReport=Not+Heard&SatGridSquare=CN85nu
+    }
 }
