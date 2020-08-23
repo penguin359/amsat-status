@@ -43,6 +43,7 @@ android {
     lintOptions {
         abortOnError false
     }
+    useLibrary 'org.apache.http.legacy'
 }
 
 repositories {
@@ -70,7 +71,8 @@ dependencies {
 
     // Use the Kotlin JUnit integration.
     testImplementation 'org.jetbrains.kotlin:kotlin-test-junit'
-    implementation 'org.apache.httpcomponents:httpclient:4.5.12'
+    //implementation 'org.apache.httpcomponents:httpclient:4.5.12'
+    implementation 'org.apache.httpcomponents:httpclient:4.3'
     testImplementation 'com.github.paweladamski:HttpClientMock:1.8.1'
     testImplementation 'org.json:json:20200518'
 }

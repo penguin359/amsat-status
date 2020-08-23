@@ -15,7 +15,7 @@ import org.northwinds.amsatstatus.makeReportTimeFromComponents
 
 class HomeFragment : Fragment() {
 
-    //var api = AmsatApi()
+    var api = AmsatApi()
 
     //private ArrayAdapter<CharSequence>  mSatelliteAdapter;
 
@@ -115,7 +115,20 @@ class HomeFragment : Fragment() {
                 satReport.toString(),
                 Toast.LENGTH_LONG
             ).show()
-            //api.sendReport(satReport)
+            //thread() {
+            //    api.sendreport(satreport)
+            //}
+            class R: Runnable {
+                public override fun run() {
+                    api.sendReport(satReport)
+                }
+            }
+            Thread(R()).start()
+            //Thread(Runnable() {
+            //    public override fun run() {
+            //        api.sendReport(satReport)
+            //    }
+            //}).start()
         }
         Toast.makeText(
             activity!!.applicationContext,

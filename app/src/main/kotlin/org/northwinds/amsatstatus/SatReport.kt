@@ -6,9 +6,6 @@ import java.util.Calendar
 import java.util.TimeZone
 import java.util.GregorianCalendar
 
-import org.northwinds.amsatstatus.Report
-import org.northwinds.amsatstatus.SatReport
-
 enum class Report(val value: String) {
     HEARD("Heard"),
     TELEMETRY_ONLY("Telemetry Only"),

@@ -19,9 +19,6 @@ import org.json.JSONTokener
 import org.json.JSONObject
 import org.json.JSONArray
 
-import org.northwinds.amsatstatus.Report
-import org.northwinds.amsatstatus.SatReport
-
 const val AMSAT_API_URL = "https://amsat.org/status/api/v1/sat_info.php"
 const val AMSAT_API_POST_URL = "https://amsat.org/status/submit.php"
 
@@ -33,7 +30,7 @@ class AmsatApi(client: CloseableHttpClient) {
 
     fun getReport(name: String, hours: Int) : List<SatReport> {
         val charset = Charset.forName("UTF-8")
-        val uri = URIBuilder(AMSAT_API_URL, charset)
+        val uri = URIBuilder(AMSAT_API_URL)//, charset)
         uri.addParameter("name", name)
         uri.addParameter("hours", hours.toString())
         val httpGet = HttpGet(uri.build())
