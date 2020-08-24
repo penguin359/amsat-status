@@ -44,6 +44,14 @@ android {
         abortOnError false
     }
     useLibrary 'org.apache.http.legacy'
+
+    // Register kotlin files
+    sourceSets {
+         androidTest.java.srcDirs += "src/androidTest/kotlin"
+         debug.java.srcDirs += "src/debug/kotlin"
+         main.java.srcDirs += "src/main/kotlin"
+         test.java.srcDirs += "src/test/kotlin"
+    }
 }
 
 repositories {
