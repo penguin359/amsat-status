@@ -10,11 +10,10 @@ import org.northwinds.amsatstatus.SatReport
 import org.northwinds.amsatstatus.Report
 import org.northwinds.amsatstatus.makeReportTimeFromString
 
-private class Updater : AsyncTask<MutableLiveData<List<SatReport>>, Void, Void>() {
-    override protected fun doInBackground(vararg value: MutableLiveData<List<SatReport>>?): Void? {
+private class Updater(val node: MutableLiveData<List<SatReport>>) : AsyncTask<String, Void, Unit>() {
+    override protected fun doInBackground(vararg name: String?) {
         val api = AmsatApi()
-        value[0]!!.postValue(api.getReport("AO-91", 24))
-        return null
+        node.postValue(api.getReport(name[0]!!, 24))
     }
 }
 
@@ -32,8 +31,13 @@ class DashboardViewModel : ViewModel() {
 
     val reports: LiveData<List<SatReport>> = _reports
 
-    fun update() {
-        Updater().execute(_reports)
+    fun update(name: String) {
+        clear()
+        Updater(_reports).execute(name)
+    }
+
+    fun clear() {
+        _reports.value = ArrayList<SatReport>()
     }
     /*
     private val _text = MutableLiveData<String>().apply {

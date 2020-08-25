@@ -9,3 +9,5 @@ Contrained, side-by-side layout on Home
 Find icons
 Internationalize
 Visually impaired support
+Use Google HTTP Client
+AndroidTest
