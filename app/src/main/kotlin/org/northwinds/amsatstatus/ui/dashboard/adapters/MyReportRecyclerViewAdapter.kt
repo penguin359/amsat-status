@@ -30,7 +30,6 @@ class MyReportRecyclerViewAdapter(
             Report.TELEMETRY_ONLY -> R.color.telemetryOnly
             Report.NOT_HEARD -> R.color.notHeard
             Report.CREW_ACTIVE -> R.color.crewActive
-            else -> R.color.conflict
         }
 
         holder.nameView.text = item.name

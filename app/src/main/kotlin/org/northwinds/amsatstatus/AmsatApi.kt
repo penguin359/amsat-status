@@ -29,8 +29,7 @@ class AmsatApi(client: CloseableHttpClient) {
     constructor() : this(HttpClients.createDefault())
 
     fun getReport(name: String, hours: Int) : List<SatReport> {
-        val charset = Charset.forName("UTF-8")
-        val uri = URIBuilder(AMSAT_API_URL)//, charset)
+        val uri = URIBuilder(AMSAT_API_URL)
         uri.addParameter("name", name)
         uri.addParameter("hours", hours.toString())
         val httpGet = HttpGet(uri.build())
@@ -52,14 +51,14 @@ class AmsatApi(client: CloseableHttpClient) {
 
             for(idx in 0..jsonList.length()-1) {
                 val entry = jsonList.get(idx) as JSONObject
-                val name = entry.getString("name")
+                val satName = entry.getString("name")
                 val callsign = entry.getString("callsign")
                 val grid = entry.getString("grid_square")
                 val timeStr = entry.getString("reported_time")
                 val time = makeReportTimeFromString(timeStr)
                 val reportStr = entry.getString("report")
                 var report = reportFromString(reportStr)
-                val reportObj = SatReport(name, report, time, callsign, grid)
+                val reportObj = SatReport(satName, report, time, callsign, grid)
                 list.add(reportObj)
             }
             EntityUtils.consume(entity1)

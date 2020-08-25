@@ -1,5 +1,6 @@
 package org.northwinds.amsatstatus
 
+import android.nfc.FormatException
 import java.text.SimpleDateFormat
 import java.text.ParseException
 import java.util.Calendar
@@ -69,6 +70,8 @@ fun makeReportTimeFromString(dateStr: String) : ReportTime {
         throw ParseException("Invalid length", 0)
     }
     val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(s)
+    if(date == null)
+        throw FormatException()
     calendar.time = date
 
     return ReportTime(calendar)

@@ -62,10 +62,8 @@ class DashboardFragment : Fragment() {
         }
         val reportView: RecyclerView = root.findViewById(R.id.reports)
         dashboardViewModel.reports.observe(viewLifecycleOwner, Observer {
-            if (reportView is RecyclerView) {
-                with(reportView) {
-                    adapter = MyReportRecyclerViewAdapter(it)
-                }
+            with(reportView) {
+                adapter = MyReportRecyclerViewAdapter(it)
             }
         })
 
