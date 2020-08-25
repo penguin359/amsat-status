@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="org.northwinds.amsatstatus.ui.dashboard.DashboardFragment"
+        android:name="org.northwinds.amsatstatus.ReportFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_report_list" />
 
     <fragment
         android:id="@+id/navigation_notifications"
