@@ -8,6 +8,7 @@ import android.widget.TextView
 
 import org.northwinds.amsatstatus.SatReport
 import org.northwinds.amsatstatus.R
+import org.northwinds.amsatstatus.Report
 
 /**
  * [RecyclerView.Adapter] that can display a [SatReport].
@@ -24,16 +25,26 @@ class MyReportRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
+        val reportColor = when (item.report) {
+            Report.HEARD -> R.color.heard
+            Report.TELEMETRY_ONLY -> R.color.telemetryOnly
+            Report.NOT_HEARD -> R.color.notHeard
+            Report.CREW_ACTIVE -> R.color.crewActive
+            else -> R.color.conflict
+        }
+
         holder.nameView.text = item.name
         holder.reportView.text = item.report.toString()
         holder.timeView.text = item.time.toString()
         holder.callsignView.text = item.callsign
         holder.gridsquareView.text = item.gridSquare
+        holder.mainView.setBackgroundResource(reportColor)
     }
 
     override fun getItemCount(): Int = values.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val mainView: ViewGroup = view.findViewById(R.id.main)
         val nameView: TextView = view.findViewById(R.id.name)
         val reportView: TextView = view.findViewById(R.id.report)
         val timeView: TextView = view.findViewById(R.id.time)
