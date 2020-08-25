@@ -1,12 +1,22 @@
 package org.northwinds.amsatstatus.ui.dashboard
 
+import android.os.AsyncTask
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import org.northwinds.amsatstatus.AmsatApi
 
 import org.northwinds.amsatstatus.SatReport
 import org.northwinds.amsatstatus.Report
 import org.northwinds.amsatstatus.makeReportTimeFromString
+
+private class Updater : AsyncTask<MutableLiveData<List<SatReport>>, Void, Void>() {
+    override protected fun doInBackground(vararg value: MutableLiveData<List<SatReport>>?): Void? {
+        val api = AmsatApi()
+        value[0]!!.postValue(api.getReport("AO-91", 24))
+        return null
+    }
+}
 
 class DashboardViewModel : ViewModel() {
     private val _reports = MutableLiveData<List<SatReport>>().apply {
@@ -22,6 +32,9 @@ class DashboardViewModel : ViewModel() {
 
     val reports: LiveData<List<SatReport>> = _reports
 
+    fun update() {
+        Updater().execute(_reports)
+    }
     /*
     private val _text = MutableLiveData<String>().apply {
         value = "This is dashboard Fragment"

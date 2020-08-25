@@ -44,6 +44,8 @@ class DashboardFragment : Fragment() {
             }
         })
 
+        dashboardViewModel.update()
+
         return root
     }
 }
