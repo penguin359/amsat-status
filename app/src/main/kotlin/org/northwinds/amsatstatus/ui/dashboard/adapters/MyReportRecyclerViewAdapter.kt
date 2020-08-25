@@ -1,10 +1,13 @@
-package org.northwinds.amsatstatus
+package org.northwinds.amsatstatus.ui.dashboard.adapters
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+
+import org.northwinds.amsatstatus.SatReport
+import org.northwinds.amsatstatus.R
 
 /**
  * [RecyclerView.Adapter] that can display a [SatReport].
@@ -15,7 +18,7 @@ class MyReportRecyclerViewAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.fragment_report, parent, false)
+            .inflate(R.layout.fragment_dashboard_item, parent, false)
         return ViewHolder(view)
     }
 

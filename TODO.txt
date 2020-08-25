@@ -1,0 +1,11 @@
+Implement preferences
+Load live sateliite reports
+colorize reports
+Clean all lint warnings/errors
+Clean all other warnings
+Support Android API 16
+Support small screen
+Contrained, side-by-side layout on Home
+Find icons
+Internationalize
+Visually impaired support
