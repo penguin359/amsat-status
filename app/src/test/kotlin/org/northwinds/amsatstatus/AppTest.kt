@@ -35,8 +35,11 @@ import org.apache.http.impl.client.CloseableHttpClient
 import org.apache.http.impl.client.HttpClients
 import org.apache.http.util.EntityUtils
 
-import com.github.paweladamski.httpclientmock.HttpClientMock
+import com.google.api.client.http.apache.v2.ApacheHttpTransport
 
+import com.github.paweladamski.httpclientmock.HttpClientMock
+import com.google.api.client.http.GenericUrl
+import com.google.api.client.http.HttpRequest
 
 
 class AppTest {
@@ -193,5 +196,15 @@ class AppTest {
         assertEquals(6, calendar.get(Calendar.HOUR_OF_DAY))
         assertEquals(30, calendar.get(Calendar.MINUTE))
         assertEquals(0, calendar.get(Calendar.SECOND))
+    }
+
+    @Test fun testGoogleHttpClient() {
+        val httpclient = HttpClients.createDefault()
+        val transport = ApacheHttpTransport(httpclient)
+        val request: HttpRequest = transport.createRequestFactory().buildGetRequest(
+                 GenericUrl("http://www.google.com/")
+        );
+        val rawResponse = request.execute().parseAsString()
+        println(rawResponse)
     }
 }
