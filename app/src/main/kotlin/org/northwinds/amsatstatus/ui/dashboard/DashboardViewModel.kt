@@ -1,23 +1,22 @@
 package org.northwinds.amsatstatus.ui.dashboard
 
-import android.os.AsyncTask
+import java.util.concurrent.Executors
+import java.util.concurrent.ExecutorService
+
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import org.northwinds.amsatstatus.AmsatApi
 
+import org.northwinds.amsatstatus.AmsatApi
 import org.northwinds.amsatstatus.SatReport
 import org.northwinds.amsatstatus.Report
 import org.northwinds.amsatstatus.makeReportTimeFromString
 
-private class Updater(val node: MutableLiveData<List<SatReport>>) : AsyncTask<String, Void, Unit>() {
-    override protected fun doInBackground(vararg name: String?) {
-        val api = AmsatApi()
-        node.postValue(api.getReport(name[0]!!, 24))
-    }
-}
+private val TAG = "DashboardViewModel"
 
 class DashboardViewModel : ViewModel() {
+    private val executor = Executors.newSingleThreadScheduledExecutor()
     private val _reports = MutableLiveData<List<SatReport>>().apply {
         value = listOf(
             SatReport(
@@ -62,17 +61,20 @@ class DashboardViewModel : ViewModel() {
     val reports: LiveData<List<SatReport>> = _reports
 
     fun update(name: String) {
+        Log.v(TAG, "Clearing results")
         clear()
-        Updater(_reports).execute(name)
+        Log.v(TAG, "Starting thread for satellite $name")
+
+        executor.execute(object : Runnable {
+            override fun run(): Unit {
+                val api = AmsatApi()
+                Log.v(TAG, "Posting request")
+                _reports.postValue(api.getReport(name, 24))
+            }
+        })
     }
 
     fun clear() {
         _reports.value = ArrayList<SatReport>()
     }
-    /*
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is dashboard Fragment"
-    }
-    val text: LiveData<String> = _text
-    */
 }
