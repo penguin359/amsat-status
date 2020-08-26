@@ -82,7 +82,9 @@ dependencies {
     // Use the Kotlin JUnit integration.
     testImplementation 'org.jetbrains.kotlin:kotlin-test-junit'
     //implementation 'org.apache.httpcomponents:httpclient:4.5.12'
-    implementation 'org.apache.httpcomponents:httpclient:4.3'
+    //implementation 'org.apache.httpcomponents:httpclient:4.3'
+    implementation 'org.apache.httpcomponents.client5:httpclient5:5.0'
+    implementation 'org.apache.httpcomponents.core5:httpcore5:5.0'
     testImplementation 'com.github.paweladamski:HttpClientMock:1.8.1'
     testImplementation 'org.json:json:20200518'
 }
