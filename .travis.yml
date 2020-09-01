@@ -1,0 +1,10 @@
+language: android
+dist: trusty
+before_install:
+  - env
+  - "ls $ANDROID_HOME"
+  - android list target
+  - android list avd
+  - android list device
+  - android list sdk
+  - "find $ANDROID_HOME"
