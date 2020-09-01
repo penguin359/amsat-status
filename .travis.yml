@@ -2,7 +2,9 @@ language: android
 dist: trusty
 android:
   components:
-    - build-tools-17.0.0
+    - tools
+    - platform-tools
+    - build-tools-29.0.3
     - android-16
     - sys-img-armeabi-v7a-android-16
 
@@ -30,7 +32,7 @@ before_install:
   - android list device
   - android list sdk
   - echo no | android create avd --force -n test -t android-16 --abi armeabi-v7a -c 100M
-  - emulator -avd test -no-window &
+  - emulator -avd test -no-audio -no-window &
 
 before_script:
   - android-wait-for-emulator
