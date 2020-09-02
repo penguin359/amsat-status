@@ -1,5 +1,9 @@
 language: android
 dist: trusty
+env:
+  - PATH="$ANDROID_HOME/cmdline-tools/2.1/bin:$ANDROID_HOME/emulator:$PATH"
+  - WHEN=1
+
 android:
   components:
     - tools
@@ -28,7 +32,7 @@ before_install:
   - echo 24333f8a63b6825ea9c5514f83c2829b004d1fee > $ANDROID_HOME/licenses/android-sdk-license
   - sdkmanager 'cmdline-tools;2.1'
   - $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager emulator
-  - echo no | avdmanager create avd --force --name test --package 'system-images;android-16;default;armeabi-v7a'
+  - echo no | $ANDROID_HOME/cmdline-tools/2.1/bin/avdmanager create avd --force --name test --package 'system-images;android-16;default;armeabi-v7a'
   - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window &
   - $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager platform-tools
   - $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager 'build-tools;30.0.2'
