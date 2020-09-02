@@ -4,14 +4,12 @@ android:
   components:
     - tools
     - platform-tools
-    - build-tools-29.0.2
     - android-16
-    - android-29
     - sys-img-armeabi-v7a-android-16
 
   licenses:
     - 'android-sdk-preview-license-52d11cd2'
-    - 'android-sdk-license-.+'
+    - 'android-sdk-license-e6a904e8'
 
 # From Travis CI's guide on how to improve Gradle caching
 before_cache:
@@ -24,16 +22,17 @@ cache:
     - $HOME/.gradle/wrapper/
     - $HOME/.android/build-cache
 
+# Start emulator early so it's ready when the build is done
 before_install:
-  - "find $ANDROID_HOME -name source.properties || true"
-  - env
-  - "ls $ANDROID_HOME"
-  - android list target
-  - android list avd
-  - android list device
-  - android list sdk
-  - echo no | android create avd --force -n test -t android-16 --abi armeabi-v7a -c 100M
-  - emulator -avd test -no-window &
+  - mkdir $ANDROID_HOME/licenses
+  - echo 24333f8a63b6825ea9c5514f83c2829b004d1fee > $ANDROID_HOME/licenses/android-sdk-license
+  - sdkmanager 'cmdline-tools;2.1'
+  - $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager emulator
+  - echo no | avdmanager create avd --force --name test --package 'system-images;android-16;default;armeabi-v7a'
+  - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window &
+  - $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager platform-tools
+  - $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager 'build-tools;30.0.2'
+  - $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager 'platforms;android-19'
 
 before_script:
   - android-wait-for-emulator
