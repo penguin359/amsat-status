@@ -4,7 +4,7 @@ env:
   - ANDROID_API="android-16" IMAGE_TYPE="default" ABI="armeabi-v7a"
   - ANDROID_API="android-25" IMAGE_TYPE="google_apis" ABI="arm64-v8a"
   - ANDROID_API="android-29" IMAGE_TYPE="default" ABI="x86"
-  - ANDROID_API="android-30" IMAGE_TYPE="google_apis_playstore" ABI="x86_64"
+  - ANDROID_API="android-30" IMAGE_TYPE="google_apis_playstore" ABI="x86"
 
 android:
   components:
@@ -28,20 +28,6 @@ cache:
 
 # Start emulator early so it's ready when the build is done
 before_install:
-  - sudo apt-get install qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils
-  - sudo apt-get install cpu-checker
-  - sudo modprobe -a kvm || true
-  - egrep -c '(vmx|svm)' /proc/cpuinfo || true
-  - cat /proc/cpuinfo || true
-  - kvm-ok || true
-  - ls -l /dev/kvm || true
-  - cat /sys/hypervisor/properties/capabilities || true
-    # Set up KVM on linux for hardware acceleration. Manually here so it only happens for emulator tests, takes ~30s
-  - travis_retry sudo -E apt-get -yq --no-install-suggests --no-install-recommends install bridge-utils libpulse0 libvirt-bin qemu-kvm virtinst ubuntu-vm-builder
-  - sudo adduser $USER libvirtd || true
-  - sudo adduser $USER libvirt || true
-  - sudo adduser $USER kvm
-
   - mkdir $ANDROID_HOME/licenses
   - echo 24333f8a63b6825ea9c5514f83c2829b004d1fee > $ANDROID_HOME/licenses/android-sdk-license
   - echo 859f317696f67ef3d7f30a50a5560e7834b43903 > $ANDROID_HOME/licenses/android-sdk-arm-dbt-license
@@ -50,9 +36,8 @@ before_install:
   - $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager "platforms;$ANDROID_API"
   - $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager "system-images;$ANDROID_API;$IMAGE_TYPE;$ABI"
   - $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager emulator
-  - $ANDROID_HOME/emulator/emulator -accel-check || true
   - echo no | $ANDROID_HOME/cmdline-tools/2.1/bin/avdmanager create avd --force --name test --package "system-images;$ANDROID_API;$IMAGE_TYPE;$ABI"
-  - $ANDROID_HOME/emulator/emulator -avd test -no-accel -no-audio -no-window -verbose -no-snapshot -no-window -camera-back none -camera-front none -selinux permissive -qemu -m 2048 &
+  - $ANDROID_HOME/emulator/emulator -avd test -no-accel -no-audio -no-window -verbose -no-snapshot -camera-back none -camera-front none -selinux permissive -qemu -m 2048 &
   - $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager platform-tools
   - $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager "build-tools;30.0.2"
 
@@ -63,6 +48,8 @@ before_script:
   - adb shell settings put global transition_animation_scale 0 &
   - adb shell settings put global animator_duration_scale 0 &
   - adb shell input keyevent 82 &
+  - ls $ANDROID_HOME/licenses -l || true
+  - cat $ANDROID_HOME/licenses/* || true
 
 script:
   - "find $ANDROID_HOME -name source.properties || true"
