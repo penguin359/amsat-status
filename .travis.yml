@@ -1,5 +1,5 @@
 language: android
-dist: bionic
+dist: xenial
 env:
   - ANDROID_API="android-16" IMAGE_TYPE="default" ABI="armeabi-v7a"
   - ANDROID_API="android-25" IMAGE_TYPE="google_apis" ABI="arm64-v8a"
@@ -30,6 +30,7 @@ cache:
 before_install:
   - sudo apt-get install qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils
   - sudo apt-get install cpu-checker
+  - sudo modprobe -a kvm || true
   - egrep -c '(vmx|svm)' /proc/cpuinfo || true
   - cat /proc/cpuinfo || true
   - kvm-ok || true
