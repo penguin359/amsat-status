@@ -28,7 +28,7 @@ cache:
 
 # Start emulator early so it's ready when the build is done
 before_install:
-  - sudo apt-get install qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils ia32-libs-multiarch
+  - sudo apt-get install qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils
   - sudo apt-get install cpu-checker
   - egrep -c '(vmx|svm)' /proc/cpuinfo || true
   - cat /proc/cpuinfo || true
