@@ -1,0 +1,58 @@
+language: android
+dist: trusty
+env:
+  - ANDROID_API="android-16" IMAGE_TYPE="default" ABI="armeabi-v7a"
+  - ANDROID_API="android-24" IMAGE_TYPE="default" ABI="armeabi-v7a"
+  #- ANDROID_API="android-25" IMAGE_TYPE="google_apis" ABI="arm64-v8a"
+  #- ANDROID_API="android-25" IMAGE_TYPE="google_apis" ABI="armeabi-v7a"
+  - ANDROID_API="android-29" IMAGE_TYPE="default" ABI="x86"
+  #- ANDROID_API="android-30" IMAGE_TYPE="google_apis_playstore" ABI="x86_64"
+  #- ANDROID_API="android-30" IMAGE_TYPE="google_apis" ABI="x86"
+
+android:
+  components:
+    - tools
+    - platform-tools
+
+  licenses:
+    - 'android-sdk-preview-license-52d11cd2'
+    - 'android-sdk-license-e6a904e8'
+
+# From Travis CI's guide on how to improve Gradle caching
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.android/build-cache
+
+# Start emulator early so it's ready when the build is done
+before_install:
+  - mkdir $ANDROID_HOME/licenses
+  - echo 24333f8a63b6825ea9c5514f83c2829b004d1fee > $ANDROID_HOME/licenses/android-sdk-license
+  - echo 859f317696f67ef3d7f30a50a5560e7834b43903 > $ANDROID_HOME/licenses/android-sdk-arm-dbt-license
+  - sdkmanager "cmdline-tools;2.1"
+  - yes | $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager --licenses
+  - $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager "platforms;$ANDROID_API"
+  - $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager "system-images;$ANDROID_API;$IMAGE_TYPE;$ABI"
+  - $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager emulator
+  - echo no | $ANDROID_HOME/cmdline-tools/2.1/bin/avdmanager create avd --force --name test --package "system-images;$ANDROID_API;$IMAGE_TYPE;$ABI"
+  - $ANDROID_HOME/emulator/emulator -avd test -no-accel -no-audio -no-window -verbose -no-snapshot -camera-back none -camera-front none -selinux permissive -qemu -m 2048 &
+  - $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager platform-tools
+  - $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager "build-tools;30.0.2"
+
+before_script:
+  - android-wait-for-emulator
+  # Disable animations
+  - adb shell settings put global window_animation_scale 0 &
+  - adb shell settings put global transition_animation_scale 0 &
+  - adb shell settings put global animator_duration_scale 0 &
+  - adb shell input keyevent 82 &
+
+script:
+  - ./gradlew build
+  - ./gradlew test
+  - ./gradlew connectedCheck
