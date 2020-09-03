@@ -51,8 +51,9 @@ before_install:
   - $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager "system-images;$ANDROID_API;$IMAGE_TYPE;$ABI"
   - $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager emulator
   - $ANDROID_HOME/emulator/emulator -accel-check || true
+  - ls $ANDROID_HOME/emulator/ || true
   - echo no | $ANDROID_HOME/cmdline-tools/2.1/bin/avdmanager create avd --force --name test --package "system-images;$ANDROID_API;$IMAGE_TYPE;$ABI"
-  - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window -verbose -no-snapshot -no-window -camera-back none -camera-front none -selinux permissive -qemu -m 2048 &
+  - $ANDROID_HOME/emulator/emulator-headless -avd test -no-audio -no-window -verbose -no-snapshot -no-window -camera-back none -camera-front none -selinux permissive -qemu -m 2048 &
   - $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager platform-tools
   - $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager "build-tools;30.0.2"
 
