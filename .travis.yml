@@ -28,9 +28,16 @@ cache:
 
 # Start emulator early so it's ready when the build is done
 before_install:
+  - sudo apt-get install qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils ia32-libs-multiarch
+  - sudo apt-get install cpu-checker
+  - egrep -c '(vmx|svm)' /proc/cpuinfo || true
+  - cat /proc/cpuinfo || true
+  - kvm-ok || true
+  - ls -l /dev/kvm || true
+  - cat /sys/hypervisor/properties/capabilities || true
     # Set up KVM on linux for hardware acceleration. Manually here so it only happens for emulator tests, takes ~30s
   - travis_retry sudo -E apt-get -yq --no-install-suggests --no-install-recommends install bridge-utils libpulse0 libvirt-bin qemu-kvm virtinst ubuntu-vm-builder
-    #- sudo adduser $USER libvirt
+  - sudo adduser $USER libvirtd || true
   - sudo adduser $USER kvm
 
   - mkdir $ANDROID_HOME/licenses
@@ -41,6 +48,7 @@ before_install:
   - $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager "platforms;$ANDROID_API"
   - $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager "system-images;$ANDROID_API;$IMAGE_TYPE;$ABI"
   - $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager emulator
+  - $ANDROID_HOME/emulator/emulator -accel-check || true
   - echo no | $ANDROID_HOME/cmdline-tools/2.1/bin/avdmanager create avd --force --name test --package "system-images;$ANDROID_API;$IMAGE_TYPE;$ABI"
   - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window -verbose -no-snapshot -no-window -camera-back none -camera-front none -selinux permissive -qemu -m 2048 &
   - $ANDROID_HOME/cmdline-tools/2.1/bin/sdkmanager platform-tools
