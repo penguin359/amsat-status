@@ -2,9 +2,9 @@ language: android
 dist: trusty
 env:
   - ANDROID_API="android-16" IMAGE_TYPE="default" ABI="armeabi-v7a"
+  - ANDROID_API="android-24" IMAGE_TYPE="default" ABI="armeabi-v7a"
   #- ANDROID_API="android-25" IMAGE_TYPE="google_apis" ABI="arm64-v8a"
   - ANDROID_API="android-25" IMAGE_TYPE="google_apis" ABI="armeabi-v7a"
-  - ANDROID_API="android-25" IMAGE_TYPE="default" ABI="armeabi-v7a"
   - ANDROID_API="android-29" IMAGE_TYPE="default" ABI="x86"
   #- ANDROID_API="android-30" IMAGE_TYPE="google_apis_playstore" ABI="x86_64"
   - ANDROID_API="android-30" IMAGE_TYPE="google_apis" ABI="x86"
