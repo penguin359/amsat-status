@@ -13,6 +13,7 @@
     <string name="submit_report">Submit Report</string>
 
     <string-array name="satellite_ids">
+        <item>DEMO-1</item>
         <item>AISAT-1</item>
         <item>AO-16</item>
         <item>AO-27</item>
@@ -112,6 +113,7 @@
     </string-array>
 
     <string-array name="satellite_names">
+        <item>DEMO 1</item>
         <item>AISAT-1</item>
         <item>AO-16</item>
         <item>AO-27</item>
