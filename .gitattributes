@@ -4,3 +4,6 @@
 *.kt text
 *.svg text
 *.xml text
+
+*.sh text eol=lf
+*.bat text eof=crlf
