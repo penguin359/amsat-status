@@ -1,7 +1,6 @@
 package org.northwinds.amsatstatus.ui.dashboard
 
 import java.util.concurrent.Executors
-import java.util.concurrent.ExecutorService
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -62,7 +61,7 @@ class DashboardViewModel : ViewModel() {
 
     fun update(name: String) {
         Log.v(TAG, "Clearing results")
-        clear()
+        empty()
         Log.v(TAG, "Starting thread for satellite $name")
 
         executor.execute(object : Runnable {
@@ -74,7 +73,7 @@ class DashboardViewModel : ViewModel() {
         })
     }
 
-    fun clear() {
+    fun empty() {
         _reports.value = ArrayList<SatReport>()
     }
 }

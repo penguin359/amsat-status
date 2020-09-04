@@ -6,12 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Spinner
-import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.northwinds.amsatstatus.R
 
@@ -41,7 +38,7 @@ class DashboardFragment : Fragment() {
         val nameView: Spinner = root.findViewById(R.id.name)
         nameView.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
-                dashboardViewModel.clear()
+                dashboardViewModel.empty()
             }
 
             override fun onItemSelected(p0: AdapterView<*>?, view: View?, position: Int, _id: Long) {
