@@ -1,5 +1,7 @@
 package org.northwinds.amsatstatus
 
+import android.util.Log
+
 import com.google.api.client.http.GenericUrl
 import com.google.api.client.http.HttpTransport
 import com.google.api.client.http.UrlEncodedContent
@@ -8,6 +10,8 @@ import org.json.JSONArray
 import org.json.JSONObject
 import org.json.JSONTokener
 
+const val TAG = "AmsatApi"
+
 const val AMSAT_API_URL = "https://amsat.org/status/api/v1/sat_info.php"
 const val AMSAT_API_POST_URL = "https://amsat.org/status/submit.php"
 
@@ -15,12 +19,23 @@ class AmsatApi(private val client: HttpTransport) {
     constructor() : this(NetHttpTransport())
 
     fun getReport(name: String, hours: Int) : List<SatReport> {
+        Log.v(TAG, "Requesting report for " + name)
         val uri = GenericUrl(AMSAT_API_URL)
         uri.`set`("name", name)
         uri.`set`("hours", hours)
+        Log.d(TAG, "To build")
         val httpGet = client.createRequestFactory().buildGetRequest(uri)
+        Log.d(TAG, "Done")
         var list = ArrayList<SatReport>()
-        val rawResponse = httpGet.execute().parseAsString()
+        Log.d(TAG, "To execute")
+        var rawResponse = "[]"
+        try {
+                rawResponse = httpGet.execute().parseAsString()
+        } catch(ex: Exception) {
+                Log.d(TAG, "Died on ex" + ex)
+        }
+        Log.d(TAG, "Done")
+        Log.d(TAG, rawResponse)
 
             val jsonList = JSONTokener(rawResponse).nextValue() as JSONArray
 
@@ -60,7 +75,7 @@ class AmsatApi(private val client: HttpTransport) {
         val content = UrlEncodedContent(params)
         val httpPost = client.createRequestFactory().buildPostRequest(uri, content)
         val rawResponse = httpPost.execute().parseAsString()
-        println("Posting report")
-        println(report.toString())
+        Log.v(TAG, "Posting report")
+        Log.v(TAG, report.toString())
     }
 }

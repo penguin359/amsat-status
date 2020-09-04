@@ -11,3 +11,5 @@ Internationalize
 Visually impaired support
 Use Google HTTP Client
 AndroidTest
+User agent
+Map positions
