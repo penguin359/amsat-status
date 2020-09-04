@@ -79,6 +79,7 @@ class MainActivityTest {
         )
         appCompatRadioButton3.perform(scrollTo(), click())
 
+        /*
         val appCompatSpinner = onView(
             allOf(
                 withId(R.id.satHeard),
@@ -92,7 +93,6 @@ class MainActivityTest {
             )
         )
         appCompatSpinner.perform(scrollTo(), click())
-        /*
         val appCompatTextView = onData(anything())
             .inAdapterView(
                 childAtPosition(
@@ -116,50 +116,7 @@ class MainActivityTest {
                 )
             )
         )
-        appCompatEditText.perform(scrollTo(), replaceText("A1B"), closeSoftKeyboard())
-
-        val appCompatEditText2 = onView(
-            allOf(
-                withId(R.id.callsign), withText("A1B"),
-                childAtPosition(
-                    childAtPosition(
-                        withClassName(`is`("android.widget.ScrollView")),
-                        0
-                    ),
-                    5
-                )
-            )
-        )
-        appCompatEditText2.perform(scrollTo(), click())
-
-        val appCompatEditText3 = onView(
-            allOf(
-                withId(R.id.callsign), withText("A1B"),
-                childAtPosition(
-                    childAtPosition(
-                        withClassName(`is`("android.widget.ScrollView")),
-                        0
-                    ),
-                    5
-                )
-            )
-        )
-        appCompatEditText3.perform(scrollTo(), replaceText("A1BC"))
-
-        val appCompatEditText4 = onView(
-            allOf(
-                withId(R.id.callsign), withText("A1BC"),
-                childAtPosition(
-                    childAtPosition(
-                        withClassName(`is`("android.widget.ScrollView")),
-                        0
-                    ),
-                    5
-                ),
-                isDisplayed()
-            )
-        )
-        appCompatEditText4.perform(closeSoftKeyboard())
+        appCompatEditText.perform(scrollTo(), replaceText("A1BC"), closeSoftKeyboard())
 
         val appCompatEditText5 = onView(
             allOf(
