@@ -58,19 +58,17 @@ class AmsatApi(private val client: HttpTransport) {
     fun sendReport(report: SatReport) {
         val uri = GenericUrl(AMSAT_API_POST_URL)
         val params: MutableMap<String, String> = LinkedHashMap()
-        /*
         params["SatName"] = report.name
         params["SatReport"] = report.report.value
-        params["SatYear"] = report.time.year.toString(
-        params["SatMonth"] = (report.time.month+1
-        params["SatDay"] = report.time.day.toString(
-        params["SatHour"] = report.time.hour.toString(
-        params["SatPeriod"] = report.time.quarter.toString(
+        params["SatYear"] = report.time.year.toString()
+        params["SatMonth"] = (report.time.month+1).toString()
+        params["SatDay"] = report.time.day.toString()
+        params["SatHour"] = report.time.hour.toString()
+        params["SatPeriod"] = report.time.quarter.toString()
         params["SatCall"] = report.callsign
         params["SatGridSquare"] = report.gridSquare
         params["SatSubmit"] = "yes"
         params["Confirm"] = "yes"
-        */
 
         val content = UrlEncodedContent(params)
         val httpPost = client.createRequestFactory().buildPostRequest(uri, content)
