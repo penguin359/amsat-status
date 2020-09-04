@@ -297,4 +297,30 @@ class AmsatApiTest {
         .called()
         // /status/submit.php?SatSubmit=yes&Confirm=yes&SatName=CubeBel-1&SatYear=2020&SatMonth=08&SatDay=23&SatHour=11&SatPeriod=0&SatCall=K7IW&SatReport=Not+Heard&SatGridSquare=CN85nu
     }
+
+    @Test fun `sends correct user agent when requesting details`() {
+        val httpClientMock = HttpClientMock()
+	httpClientMock.onGet().doReturn("[]")
+
+        val transport = ApacheHttpTransport(httpClientMock)
+        val api = AmsatApi(transport)
+
+	api.getReport("AO-91", 24)
+        httpClientMock.verify().get().withHeader("User-Agent", "AMSATStatus/1.0 Google-HTTP-Java-Client/1.36.0 (gzip)").called()
+    }
+
+    @Ignore("Google HTTP client does not implement getContent for Apache")
+    @Test fun `sends correct user agent on report submission`() {
+        val httpClientMock = HttpClientMock()
+	httpClientMock.onPost().doReturn("Success")
+
+        val transport = ApacheHttpTransport(httpClientMock)
+        val api = AmsatApi(transport)
+
+        val timeStr = "2018-02-27T02:15:00Z"
+        val time = makeReportTimeFromString(timeStr)
+        val report = SatReport("NO-84", Report.TELEMETRY_ONLY, time, "AB1CD", "CN85")
+        api.sendReport(report)
+        httpClientMock.verify().post().withHeader("User-Agent", "AMSATStatus/1.0").called()
+    }
 }

@@ -25,6 +25,7 @@ class AmsatApi(private val client: HttpTransport) {
         uri.`set`("hours", hours)
         Log.d(TAG, "To build")
         val httpGet = client.createRequestFactory().buildGetRequest(uri)
+        httpGet.headers.userAgent = "AMSATStatus/1.0"
         Log.d(TAG, "Done")
         var list = ArrayList<SatReport>()
         Log.d(TAG, "To execute")
@@ -72,6 +73,7 @@ class AmsatApi(private val client: HttpTransport) {
 
         val content = UrlEncodedContent(params)
         val httpPost = client.createRequestFactory().buildPostRequest(uri, content)
+        httpPost.headers.userAgent = "AMSATStatus/1.0"
         val rawResponse = httpPost.execute().parseAsString()
         Log.v(TAG, "Posting report")
         Log.v(TAG, report.toString())
