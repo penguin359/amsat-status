@@ -1,5 +1,6 @@
 package org.northwinds.amsatstatus.ui.home
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -85,8 +86,15 @@ class HomeFragment : Fragment() {
             val year = date_picker.year.toString()
             val time_picker =
                 root.findViewById<View>(R.id.time_fixture) as TimePicker
-            val hour = time_picker.hour.toString()
-            val period = time_picker.minute.toString()
+            var hour: String
+            var period: String
+            if(Build.VERSION.SDK_INT < 23) {
+                hour = time_picker.currentHour.toString()
+                period = time_picker.currentMinute.toString()
+            } else {
+                hour = time_picker.hour.toString()
+                period = time_picker.minute.toString()
+            }
 
             val callsign_w = root.findViewById(R.id.callsign) as EditText
             val callsign = callsign_w.text
@@ -96,8 +104,8 @@ class HomeFragment : Fragment() {
                 year = date_picker.year,
                 month = date_picker.month,
                 day = date_picker.dayOfMonth,
-                hour = time_picker.hour,
-                quarter = time_picker.minute)
+                hour = if(Build.VERSION.SDK_INT < 23) { time_picker.currentHour } else { time_picker.hour },
+                quarter = if(Build.VERSION.SDK_INT < 23) { time_picker.currentMinute } else { time_picker.minute })
             val satReport = SatReport(satellite_ids[id], reportType, time, callsign.toString(), grid.toString())
             Toast.makeText(
                 activity!!.applicationContext,
