@@ -6,6 +6,7 @@ import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertEquals
+import org.hamcrest.core.StringContains
 
 import com.google.api.client.http.apache.v2.ApacheHttpTransport
 import com.github.paweladamski.httpclientmock.HttpClientMock
@@ -306,7 +307,7 @@ class AmsatApiTest {
         val api = AmsatApi(transport)
 
 	api.getReport("AO-91", 24)
-        httpClientMock.verify().get().withHeader("User-Agent", "AMSATStatus/1.0 Google-HTTP-Java-Client/1.36.0 (gzip)").called()
+        httpClientMock.verify().get().withHeader("User-Agent", StringContains("AMSATStatus/1.0")).called()
     }
 
     @Ignore("Google HTTP client does not implement getContent for Apache")
@@ -321,6 +322,6 @@ class AmsatApiTest {
         val time = makeReportTimeFromString(timeStr)
         val report = SatReport("NO-84", Report.TELEMETRY_ONLY, time, "AB1CD", "CN85")
         api.sendReport(report)
-        httpClientMock.verify().post().withHeader("User-Agent", "AMSATStatus/1.0").called()
+        httpClientMock.verify().post().withHeader("User-Agent", StringContains("AMSATStatus/1.0")).called()
     }
 }
