@@ -41,12 +41,12 @@ class HomeFragmentTest {
             assertEquals("Month", utc_time.get(Calendar.MONTH), date_widget.month)
             assertEquals("Day", utc_time.get(Calendar.DAY_OF_MONTH), date_widget.dayOfMonth)
             assertEquals("Hour", utc_time.get(Calendar.HOUR_OF_DAY), time_widget.currentHour)
-            assertEquals("Minute", utc_time.get(Calendar.MINUTE), time_widget.currentMinute)
+            assertEquals("Minute", utc_time.get(Calendar.MINUTE) / 15, time_widget.currentMinute)
         }
         assertEquals("Year", utc_time.get(Calendar.YEAR), year)
         assertEquals("Month", utc_time.get(Calendar.MONTH), month)
         assertEquals("Day", utc_time.get(Calendar.DAY_OF_MONTH), day)
         assertEquals("Hour", utc_time.get(Calendar.HOUR_OF_DAY), hour)
-        assertEquals("Minute", utc_time.get(Calendar.MINUTE), minute)
+        assertEquals("Minute", utc_time.get(Calendar.MINUTE) / 15, minute)
     }
 }
