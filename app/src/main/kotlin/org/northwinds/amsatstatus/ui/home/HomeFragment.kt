@@ -66,10 +66,10 @@ class HomeFragment : Fragment() {
             utc_time.get(Calendar.DAY_OF_MONTH))
 	if(Build.VERSION.SDK_INT < 23) {
 	    timePicker.currentHour = utc_time.get(Calendar.HOUR_OF_DAY)
-	    timePicker.currentMinute = utc_time.get(Calendar.MINUTE)
+	    timePicker.currentMinute = utc_time.get(Calendar.MINUTE) / 15
 	} else {
 	    timePicker.hour = utc_time.get(Calendar.HOUR_OF_DAY)
-	    timePicker.minute = utc_time.get(Calendar.MINUTE)
+	    timePicker.minute = utc_time.get(Calendar.MINUTE) / 15
 	}
 
         setTimePickerInterval(timePicker)
