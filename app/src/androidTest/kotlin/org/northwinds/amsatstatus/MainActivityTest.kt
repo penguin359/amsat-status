@@ -3,20 +3,28 @@ package org.northwinds.amsatstatus
 
 import android.view.View
 import android.view.ViewGroup
-import androidx.test.espresso.Espresso.onData
+import android.widget.DatePicker
+import android.widget.TimePicker
+//import androidx.test.espresso.Espresso.onData
+import androidx.test.annotation.UiThreadTest
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
-import androidx.test.runner.AndroidJUnit4
 import org.hamcrest.Description
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers.*
+import org.hamcrest.Matchers.`is`
+import org.hamcrest.Matchers.allOf
 import org.hamcrest.TypeSafeMatcher
+import org.junit.Assert.assertEquals
+import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.*
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -163,5 +171,24 @@ class MainActivityTest {
                         && view == parent.getChildAt(position)
             }
         }
+    }
+
+    @Before
+    fun setUp() {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
+    }
+
+    @Test
+    @UiThreadTest
+    fun homeStartsOnCurrentUTCTime() {
+        val utc_time = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+
+        //onView(withId(R.id.date_fixture))
+        val date_widget = mActivityTestRule.activity.findViewById<DatePicker>(R.id.date_fixture)
+        assertEquals("Year", utc_time.get(Calendar.YEAR), date_widget.year)
+        assertEquals("Month", utc_time.get(Calendar.MONTH), date_widget.month)
+        assertEquals("Day", utc_time.get(Calendar.DAY_OF_MONTH), date_widget.dayOfMonth)
+        val time_widget = mActivityTestRule.activity.findViewById<TimePicker>(R.id.time_fixture)
+        assertEquals("Hour", utc_time.get(Calendar.HOUR_OF_DAY), time_widget.currentHour)
     }
 }
