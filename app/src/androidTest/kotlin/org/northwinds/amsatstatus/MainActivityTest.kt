@@ -113,44 +113,17 @@ class MainActivityTest {
         */
 
         val appCompatEditText = onView(
-            allOf(
-                withId(R.id.callsign),
-                childAtPosition(
-                    childAtPosition(
-                        withClassName(`is`("android.widget.ScrollView")),
-                        0
-                    ),
-                    5
-                )
-            )
+            withId(R.id.callsign)
         )
         appCompatEditText.perform(scrollTo(), replaceText("A1BC"), closeSoftKeyboard())
 
         val appCompatEditText5 = onView(
-            allOf(
-                withId(R.id.gridsquare),
-                childAtPosition(
-                    childAtPosition(
-                        withClassName(`is`("android.widget.ScrollView")),
-                        0
-                    ),
-                    6
-                )
-            )
+            withId(R.id.gridsquare)
         )
         appCompatEditText5.perform(scrollTo(), replaceText("CN85"), closeSoftKeyboard())
 
         val appCompatButton = onView(
-            allOf(
-                withId(R.id.submit_button), withText("Submit Report"),
-                childAtPosition(
-                    childAtPosition(
-                        withClassName(`is`("android.widget.ScrollView")),
-                        0
-                    ),
-                    7
-                )
-            )
+            withId(R.id.submit_button)
         )
         appCompatButton.perform(scrollTo(), click())
     }
@@ -175,7 +148,7 @@ class MainActivityTest {
 
     @Before
     fun setUp() {
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
+        //TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
     }
 
     @Test

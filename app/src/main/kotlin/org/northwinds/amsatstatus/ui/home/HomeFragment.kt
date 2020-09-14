@@ -1,5 +1,8 @@
 package org.northwinds.amsatstatus.ui.home
 
+import java.util.Calendar
+import java.util.TimeZone
+
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -53,6 +56,22 @@ class HomeFragment : Fragment() {
 //            }
 //        });
         timePicker.setIs24HourView(true)
+
+	var date_picker =
+	    root.findViewById<View>(R.id.date_fixture) as DatePicker
+	val utc_time = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+	date_picker.updateDate(
+            utc_time.get(Calendar.YEAR),
+            utc_time.get(Calendar.MONTH),
+            utc_time.get(Calendar.DAY_OF_MONTH))
+	if(Build.VERSION.SDK_INT < 23) {
+	    timePicker.currentHour = utc_time.get(Calendar.HOUR_OF_DAY)
+	    timePicker.currentMinute = utc_time.get(Calendar.MINUTE)
+	} else {
+	    timePicker.hour = utc_time.get(Calendar.HOUR_OF_DAY)
+	    timePicker.minute = utc_time.get(Calendar.MINUTE)
+	}
+
         setTimePickerInterval(timePicker)
         val submit_btn =
             root.findViewById<View>(R.id.submit_button) as Button
@@ -79,8 +98,6 @@ class HomeFragment : Fragment() {
                 R.id.crewActiveRadio -> Report.CREW_ACTIVE
                 else -> Report.NOT_HEARD
             }
-            val date_picker =
-                root.findViewById<View>(R.id.date_fixture) as DatePicker
             val day = date_picker.dayOfMonth.toString()
             val month = String.format("%02d", date_picker.month + 1)
             val year = date_picker.year.toString()
