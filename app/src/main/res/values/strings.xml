@@ -7,8 +7,8 @@
     <string name="downlink_only">Downlink Only</string>
     <string name="not_heard">Not Heard</string>
     <string name="iss_crew_voice_active">ISS Crew (Voice) Active</string>
-    <string name="callsign">callsign</string>
-    <string name="grid">grid</string>
+    <string name="callsign">Callsign</string>
+    <string name="grid">Grid</string>
     <string name="satellite">Satellite</string>
     <string name="submit_report">Submit Report</string>
 
@@ -215,18 +215,17 @@
     <string name="title_activity_settings">SettingsActivity</string>
 
     <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
+    <string name="defaults_header">Defaults</string>
+    <string name="display_header">Display</string>
 
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
+    <!-- Defaults Preferences -->
 
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <string name="defaults">Defaults</string>
+    <!-- Display Preferences -->
+    <string name="use_local_time">Use local time</string>
+    <string name="use_local_time_on">Time is in local time</string>
+    <string name="use_local_time_off">Time is in UTC</string>
+
+    <string name="preference_callsign">callsign</string>
+    <string name="preference_default_grid">default_grid</string>
+    <string name="preference_local_time">local_time</string>
 </resources>
