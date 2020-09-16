@@ -17,6 +17,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
+import org.hamcrest.core.StringContains
 import org.junit.Before
 import org.junit.Ignore
 import org.northwinds.amsatstatus.R
@@ -60,6 +61,8 @@ class HomeFragmentTest {
         assertEquals("Day", utc_time.get(Calendar.DAY_OF_MONTH), day)
         assertEquals("Hour", utc_time.get(Calendar.HOUR_OF_DAY), hour)
         assertEquals("Minute", utc_time.get(Calendar.MINUTE) / 15, minute)
+
+        onView(withId(R.id.time_mode)).check(matches(withText(StringContains("UTC"))))
     }
 
     //@Ignore("This test is incomplete")
@@ -82,6 +85,8 @@ class HomeFragmentTest {
             assertEquals("Hour", local_time.get(Calendar.HOUR_OF_DAY), time_widget.currentHour)
             assertEquals("Minute", local_time.get(Calendar.MINUTE) / 15, time_widget.currentMinute)
         }
+
+        onView(withId(R.id.time_mode)).check(matches(withText(StringContains("Local"))))
     }
 
     @Test

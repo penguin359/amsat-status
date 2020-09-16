@@ -11,6 +11,8 @@
     <string name="grid">Grid</string>
     <string name="satellite">Satellite</string>
     <string name="submit_report">Submit Report</string>
+    <string name="local_time">Local Time</string>
+    <string name="utc_time">UTC Time</string>
 
     <string-array name="satellite_ids">
         <item>DEMO-1</item>

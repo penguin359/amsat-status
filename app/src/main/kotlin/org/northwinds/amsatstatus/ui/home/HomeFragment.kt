@@ -57,9 +57,12 @@ class HomeFragment : Fragment() {
         var date_picker = root.findViewById(R.id.date_fixture) as DatePicker
         val prefs = PreferenceManager(context).sharedPreferences
         val clock = Clock()
+        val timeMode = root.findViewById(R.id.time_mode) as TextView
         val picker_time = if(prefs.getBoolean(context!!.getString(R.string.preference_local_time), false)) {
+            timeMode.setText(R.string.local_time)
             clock.localCalendar
         } else {
+            timeMode.setText(R.string.utc_time)
             clock.utcCalendar
         }
         date_picker.updateDate(
