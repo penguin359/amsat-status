@@ -6,8 +6,6 @@ import java.util.Calendar
 import java.util.GregorianCalendar
 import java.util.TimeZone
 
-import org.northwinds.amsatstatus.ui.home.HomeFragment
-
 class ClockTest {
 	@Test
 	fun testUtcToLocalConversion() {
@@ -82,5 +80,31 @@ class ClockTest {
 		assertEquals(17,   actual.get(Calendar.HOUR_OF_DAY), "Bad hour")
 		assertEquals(50,   actual.get(Calendar.MINUTE), "Bad minute")
 		assertEquals(45,   actual.get(Calendar.SECOND), "Bad second")
+	}
+
+	@Test
+	fun testClockGetsCorrectTimesDuringNewYears() {
+		// UTC:   2019-01-01T05:23:45Z
+		// Local: 2018-12-31T21:23:45-08:00
+		val ref_time = 1546320225*1000L
+		val ref_timezone = "America/Los_Angeles"
+
+		TimeZone.setDefault(TimeZone.getTimeZone(ref_timezone))
+		val clock = Clock(ref_time)
+		val utc = clock.utcCalendar
+		assertEquals(2019, utc.get(Calendar.YEAR), "Bad year")
+		assertEquals(1-1,  utc.get(Calendar.MONTH), "Bad month")
+		assertEquals(1,    utc.get(Calendar.DAY_OF_MONTH), "Bad day")
+		assertEquals(5,    utc.get(Calendar.HOUR_OF_DAY), "Bad hour")
+		assertEquals(23,   utc.get(Calendar.MINUTE), "Bad minute")
+		assertEquals(45,   utc.get(Calendar.SECOND), "Bad second")
+
+		val local = clock.localCalendar
+		assertEquals(2018, local.get(Calendar.YEAR), "Bad year")
+		assertEquals(12-1, local.get(Calendar.MONTH), "Bad month")
+		assertEquals(31,   local.get(Calendar.DAY_OF_MONTH), "Bad day")
+		assertEquals(21,   local.get(Calendar.HOUR_OF_DAY), "Bad hour")
+		assertEquals(23,   local.get(Calendar.MINUTE), "Bad minute")
+		assertEquals(45,   local.get(Calendar.SECOND), "Bad second")
 	}
 }
