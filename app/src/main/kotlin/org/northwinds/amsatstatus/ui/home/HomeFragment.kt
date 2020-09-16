@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.preference.PreferenceManager
 import org.northwinds.amsatstatus.R
 import org.northwinds.amsatstatus.AmsatApi
 import org.northwinds.amsatstatus.Report
@@ -57,20 +58,24 @@ class HomeFragment : Fragment() {
 //        });
         timePicker.setIs24HourView(true)
 
-	var date_picker =
-	    root.findViewById<View>(R.id.date_fixture) as DatePicker
-	val utc_time = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-	date_picker.updateDate(
-            utc_time.get(Calendar.YEAR),
-            utc_time.get(Calendar.MONTH),
-            utc_time.get(Calendar.DAY_OF_MONTH))
-	if(Build.VERSION.SDK_INT < 23) {
-	    timePicker.currentHour = utc_time.get(Calendar.HOUR_OF_DAY)
-	    timePicker.currentMinute = utc_time.get(Calendar.MINUTE) / 15
-	} else {
-	    timePicker.hour = utc_time.get(Calendar.HOUR_OF_DAY)
-	    timePicker.minute = utc_time.get(Calendar.MINUTE) / 15
-	}
+        var date_picker = root.findViewById(R.id.date_fixture) as DatePicker
+        val utc_time = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        date_picker.updateDate(
+                utc_time.get(Calendar.YEAR),
+                utc_time.get(Calendar.MONTH),
+                utc_time.get(Calendar.DAY_OF_MONTH))
+        if(Build.VERSION.SDK_INT < 23) {
+            timePicker.currentHour = utc_time.get(Calendar.HOUR_OF_DAY)
+            timePicker.currentMinute = utc_time.get(Calendar.MINUTE) / 15
+        } else {
+            timePicker.hour = utc_time.get(Calendar.HOUR_OF_DAY)
+            timePicker.minute = utc_time.get(Calendar.MINUTE) / 15
+        }
+        val prefs = PreferenceManager(context).sharedPreferences
+        val callsign_w = root.findViewById(R.id.callsign) as EditText
+        callsign_w?.setText(prefs.getString(context!!.getString(R.string.preference_callsign), ""))
+        val grid_w = root.findViewById(R.id.gridsquare) as EditText
+        grid_w?.setText(prefs.getString(context!!.getString(R.string.preference_default_grid), ""))
 
         setTimePickerInterval(timePicker)
         val submit_btn =
