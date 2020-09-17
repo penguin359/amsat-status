@@ -14,9 +14,8 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
 import org.northwinds.amsatstatus.*
 
-class HomeFragment : Fragment() {
-
-    var api = AmsatApi()
+class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragment() {
+    constructor() : this(Clock(), AmsatApi())
 
     //private ArrayAdapter<CharSequence>  mSatelliteAdapter;
 
@@ -56,7 +55,7 @@ class HomeFragment : Fragment() {
 
         var date_picker = root.findViewById(R.id.date_fixture) as DatePicker
         val prefs = PreferenceManager(context).sharedPreferences
-        val clock = Clock()
+        //val clock = Clock()
         val timeMode = root.findViewById(R.id.time_mode) as TextView
         val picker_time = if(prefs.getBoolean(context!!.getString(R.string.preference_local_time), false)) {
             timeMode.setText(R.string.local_time)

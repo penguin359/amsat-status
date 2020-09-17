@@ -13,14 +13,25 @@ import java.util.TimeZone
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.capture
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
 import org.hamcrest.core.StringContains
 import org.junit.Before
 import org.junit.Ignore
-import org.northwinds.amsatstatus.R
+//import org.mockito.ArgumentCaptor
+//import org.mockito.Mockito.mock
+//import org.mockito.ArgumentCaptor
+//import org.mockito.Mockito.mock
+//import org.mockito.Mockito.verify
+import org.northwinds.amsatstatus.*
 
 @RunWith(AndroidJUnit4::class)
 class HomeFragmentTest {
@@ -145,5 +156,29 @@ class HomeFragmentTest {
         assertEquals("Day", utc_time.get(Calendar.DAY_OF_MONTH), day)
         assertEquals("Hour", utc_time.get(Calendar.HOUR_OF_DAY), hour)
         assertEquals("Minute", utc_time.get(Calendar.MINUTE) / 15, minute)
+    }
+
+    @Test
+    fun dateTimeSubmitsCorrectFixedUTCTime() {
+        PreferenceManager(appContext).sharedPreferences.edit {
+            putString("callsign", "A1BC")
+            putBoolean(appContext.getString(R.string.preference_local_time), false)
+        }
+
+        //val apiMock = mock(AmsatApi::class.java)
+        val apiMock = mock<AmsatApi> {}
+        TimeZone.setDefault(TimeZone.getTimeZone(ref_timezone))
+        //val utc_time = Calendar.getInstance(TimeZone.getTimeZone("MST"))
+        val frag = launchFragmentInContainer<HomeFragment>(instantiate = { HomeFragment(Clock(), apiMock) })
+
+        onView(withId(R.id.submit_button)).perform(scrollTo(), click())
+
+        //var arg: ArgumentCaptor<SatReport> = ArgumentCaptor.forClass(SatReport::class.java)
+        //var arg: ArgumentCaptor<SatReport> = argumentCaptor.forClass(SatReport::class.java)
+        val arg = argumentCaptor<SatReport>()
+        //verify(apiMock).sendReport(capture(arg))
+        verify(apiMock).sendReport(arg.capture())
+        assertEquals("A1BC", arg.firstValue.callsign)
+        //SatReport("", Report.CREW_ACTIVE, ReportTime(Calendar.getInstance()), ""))
     }
 }

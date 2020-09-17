@@ -15,7 +15,7 @@ const val TAG = "AmsatApi"
 const val AMSAT_API_URL = "https://amsat.org/status/api/v1/sat_info.php"
 const val AMSAT_API_POST_URL = "https://amsat.org/status/submit.php"
 
-class AmsatApi(private val client: HttpTransport) {
+open class AmsatApi(private val client: HttpTransport) {
     constructor() : this(NetHttpTransport())
 
     fun getReport(name: String, hours: Int) : List<SatReport> {
@@ -56,7 +56,7 @@ class AmsatApi(private val client: HttpTransport) {
         return list
     }
 
-    fun sendReport(report: SatReport) {
+    open fun sendReport(report: SatReport) {
         val uri = GenericUrl(AMSAT_API_POST_URL)
         val params: MutableMap<String, String> = LinkedHashMap()
         params["SatName"] = report.name
