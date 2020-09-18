@@ -13,3 +13,9 @@ Use Google HTTP Client
 AndroidTest
 User agent
 Map positions
+Progress bar on list load
+Capitalize callsign
+Home screen widget
+Notifications/Alerts
+Multiple satellites
+Tracking
