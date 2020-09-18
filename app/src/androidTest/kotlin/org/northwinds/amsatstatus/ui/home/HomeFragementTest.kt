@@ -251,7 +251,7 @@ class HomeFragmentTest {
         assertEquals("Bad quarter", 1, time.quarter)
     }
 
-    @Ignore("Requires an update to ReportTime to fix it")
+    //@Ignore("Requires an update to ReportTime to fix it")
     @Test
     fun dateTimeSubmitsCorrectFixedLocalTime() {
         val expectedCallsign = "A1BC"
