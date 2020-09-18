@@ -12,6 +12,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
+import kotlinx.android.synthetic.main.fragment_dashboard_item.*
 import org.northwinds.amsatstatus.*
 
 class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragment() {
@@ -125,12 +126,18 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
             val callsign = callsign_w.text
             val grid_w = root.findViewById(R.id.gridsquare) as EditText
             val grid = grid_w.text
-            val time = makeReportTimeFromComponents(
-                year = date_picker.year,
-                month = date_picker.month,
-                day = date_picker.dayOfMonth,
-                hour = if(Build.VERSION.SDK_INT < 23) { time_picker.currentHour } else { time_picker.hour },
-                quarter = if(Build.VERSION.SDK_INT < 23) { time_picker.currentMinute } else { time_picker.minute })
+            val calendar = if(prefs.getBoolean(context!!.getString(R.string.preference_local_time), false)) {
+                Calendar.getInstance()
+            } else {
+                Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+            }
+            calendar.set(Calendar.YEAR, date_picker.year)
+            calendar.set(Calendar.MONTH, date_picker.month)
+            calendar.set(Calendar.DAY_OF_MONTH, date_picker.dayOfMonth)
+            calendar.set(Calendar.HOUR_OF_DAY, if(Build.VERSION.SDK_INT < 23) { time_picker.currentHour } else { time_picker.hour })
+            calendar.set(Calendar.MINUTE, if(Build.VERSION.SDK_INT < 23) { time_picker.currentMinute } else { time_picker.minute } * 15)
+            calendar.set(Calendar.SECOND, 0)
+            val time = ReportTime(calendar)
             val satReport = SatReport(satellite_ids[id], reportType, time, callsign.toString(), grid.toString())
             Toast.makeText(
                 activity!!.applicationContext,
