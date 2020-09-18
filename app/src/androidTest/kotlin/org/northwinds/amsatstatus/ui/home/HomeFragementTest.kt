@@ -289,4 +289,23 @@ class HomeFragmentTest {
         assertEquals("Bad minute", 15, time.minute)
         assertEquals("Bad quarter", 1, time.quarter)
     }
+
+    @Test
+    fun timeLabelUpdatesWithPreferences() {
+        val frag = launchFragmentInContainer<HomeFragment>()
+
+        onView(withId(R.id.time_mode)).check(matches(withText(StringContains("UTC"))))
+
+        PreferenceManager(appContext).sharedPreferences.edit {
+            putBoolean(appContext.getString(R.string.preference_local_time), true)
+        }
+
+        onView(withId(R.id.time_mode)).check(matches(withText(StringContains("Local"))))
+
+        PreferenceManager(appContext).sharedPreferences.edit {
+            putBoolean(appContext.getString(R.string.preference_local_time), false)
+        }
+
+        onView(withId(R.id.time_mode)).check(matches(withText(StringContains("UTC"))))
+    }
 }

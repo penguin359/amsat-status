@@ -1,5 +1,6 @@
 package org.northwinds.amsatstatus.ui.home
 
+import android.content.SharedPreferences
 import java.util.Calendar
 import java.util.TimeZone
 
@@ -21,6 +22,23 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
     //private ArrayAdapter<CharSequence>  mSatelliteAdapter;
 
     private lateinit var homeViewModel: HomeViewModel
+
+    lateinit var timeMode: TextView
+
+    lateinit var prefs : SharedPreferences
+    inner class Changer : SharedPreferences.OnSharedPreferenceChangeListener {
+        override fun onSharedPreferenceChanged(prefs: SharedPreferences?, key: String?) {
+            if (key!!.equals(context!!.getString(R.string.preference_local_time))) {
+                if(prefs!!.getBoolean(context!!.getString(R.string.preference_local_time), false)) {
+                    timeMode.setText(R.string.local_time)
+                } else {
+                    timeMode.setText(R.string.utc_time)
+                }
+            }
+        }
+    }
+
+    val changer = Changer()
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -55,9 +73,9 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
         timePicker.setIs24HourView(true)
 
         var date_picker = root.findViewById(R.id.date_fixture) as DatePicker
-        val prefs = PreferenceManager(context).sharedPreferences
+        prefs = PreferenceManager(context).sharedPreferences
         //val clock = Clock()
-        val timeMode = root.findViewById(R.id.time_mode) as TextView
+        timeMode = root.findViewById(R.id.time_mode) as TextView
         val picker_time = if(prefs.getBoolean(context!!.getString(R.string.preference_local_time), false)) {
             timeMode.setText(R.string.local_time)
             clock.localCalendar
@@ -65,6 +83,7 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
             timeMode.setText(R.string.utc_time)
             clock.utcCalendar
         }
+        prefs.registerOnSharedPreferenceChangeListener(changer)
         date_picker.updateDate(
                 picker_time.get(Calendar.YEAR),
                 picker_time.get(Calendar.MONTH),
@@ -170,6 +189,11 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
             Toast.LENGTH_SHORT
         ).show()
         return root
+    }
+
+    override fun onDestroyView() {
+        prefs.unregisterOnSharedPreferenceChangeListener(changer)
+        super.onDestroyView()
     }
 
     //@SuppressLint("NewApi")
