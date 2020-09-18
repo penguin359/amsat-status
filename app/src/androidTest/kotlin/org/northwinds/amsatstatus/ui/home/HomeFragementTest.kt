@@ -1,37 +1,36 @@
 package org.northwinds.amsatstatus.ui.home
 
-import android.widget.DatePicker
-import android.widget.TimePicker
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.fragment.app.testing.launchFragmentInContainer
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.Assert.*
-
-import java.util.Calendar
-import java.util.TimeZone
-import androidx.core.content.edit
-import androidx.preference.PreferenceManager
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.scrollTo
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.platform.app.InstrumentationRegistry
-import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.capture
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import org.hamcrest.core.StringContains
-import org.junit.Before
-import org.junit.Ignore
 //import org.mockito.ArgumentCaptor
 //import org.mockito.Mockito.mock
 //import org.mockito.ArgumentCaptor
 //import org.mockito.Mockito.mock
 //import org.mockito.Mockito.verify
+import android.widget.DatePicker
+import android.widget.TimePicker
+import androidx.core.content.edit
+import androidx.fragment.app.testing.launchFragmentInContainer
+import androidx.preference.PreferenceManager
+import androidx.test.espresso.Espresso.onData
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.scrollTo
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import org.hamcrest.Matchers.*
+import org.hamcrest.core.StringContains
+import org.junit.Assert.assertEquals
+import org.junit.Before
+import org.junit.Ignore
+import org.junit.Test
+import org.junit.runner.RunWith
 import org.northwinds.amsatstatus.*
+import java.util.*
+
 
 @RunWith(AndroidJUnit4::class)
 class HomeFragmentTest {
@@ -43,7 +42,7 @@ class HomeFragmentTest {
     }
 
     @Test
-    fun dateTimePickersLoadUtcTime() {
+    fun dateTimePickersLoadCurrentUtcTime() {
         val frag = launchFragmentInContainer<HomeFragment>()
 
         val utc_time = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
@@ -62,13 +61,13 @@ class HomeFragmentTest {
             hour = time_widget.currentHour
             minute = time_widget.currentMinute
             assertEquals("Year", utc_time.get(Calendar.YEAR), date_widget.year)
-            assertEquals("Month", utc_time.get(Calendar.MONTH), date_widget.month)
+            assertEquals("Month", utc_time.get(Calendar.MONTH)+1, date_widget.month+1)
             assertEquals("Day", utc_time.get(Calendar.DAY_OF_MONTH), date_widget.dayOfMonth)
             assertEquals("Hour", utc_time.get(Calendar.HOUR_OF_DAY), time_widget.currentHour)
             assertEquals("Minute", utc_time.get(Calendar.MINUTE) / 15, time_widget.currentMinute)
         }
         assertEquals("Year", utc_time.get(Calendar.YEAR), year)
-        assertEquals("Month", utc_time.get(Calendar.MONTH), month)
+        assertEquals("Month", utc_time.get(Calendar.MONTH)+1, month+1)
         assertEquals("Day", utc_time.get(Calendar.DAY_OF_MONTH), day)
         assertEquals("Hour", utc_time.get(Calendar.HOUR_OF_DAY), hour)
         assertEquals("Minute", utc_time.get(Calendar.MINUTE) / 15, minute)
@@ -76,9 +75,8 @@ class HomeFragmentTest {
         onView(withId(R.id.time_mode)).check(matches(withText(StringContains("UTC"))))
     }
 
-    //@Ignore("This test is incomplete")
     @Test
-    fun dateTimePickersLoadLocalTime() {
+    fun dateTimePickersLoadCurrentLocalTime() {
         PreferenceManager(appContext).sharedPreferences.edit {
             putBoolean(appContext.getString(R.string.preference_local_time), true)
         }
@@ -91,10 +89,63 @@ class HomeFragmentTest {
             val date_widget = it.view!!.findViewById(R.id.date_fixture) as DatePicker
             val time_widget = it.view!!.findViewById<TimePicker>(R.id.time_fixture)
             assertEquals("Year", local_time.get(Calendar.YEAR), date_widget.year)
-            assertEquals("Month", local_time.get(Calendar.MONTH), date_widget.month)
+            assertEquals("Month", local_time.get(Calendar.MONTH)+1, date_widget.month+1)
             assertEquals("Day", local_time.get(Calendar.DAY_OF_MONTH), date_widget.dayOfMonth)
             assertEquals("Hour", local_time.get(Calendar.HOUR_OF_DAY), time_widget.currentHour)
             assertEquals("Minute", local_time.get(Calendar.MINUTE) / 15, time_widget.currentMinute)
+        }
+
+        onView(withId(R.id.time_mode)).check(matches(withText(StringContains("Local"))))
+    }
+
+    // UTC:   2019-01-01T05:23:45Z
+    // Local: 2018-12-31T21:23:45-08:00
+    val ref_time = 1546320225*1000L
+    val ref_timezone = "America/Los_Angeles"
+
+    @Test
+    fun dateTimePickersLoadFixedUtcTime() {
+        TimeZone.setDefault(TimeZone.getTimeZone(ref_timezone))
+
+        val frag = launchFragmentInContainer<HomeFragment>(instantiate = {
+            HomeFragment(Clock(ref_time), AmsatApi())
+        })
+
+        frag.onFragment {
+            val date_widget = it.view!!.findViewById(R.id.date_fixture) as DatePicker
+            val time_widget = it.view!!.findViewById<TimePicker>(R.id.time_fixture)
+            // UTC:   2019-01-01T05:23:45Z
+            assertEquals("Bad Year",   2019,    date_widget.year)
+            assertEquals("Bad Month",  1,       date_widget.month+1)
+            assertEquals("Bad Day",    1,       date_widget.dayOfMonth)
+            assertEquals("Bad Hour",   5,       time_widget.currentHour)
+            assertEquals("Bad Minute", 23 / 15, time_widget.currentMinute)
+        }
+
+        onView(withId(R.id.time_mode)).check(matches(withText(StringContains("UTC"))))
+    }
+
+    @Test
+    fun dateTimePickersLoadFixedLocalTime() {
+        PreferenceManager(appContext).sharedPreferences.edit {
+            putBoolean(appContext.getString(R.string.preference_local_time), true)
+        }
+
+        TimeZone.setDefault(TimeZone.getTimeZone(ref_timezone))
+
+        val frag = launchFragmentInContainer<HomeFragment>(instantiate = {
+            HomeFragment(Clock(ref_time), AmsatApi())
+        })
+
+        frag.onFragment {
+            val date_widget = it.view!!.findViewById(R.id.date_fixture) as DatePicker
+            val time_widget = it.view!!.findViewById<TimePicker>(R.id.time_fixture)
+            // Local: 2018-12-31T21:23:45-08:00
+            assertEquals("Bad Year",   2018,    date_widget.year)
+            assertEquals("Bad Month",  12,      date_widget.month+1)
+            assertEquals("Bad Day",    31,      date_widget.dayOfMonth)
+            assertEquals("Bad Hour",   21,      time_widget.currentHour)
+            assertEquals("Bad Minute", 23 / 15, time_widget.currentMinute)
         }
 
         onView(withId(R.id.time_mode)).check(matches(withText(StringContains("Local"))))
@@ -120,11 +171,6 @@ class HomeFragmentTest {
         onView(withId(R.id.gridsquare)).check(matches(withText(EXPECTED_GRIDSQUARE)))
     }
 
-    // UTC:   2019-01-01T05:23:45Z
-    // Local: 2018-12-31T21:23:45-08:00
-    val ref_time = 1546320225*1000L
-    val ref_timezone = "America/Los_Angeles"
-
     @Test
     fun homeFragmentLoad() {
         val frag = launchFragmentInContainer<HomeFragment>()
@@ -146,13 +192,13 @@ class HomeFragmentTest {
             hour = time_widget.currentHour
             minute = time_widget.currentMinute
             assertEquals("Year", utc_time.get(Calendar.YEAR), date_widget.year)
-            assertEquals("Month", utc_time.get(Calendar.MONTH), date_widget.month)
+            assertEquals("Month", utc_time.get(Calendar.MONTH)+1, date_widget.month+1)
             assertEquals("Day", utc_time.get(Calendar.DAY_OF_MONTH), date_widget.dayOfMonth)
             assertEquals("Hour", utc_time.get(Calendar.HOUR_OF_DAY), time_widget.currentHour)
             assertEquals("Minute", utc_time.get(Calendar.MINUTE) / 15, time_widget.currentMinute)
         }
         assertEquals("Year", utc_time.get(Calendar.YEAR), year)
-        assertEquals("Month", utc_time.get(Calendar.MONTH), month)
+        assertEquals("Month", utc_time.get(Calendar.MONTH)+1, month+1)
         assertEquals("Day", utc_time.get(Calendar.DAY_OF_MONTH), day)
         assertEquals("Hour", utc_time.get(Calendar.HOUR_OF_DAY), hour)
         assertEquals("Minute", utc_time.get(Calendar.MINUTE) / 15, minute)
@@ -160,8 +206,11 @@ class HomeFragmentTest {
 
     @Test
     fun dateTimeSubmitsCorrectFixedUTCTime() {
+        val expectedCallsign = "A1BC"
+        val expectedGridsquare = "BP51"
         PreferenceManager(appContext).sharedPreferences.edit {
-            putString("callsign", "A1BC")
+            putString(appContext.getString(R.string.preference_callsign), expectedCallsign)
+            putString(appContext.getString(R.string.preference_default_grid), expectedGridsquare)
             putBoolean(appContext.getString(R.string.preference_local_time), false)
         }
 
@@ -169,8 +218,18 @@ class HomeFragmentTest {
         val apiMock = mock<AmsatApi> {}
         TimeZone.setDefault(TimeZone.getTimeZone(ref_timezone))
         //val utc_time = Calendar.getInstance(TimeZone.getTimeZone("MST"))
-        val frag = launchFragmentInContainer<HomeFragment>(instantiate = { HomeFragment(Clock(), apiMock) })
+        val frag = launchFragmentInContainer<HomeFragment>(instantiate = {
+            HomeFragment(
+                Clock(ref_time),
+                apiMock
+            )
+        })
 
+        onView(withId(R.id.crewActiveRadio)).perform(scrollTo(), click())
+        onView(withId(R.id.satHeard)).perform(click())
+        //onData(withSpinnerText(""))
+        onData(allOf(`is`(instanceOf(String::class.java)), `is`("AO-7 Mode B"))).perform(click())
+        onView(withId(R.id.satHeard)).check(matches(withSpinnerText(containsString("AO-7 Mode B"))))
         onView(withId(R.id.submit_button)).perform(scrollTo(), click())
 
         //var arg: ArgumentCaptor<SatReport> = ArgumentCaptor.forClass(SatReport::class.java)
@@ -178,7 +237,56 @@ class HomeFragmentTest {
         val arg = argumentCaptor<SatReport>()
         //verify(apiMock).sendReport(capture(arg))
         verify(apiMock).sendReport(arg.capture())
-        assertEquals("A1BC", arg.firstValue.callsign)
-        //SatReport("", Report.CREW_ACTIVE, ReportTime(Calendar.getInstance()), ""))
+        assertEquals(expectedCallsign, arg.firstValue.callsign)
+        assertEquals(expectedGridsquare, arg.firstValue.gridSquare)
+        assertEquals(Report.CREW_ACTIVE, arg.firstValue.report)
+        assertEquals("[B]_AO-7", arg.firstValue.name)
+        val time =  arg.firstValue.time
+        // UTC:   2019-01-01T05:23:45Z
+        assertEquals("Bad year", 2019, time.year)
+        assertEquals("Bad month", 1, time.month+1)
+        assertEquals("Bad day",1, time.day)
+        assertEquals("Bad hour", 5, time.hour)
+        assertEquals("Bad minute", 15, time.minute)
+        assertEquals("Bad quarter", 1, time.quarter)
+    }
+
+    @Ignore("Requires an update to ReportTime to fix it")
+    @Test
+    fun dateTimeSubmitsCorrectFixedLocalTime() {
+        val expectedCallsign = "A1BC"
+        val expectedGridsquare = "BP51"
+        PreferenceManager(appContext).sharedPreferences.edit {
+            putString(appContext.getString(R.string.preference_callsign), expectedCallsign)
+            putString(appContext.getString(R.string.preference_default_grid), expectedGridsquare)
+            putBoolean(appContext.getString(R.string.preference_local_time), true)
+        }
+
+        val apiMock = mock<AmsatApi> {}
+        TimeZone.setDefault(TimeZone.getTimeZone(ref_timezone))
+        val frag = launchFragmentInContainer<HomeFragment>(instantiate = {
+            HomeFragment(Clock(ref_time), apiMock)
+        })
+
+        onView(withId(R.id.telemetryOnlyRadio)).perform(scrollTo(), click())
+        onView(withId(R.id.satHeard)).perform(click())
+        onData(allOf(`is`(instanceOf(String::class.java)), `is`("ISS SSTV"))).perform(click())
+        onView(withId(R.id.satHeard)).check(matches(withSpinnerText(containsString("ISS SSTV"))))
+        onView(withId(R.id.submit_button)).perform(scrollTo(), click())
+
+        val arg = argumentCaptor<SatReport>()
+        verify(apiMock).sendReport(arg.capture())
+        assertEquals(expectedCallsign, arg.firstValue.callsign)
+        assertEquals(expectedGridsquare, arg.firstValue.gridSquare)
+        assertEquals(Report.TELEMETRY_ONLY, arg.firstValue.report)
+        assertEquals("ISS-SSTV", arg.firstValue.name)
+        val time =  arg.firstValue.time
+        // UTC:   2019-01-01T05:23:45Z
+        assertEquals("Bad year", 2019, time.year)
+        assertEquals("Bad month", 1, time.month+1)
+        assertEquals("Bad day",1, time.day)
+        assertEquals("Bad hour", 5, time.hour)
+        assertEquals("Bad minute", 15, time.minute)
+        assertEquals("Bad quarter", 1, time.quarter)
     }
 }
