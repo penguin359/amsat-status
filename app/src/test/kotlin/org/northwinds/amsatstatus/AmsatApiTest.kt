@@ -1,6 +1,7 @@
 package org.northwinds.amsatstatus
 
 import java.util.Calendar
+import java.util.TimeZone
 
 import kotlin.test.Ignore
 import kotlin.test.Test
@@ -86,15 +87,59 @@ class AmsatApiTest {
     }
 
     @Test fun `can create ReportTime from Calendar`() {
-        val calendar = Calendar.getInstance()
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
         val time = ReportTime(calendar)
 
-        assertEquals(calendar.get(Calendar.YEAR), time.year)
-        assertEquals(calendar.get(Calendar.MONTH)+1, time.month+1)
-        assertEquals(calendar.get(Calendar.DAY_OF_MONTH), time.day)
-        assertEquals(calendar.get(Calendar.HOUR_OF_DAY), time.hour)
-        assertEquals(calendar.get(Calendar.MINUTE), time.minute)
-        assertEquals(calendar.get(Calendar.MINUTE) / 15, time.quarter)
+        assertEquals(calendar.get(Calendar.YEAR),         time.year,    "Bad Year")
+        assertEquals(calendar.get(Calendar.MONTH)+1,      time.month+1, "Bad Month")
+        assertEquals(calendar.get(Calendar.DAY_OF_MONTH), time.day,     "Bad Day")
+        assertEquals(calendar.get(Calendar.HOUR_OF_DAY),  time.hour,    "Bad Hour")
+        assertEquals(calendar.get(Calendar.MINUTE),       time.minute,  "Bad Minute")
+        assertEquals(calendar.get(Calendar.MINUTE) / 15,  time.quarter, "Bad Quarter")
+    }
+
+    @Test fun `can create ReportTime from UNIX timestamp`() {
+        // Make sure test is not affected by local time zone
+        TimeZone.setDefault(TimeZone.getTimeZone("MST"))
+
+        // September 18, 2020 5:24:10 AM (UTC)
+        // 2020-09-18T05:24:10Z
+        val test_time = 1600406650*1000L
+        val time = ReportTime(test_time)
+
+        assertEquals(2020,    time.year,    "Bad Year")
+        assertEquals(9,       time.month+1, "Bad Month")
+        assertEquals(18,      time.day,     "Bad Day")
+        assertEquals(5,       time.hour,    "Bad Hour")
+        assertEquals(24,      time.minute,  "Bad Minute")
+        assertEquals(24 / 15, time.quarter, "Bad Quarter")
+    }
+
+    @Test fun `can create UTC-based ReportTime from local calendar`() {
+        // UTC:   2019-01-01T05:23:45Z
+        // Local: 2018-12-31T21:23:45-08:00
+        val ref_time = 1546320225*1000L
+        val ref_timezone = "America/Los_Angeles"
+
+        // Make sure test is not affected by local time zone
+        val timezone = TimeZone.getTimeZone(ref_timezone)
+        TimeZone.setDefault(timezone)
+        val cal = Calendar.getInstance(timezone)
+        // Local: 2018-12-31T21:23:45-08:00
+        cal.set(Calendar.YEAR, 2018)
+        cal.set(Calendar.MONTH, 12-1)
+        cal.set(Calendar.DAY_OF_MONTH, 31)
+        cal.set(Calendar.HOUR_OF_DAY, 21)
+        cal.set(Calendar.MINUTE, 23)
+
+        val time = ReportTime(cal)
+
+        assertEquals(2019,    time.year,    "Bad Year")
+        assertEquals(1,       time.month+1, "Bad Month")
+        assertEquals(1,       time.day,     "Bad Day")
+        assertEquals(5,       time.hour,    "Bad Hour")
+        assertEquals(23,      time.minute,  "Bad Minute")
+        assertEquals(23 / 15, time.quarter, "Bad Quarter")
     }
 
     @Test fun `can create ReportTime from components`() {
@@ -301,19 +346,19 @@ class AmsatApiTest {
 
     @Test fun `sends correct user agent when requesting details`() {
         val httpClientMock = HttpClientMock()
-	httpClientMock.onGet().doReturn("[]")
+        httpClientMock.onGet().doReturn("[]")
 
         val transport = ApacheHttpTransport(httpClientMock)
         val api = AmsatApi(transport)
 
-	api.getReport("AO-91", 24)
+        api.getReport("AO-91", 24)
         httpClientMock.verify().get().withHeader("User-Agent", StringContains("AMSATStatus/1.0")).called()
     }
 
     @Ignore("Google HTTP client does not implement getContent for Apache")
     @Test fun `sends correct user agent on report submission`() {
         val httpClientMock = HttpClientMock()
-	httpClientMock.onPost().doReturn("Success")
+        httpClientMock.onPost().doReturn("Success")
 
         val transport = ApacheHttpTransport(httpClientMock)
         val api = AmsatApi(transport)
