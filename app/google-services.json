@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "200865736642",
+    "firebase_url": "https://amsat-status.firebaseio.com",
+    "project_id": "amsat-status",
+    "storage_bucket": "amsat-status.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:200865736642:android:f770609119242eba60585b",
+        "android_client_info": {
+          "package_name": "org.northwinds.amsatstatus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "200865736642-dpupptd898lafkfstd1h5fuqag3dja4t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.northwinds.amsatstatus",
+            "certificate_hash": "f2231c1da1b18cff8b49d4e3b482f90d4072f215"
+          }
+        },
+        {
+          "client_id": "200865736642-9q73ll86vfgmetmjj29lelv529u4kl7s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5qdiib2x6CxNpBqeKxGYVMbcxKCGwEqs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "200865736642-9q73ll86vfgmetmjj29lelv529u4kl7s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
