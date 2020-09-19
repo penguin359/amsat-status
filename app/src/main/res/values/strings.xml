@@ -227,7 +227,14 @@
     <string name="use_local_time_on">Time is in local time</string>
     <string name="use_local_time_off">Time is in UTC</string>
 
+    <string name="title_analytics">Analytics Opt-in</string>
+    <string name="title_anonymous_usage">Anonymous usage statistics</string>
+    <string name="title_crash_reports">Automatically submit crash reports</string>
+
     <string name="preference_callsign">callsign</string>
     <string name="preference_default_grid">default_grid</string>
     <string name="preference_local_time">local_time</string>
+    <string name="preference_asked_for_consent">asked_for_consent</string>
+    <string name="preference_enable_analytics">enable_analytics</string>
+    <string name="preference_enable_crash_reports">enable_crash_reports</string>
 </resources>

@@ -16,4 +16,12 @@
             app:summaryOn="@string/use_local_time_on"
             app:title="@string/use_local_time" />
     </PreferenceCategory>
+    <PreferenceCategory app:title="@string/title_analytics">
+        <SwitchPreferenceCompat
+            app:key="@string/preference_enable_analytics"
+            app:title="@string/title_anonymous_usage" />
+        <SwitchPreferenceCompat
+            app:key="@string/preference_enable_crash_reports"
+            app:title="@string/title_crash_reports" />
+    </PreferenceCategory>
 </PreferenceScreen>

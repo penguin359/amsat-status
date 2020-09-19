@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:name="androidx.multidex.MultiDexApplication"
+        android:name=".AmsatApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -23,7 +23,12 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data
+                android:name="firebase_analytics_collection_enabled"
+                android:value="false" />
+            <meta-data
+                android:name="firebase_crashlytics_collection_enabled"
+                android:value="false" />
         </activity>
     </application>
-
 </manifest>
