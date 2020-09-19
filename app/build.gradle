@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdkVersion 30
@@ -116,4 +117,5 @@ dependencies {
     androidTestImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0'
 
     implementation 'com.google.firebase:firebase-analytics-ktx:17.5.0'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:17.2.1'
 }
