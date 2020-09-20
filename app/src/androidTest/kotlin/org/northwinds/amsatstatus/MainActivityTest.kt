@@ -5,6 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.TimePicker
+import androidx.core.content.edit
+import androidx.preference.PreferenceManager
 //import androidx.test.espresso.Espresso.onData
 import androidx.test.annotation.UiThreadTest
 import androidx.test.espresso.Espresso.onView
@@ -12,6 +14,7 @@ import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import org.hamcrest.Description
 import org.hamcrest.Matcher
@@ -26,13 +29,21 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.*
 
+class MainActivityTestRule : ActivityTestRule<MainActivity>(MainActivity::class.java) {
+    override fun beforeActivityLaunched() {
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        PreferenceManager.getDefaultSharedPreferences(appContext).edit {
+            putBoolean(appContext.getString(R.string.preference_asked_for_consent), true)
+        }
+    }
+}
+
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest {
-
     @Rule
     @JvmField
-    var mActivityTestRule = ActivityTestRule(MainActivity::class.java)
+    var mActivityTestRule = MainActivityTestRule()
 
     @Test
     fun mainActivityTest() {
@@ -144,11 +155,6 @@ class MainActivityTest {
                         && view == parent.getChildAt(position)
             }
         }
-    }
-
-    @Before
-    fun setUp() {
-        //TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
     }
 
     @Test

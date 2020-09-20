@@ -4,6 +4,7 @@ colorize reports
 Clean all lint warnings/errors
 Clean all other warnings
 Support Android API 16
+  Missing StandardCharsets
 Support small screen
 Contrained, side-by-side layout on Home
 Find icons
@@ -18,4 +19,11 @@ Capitalize callsign
 Home screen widget
 Notifications/Alerts
 Multiple satellites
-Tracking
+Enable TLS 1.2 on older Android
+Enhanced logging
+Analytics
+Google Maps locations
+Back button on settings
+Test dialog
+Unexpected exceptions
+Event logging

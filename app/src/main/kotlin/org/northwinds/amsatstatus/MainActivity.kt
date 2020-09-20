@@ -41,27 +41,30 @@ class MainActivity : AppCompatActivity() {
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(getString(R.string.title_analytics))
+        val asked = prefs.getBoolean(getString(R.string.preference_asked_for_consent), false)
+        if(!asked) {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle(getString(R.string.title_analytics))
 
-        val animals = arrayOf(
-            getString(R.string.title_anonymous_usage),
-            getString(R.string.title_crash_reports))
-        var checkedItems = booleanArrayOf(false, false)
-        builder.setMultiChoiceItems(animals, checkedItems) { _, which, isChecked ->
-            checkedItems[which] = isChecked
-        }
-
-        builder.setPositiveButton("OK") { _, _ ->
-            prefs.edit {
-                putBoolean(getString(R.string.preference_enable_analytics), checkedItems[0])
-                putBoolean(getString(R.string.preference_enable_crash_reports), checkedItems[1])
+            val analytics = arrayOf(
+                getString(R.string.title_anonymous_usage),
+                getString(R.string.title_crash_reports))
+            var checkedItems = booleanArrayOf(false, false)
+            builder.setMultiChoiceItems(analytics, checkedItems) { _, which, isChecked ->
+                checkedItems[which] = isChecked
             }
-        }
-        //builder.setNegativeButton("Cancel", null)
 
-        val dialog = builder.create()
-        dialog.show()
+            builder.setPositiveButton("OK") { _, _ ->
+                prefs.edit {
+                    putBoolean(getString(R.string.preference_enable_analytics), checkedItems[0])
+                    putBoolean(getString(R.string.preference_enable_crash_reports), checkedItems[1])
+                    putBoolean(getString(R.string.preference_asked_for_consent), true)
+                }
+            }
+
+            val dialog = builder.create()
+            dialog.show()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

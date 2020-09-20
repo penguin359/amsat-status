@@ -269,7 +269,7 @@ class HomeFragmentTest {
         })
 
         onView(withId(R.id.telemetryOnlyRadio)).perform(scrollTo(), click())
-        onView(withId(R.id.satHeard)).perform(click())
+        onView(withId(R.id.satHeard)).perform(scrollTo(), click())
         onData(allOf(`is`(instanceOf(String::class.java)), `is`("ISS SSTV"))).perform(click())
         onView(withId(R.id.satHeard)).check(matches(withSpinnerText(containsString("ISS SSTV"))))
         onView(withId(R.id.submit_button)).perform(scrollTo(), click())
