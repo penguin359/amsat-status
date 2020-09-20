@@ -29,11 +29,15 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.*
 
-class MainActivityTestRule : ActivityTestRule<MainActivity>(MainActivity::class.java) {
+class MainActivityTestRule(private val showDialog: Boolean = false) : 
+  ActivityTestRule<MainActivity>(MainActivity::class.java) {
     override fun beforeActivityLaunched() {
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         PreferenceManager.getDefaultSharedPreferences(appContext).edit {
-            putBoolean(appContext.getString(R.string.preference_asked_for_consent), true)
+            clear()
+            if(!showDialog) {
+                putBoolean(appContext.getString(R.string.preference_asked_for_consent), true)
+            }
         }
     }
 }

@@ -19,9 +19,11 @@
     <PreferenceCategory app:title="@string/title_analytics">
         <SwitchPreferenceCompat
             app:key="@string/preference_enable_analytics"
-            app:title="@string/title_anonymous_usage" />
+            app:title="@string/title_anonymous_usage"
+            app:defaultValue="false" />
         <SwitchPreferenceCompat
             app:key="@string/preference_enable_crash_reports"
-            app:title="@string/title_crash_reports" />
+            app:title="@string/title_crash_reports"
+            app:defaultValue="false" />
     </PreferenceCategory>
 </PreferenceScreen>
