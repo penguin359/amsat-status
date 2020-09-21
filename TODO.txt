@@ -27,3 +27,4 @@ Back button on settings
 Test dialog
 Unexpected exceptions
 Event logging
+Verify dialog does not reappear on later activities
