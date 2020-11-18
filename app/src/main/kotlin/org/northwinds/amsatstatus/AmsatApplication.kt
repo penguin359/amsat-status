@@ -1,5 +1,8 @@
 package org.northwinds.amsatstatus
 
+import javax.net.ssl.SSLContext
+import javax.net.ssl.HttpsURLConnection
+
 //import android.app.Application
 import android.content.SharedPreferences
 import android.util.Log
@@ -48,5 +51,18 @@ class AmsatApplication : MultiDexApplication() {
         Log.v(TAG, "Crash reports status initial: $crash_reports")
         firebaseAnalytics.setAnalyticsCollectionEnabled(analytics)
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(crash_reports)
+
+        val default = SSLContext.getDefault()
+        val params = default.getDefaultSSLParameters()
+        Log.d(TAG, "Default Protocol: ${default.getProtocol()}")
+        Log.d(TAG, "Default Protocols: ${params.getProtocols().joinToString()}")
+        Log.d(TAG, "Default Ciphers: ${params.getCipherSuites().joinToString()}")
+        val context = SSLContext.getInstance("TLSv1.2")
+        context.init(null, null, null)
+        val params2 = context.getDefaultSSLParameters()
+        Log.d(TAG, "TLSv1.2 Protocol: ${context.getProtocol()}")
+        Log.d(TAG, "TLSv1.2 Protocols: ${params2.getProtocols().joinToString()}")
+        Log.d(TAG, "TLSv1.2 Ciphers: ${params2.getCipherSuites().joinToString()}")
+        HttpsURLConnection.setDefaultSSLSocketFactory(context.socketFactory)
     }
 }
