@@ -1,12 +1,12 @@
 Implement preferences
-Load live sateliite reports
-colorize reports
+Load live satellite reports
+Colorize reports
 Clean all lint warnings/errors
 Clean all other warnings
 Support Android API 16
   Missing StandardCharsets
 Support small screen
-Contrained, side-by-side layout on Home
+Constrained, side-by-side layout on Home
 Find icons
 Internationalize
 Visually impaired support
@@ -14,6 +14,9 @@ Use Google HTTP Client
 AndroidTest
 User agent
 Map positions
+Show dates/times localized
+Fix display of dashboard
+Add map of reports
 Progress bar on list load
 Capitalize callsign
 Home screen widget
