@@ -5,12 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.TimePicker
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 //import androidx.test.espresso.Espresso.onData
 import androidx.test.annotation.UiThreadTest
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
@@ -21,6 +23,7 @@ import org.hamcrest.Matcher
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.TypeSafeMatcher
+import org.hamcrest.core.StringContains.containsString
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Ignore
@@ -29,7 +32,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.*
 
-class MainActivityTestRule(private val showDialog: Boolean = false) : 
+class MainActivityTestRule(private val showDialog: Boolean = false, private val callsign: String = "", private val grid: String = "") :
   ActivityTestRule<MainActivity>(MainActivity::class.java) {
     override fun beforeActivityLaunched() {
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
@@ -38,6 +41,34 @@ class MainActivityTestRule(private val showDialog: Boolean = false) :
             if(!showDialog) {
                 putBoolean(appContext.getString(R.string.preference_asked_for_consent), true)
             }
+//            if(!callsign.?nil) {
+                putString("callsign", callsign)
+//            }
+            putString("default_grid", grid)
+        }
+    }
+}
+
+@LargeTest
+@RunWith(AndroidJUnit4::class)
+class MainActivityCustomTest {
+    @Rule
+    @JvmField
+    var mActivityTestRule = MainActivityTestRule(false, "AB1CDE", "CN85nu")
+
+    @Test
+    fun mainActivityLoadsCustomFieldsTest() {
+        val callsignEditText = onView(withId(R.id.callsign))
+        callsignEditText.check { view, noViewFoundException ->
+            val editView = view as AppCompatEditText
+            assertEquals("AB1CDE", editView.text.toString())
+        }
+            //.check(containsString("AB1CD"))
+
+        val gridsquareEditText = onView(withId(R.id.gridsquare))
+        gridsquareEditText.check { view, noViewFoundException ->
+            val editView = view as AppCompatEditText
+            assertEquals("CN85nu", editView.text.toString())
         }
     }
 }
@@ -48,6 +79,22 @@ class MainActivityTest {
     @Rule
     @JvmField
     var mActivityTestRule = MainActivityTestRule()
+
+    @Test
+    fun mainActivityLoadsDefaultFieldsTest() {
+        val callsignEditText = onView(withId(R.id.callsign))
+        callsignEditText.check { view, noViewFoundException ->
+            val editView = view as AppCompatEditText
+            assertEquals("", editView.text.toString())
+        }
+        //.check(containsString("AB1CD"))
+
+        val gridsquareEditText = onView(withId(R.id.gridsquare))
+        gridsquareEditText.check { view, noViewFoundException ->
+            val editView = view as AppCompatEditText
+            assertEquals("", editView.text.toString())
+        }
+    }
 
     @Test
     fun mainActivityTest() {
