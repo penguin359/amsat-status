@@ -6,6 +6,7 @@ import java.util.TimeZone
 
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,10 +24,14 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
 
     private lateinit var homeViewModel: HomeViewModel
 
+    lateinit var callsign: EditText
+    lateinit var gridsquare: EditText
     lateinit var timeMode: TextView
 
     lateinit var prefs : SharedPreferences
     inner class Changer : SharedPreferences.OnSharedPreferenceChangeListener {
+        fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
+
         override fun onSharedPreferenceChanged(prefs: SharedPreferences?, key: String?) {
             if (key!!.equals(context!!.getString(R.string.preference_local_time))) {
                 if(prefs!!.getBoolean(context!!.getString(R.string.preference_local_time), false)) {
@@ -34,6 +39,12 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
                 } else {
                     timeMode.setText(R.string.utc_time)
                 }
+            }
+            if(key!! == getString(R.string.preference_callsign)) {
+                callsign.text = prefs!!.getString(getString(R.string.preference_callsign), "")?.toEditable()
+            }
+            if(key!! == getString(R.string.preference_default_grid)) {
+                gridsquare.text = prefs!!.getString(getString(R.string.preference_default_grid), "")?.toEditable()
             }
         }
     }
@@ -95,10 +106,10 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
             timePicker.hour = picker_time.get(Calendar.HOUR_OF_DAY)
             timePicker.minute = picker_time.get(Calendar.MINUTE) / 15
         }
-        val callsign_w = root.findViewById(R.id.callsign) as EditText
-        callsign_w?.setText(prefs.getString(requireContext().getString(R.string.preference_callsign), ""))
-        val grid_w = root.findViewById(R.id.gridsquare) as EditText
-        grid_w?.setText(prefs.getString(requireContext().getString(R.string.preference_default_grid), ""))
+        callsign = root.findViewById(R.id.callsign) as EditText
+        callsign?.setText(prefs.getString(requireContext().getString(R.string.preference_callsign), ""))
+        gridsquare = root.findViewById(R.id.gridsquare) as EditText
+        gridsquare?.setText(prefs.getString(requireContext().getString(R.string.preference_default_grid), ""))
 
         setTimePickerInterval(timePicker)
         val submit_btn =

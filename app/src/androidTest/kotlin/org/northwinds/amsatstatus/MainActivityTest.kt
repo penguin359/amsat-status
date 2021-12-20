@@ -8,11 +8,13 @@ import android.widget.TimePicker
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.RecyclerView
 //import androidx.test.espresso.Espresso.onData
 import androidx.test.annotation.UiThreadTest
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
@@ -93,6 +95,142 @@ class MainActivityTest {
         gridsquareEditText.check { view, noViewFoundException ->
             val editView = view as AppCompatEditText
             assertEquals("", editView.text.toString())
+        }
+    }
+
+    @Test
+    fun mainActivityLoadsUpdatedFieldsTest() {
+        val overflowMenuButton = onView(
+            allOf(
+                withContentDescription("More options"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.action_bar),
+                        1
+                    ),
+                    0
+                ),
+                isDisplayed()
+            )
+        )
+        overflowMenuButton.perform(click())
+
+        val appCompatTextView = onView(
+            allOf(
+                withId(R.id.title), withText("Settings"),
+                childAtPosition(
+                    childAtPosition(withId(R.id.content),0),
+                    0
+                ),
+                isDisplayed()
+            )
+        )
+        appCompatTextView.perform(click())
+        onView(withText(R.string.callsign)).perform(click())
+        val appCompatEditText = onView(
+            allOf(
+                withId(android.R.id.edit),
+                childAtPosition(
+                    childAtPosition(
+                        withClassName(`is`("android.widget.ScrollView")),
+                        0
+                    ),
+                    1
+                )
+            )
+        )
+        appCompatEditText.perform(scrollTo(), replaceText("AA0AAA"), closeSoftKeyboard())
+
+        val appCompatButton = onView(
+            allOf(
+                withId(android.R.id.button1), withText("OK"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.buttonPanel),
+                        0
+                    ),
+                    3
+                )
+            )
+        )
+        appCompatButton.perform(scrollTo(), click())
+
+        val recyclerView3 = onView(
+            allOf(
+                withId(R.id.recycler_view),
+                childAtPosition(
+                    withId(android.R.id.list_container),
+                    0
+                )
+            )
+        )
+        recyclerView3.perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                2,
+                click()
+            )
+        )
+
+        val appCompatEditText2 = onView(
+            allOf(
+                withId(android.R.id.edit),
+                childAtPosition(
+                    childAtPosition(
+                        withClassName(`is`("android.widget.ScrollView")),
+                        0
+                    ),
+                    1
+                )
+            )
+        )
+        appCompatEditText2.perform(scrollTo(), replaceText("AB34ef"), closeSoftKeyboard())
+
+        val appCompatButton2 = onView(
+            allOf(
+                withId(android.R.id.button1), withText("OK"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.buttonPanel),
+                        0
+                    ),
+                    3
+                )
+            )
+        )
+        appCompatButton2.perform(scrollTo(), click())
+//        Thread.sleep(300)
+//        pressBack()
+//        pressBack()
+        val appCompatImageButton = onView(
+            allOf(
+                withContentDescription("Navigate up"),
+                childAtPosition(
+                    allOf(
+                        withId(R.id.action_bar),
+                        childAtPosition(
+                            withId(R.id.action_bar_container),
+                            0
+                        )
+                    ),
+                    1
+                ),
+                isDisplayed()
+            )
+        )
+        appCompatImageButton.perform(click())
+
+        val callsignEditText = onView(withId(R.id.callsign))
+        callsignEditText.perform(scrollTo())
+        callsignEditText.check { view, noViewFoundException ->
+            val editView = view as AppCompatEditText
+            assertEquals("AA0AAA", editView.text.toString())
+        }
+        //.check(containsString("AB1CD"))
+
+        val gridsquareEditText = onView(withId(R.id.gridsquare))
+        gridsquareEditText.check { view, noViewFoundException ->
+            val editView = view as AppCompatEditText
+            assertEquals("AB34ef", editView.text.toString())
         }
     }
 
