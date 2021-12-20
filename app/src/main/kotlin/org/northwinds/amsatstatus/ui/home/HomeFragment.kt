@@ -76,7 +76,7 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
         prefs = PreferenceManager(context).sharedPreferences
         //val clock = Clock()
         timeMode = root.findViewById(R.id.time_mode) as TextView
-        val picker_time = if(prefs.getBoolean(context!!.getString(R.string.preference_local_time), false)) {
+        val picker_time = if(prefs.getBoolean(requireContext().getString(R.string.preference_local_time), false)) {
             timeMode.setText(R.string.local_time)
             clock.localCalendar
         } else {
@@ -96,9 +96,9 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
             timePicker.minute = picker_time.get(Calendar.MINUTE) / 15
         }
         val callsign_w = root.findViewById(R.id.callsign) as EditText
-        callsign_w?.setText(prefs.getString(context!!.getString(R.string.preference_callsign), ""))
+        callsign_w?.setText(prefs.getString(requireContext().getString(R.string.preference_callsign), ""))
         val grid_w = root.findViewById(R.id.gridsquare) as EditText
-        grid_w?.setText(prefs.getString(context!!.getString(R.string.preference_default_grid), ""))
+        grid_w?.setText(prefs.getString(requireContext().getString(R.string.preference_default_grid), ""))
 
         setTimePickerInterval(timePicker)
         val submit_btn =
@@ -145,7 +145,7 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
             val callsign = callsign_w.text
             val grid_w = root.findViewById(R.id.gridsquare) as EditText
             val grid = grid_w.text
-            val calendar = if(prefs.getBoolean(context!!.getString(R.string.preference_local_time), false)) {
+            val calendar = if(prefs.getBoolean(requireContext().getString(R.string.preference_local_time), false)) {
                 Calendar.getInstance()
             } else {
                 Calendar.getInstance(TimeZone.getTimeZone("UTC"))
@@ -159,12 +159,12 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
             val time = ReportTime(calendar)
             val satReport = SatReport(satellite_ids[id], reportType, time, callsign.toString(), grid.toString())
             Toast.makeText(
-                activity!!.applicationContext,
+                requireActivity().applicationContext,
                 "Submit SatName: " + satellite_ids[id] + ", SatReport: " + value + ", Period: " + period + ", SatHour: " + hour + ", SatDay: " + day + ", SatMonth: " + month + ", SatYear: " + year + ", SatCall: " + callsign + ", SatGridSquare: " + grid,
                 Toast.LENGTH_LONG
             ).show()
             Toast.makeText(
-                activity!!.applicationContext,
+                requireActivity().applicationContext,
                 satReport.toString(),
                 Toast.LENGTH_LONG
             ).show()
@@ -184,7 +184,7 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
             //}).start()
         }
         Toast.makeText(
-            activity!!.applicationContext,
+            requireActivity().applicationContext,
             "Application is loaded!",
             Toast.LENGTH_SHORT
         ).show()
