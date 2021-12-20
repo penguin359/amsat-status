@@ -31,3 +31,6 @@ Test dialog
 Unexpected exceptions
 Event logging
 Verify dialog does not reappear on later activities
+Update Home fields on settings change
+Find my gridsquare
+Back button on Preferences
