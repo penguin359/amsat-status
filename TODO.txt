@@ -32,5 +32,8 @@ Unexpected exceptions
 Event logging
 Verify dialog does not reappear on later activities
 Update Home fields on settings change
+  *callsign
+  *grid
+  time to match now
 Find my gridsquare
-Back button on Preferences
+*Back button on Preferences
