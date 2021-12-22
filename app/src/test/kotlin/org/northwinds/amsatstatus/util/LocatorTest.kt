@@ -20,4 +20,10 @@ class LocatorTest {
         print(Locator.coord_to_grid(lat, lon))
         assertEquals("CN85nu94fg", Locator.coord_to_grid(lat, lon))
     }
+
+    @Test fun `returns coordinates for 10 char grid square`() {
+        val pos = Locator.grid_to_coord("CN85NU94FG")
+        assertEquals(45.851151, pos.latitude, absoluteTolerance=1.0/(1*24*10*24))
+        assertEquals(-122.839653, pos.longitude, absoluteTolerance=1.0/(0.5*24*10*24))
+    }
 }

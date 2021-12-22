@@ -2,6 +2,8 @@ package org.northwinds.amsatstatus.util
 
 import java.lang.RuntimeException
 
+data class Position(val latitude: Double, val longitude: Double)
+
 class Locator {
     companion object {
         fun coord_to_grid(lat: Double, lon: Double): String
@@ -38,75 +40,81 @@ class Locator {
             val a_lat = remain_lat % (24)
             return "${('A'+field_lon).toChar()}${('A'+field_lat).toChar()}${square_lon}${square_lat}${('a'+subsquare_lon).toChar()}${('a'+subsquare_lat).toChar()}$extsquare_lon$extsquare_lat${('a'+a_lon).toChar()}${('a'+a_lat).toChar()}"
         }
+
+        fun grid_to_coord(grid2: String, corner: String = ""): Position
+        {
+            val grid = grid2.trim().toLowerCase()
+            if(!setOf(2, 4, 6, 8, 10).contains(grid.length))
+                throw RuntimeException("Not a grid square")
+            val field_lon = (grid[0] - 'a').toInt()
+            val field_lat = (grid[1] - 'a').toInt()
+            var center_offset = 5*24*10*24
+            var square_lon = 0
+            var square_lat = 0
+            if(grid.length > 2) {
+                square_lon = (grid[2] - '0').toInt()
+                square_lat = (grid[3] - '0').toInt()
+                center_offset = 12 * 10 * 24
+            }
+            var subsquare_lon = 0
+            var subsquare_lat = 0
+            if(grid.length > 4) {
+                subsquare_lon = (grid[4] - 'a').toInt()
+                subsquare_lat = (grid[5] - 'a').toInt()
+                center_offset = 5 * 24
+            }
+            var extsquare_lon = 0
+            var extsquare_lat = 0
+            if(grid.length > 6) {
+                extsquare_lon = (grid[6] - '0').toInt()
+                extsquare_lat = (grid[7] - '0').toInt()
+                center_offset = 12
+            }
+            var a_lon = 0
+            var a_lat = 0
+            if(grid.length > 8) {
+                a_lon = (grid[8] - 'a').toInt()
+                a_lat = (grid[9] - 'a').toInt()
+                center_offset = 0
+            }
+            var lon = field_lon
+            var lat = field_lat
+            lon *= 10
+            lat *= 10
+            lon += square_lon
+            lat += square_lat
+            lon *= 24
+            lat *= 24
+            lon += subsquare_lon
+            lat += subsquare_lat
+            lon *= 10
+            lat *= 10
+            lon += extsquare_lon
+            lat += extsquare_lat
+            lon *= 24
+            lat *= 24
+            lon += a_lon
+            lat += a_lat
+            if(corner.contains('E')) {
+                lon += 2*center_offset
+            } else if(!corner.contains('W')) {
+                lon += center_offset
+            }
+            if(corner.contains('N')) {
+                lat += 2 * center_offset
+            } else if(!corner.contains('S')) {
+                lat += center_offset
+            }
+            var real_lon = lon.toDouble() / (12*10*24)
+            var real_lat = lat.toDouble() / (24*10*24)
+            real_lon -= 180
+            real_lat -= 90
+            return Position(real_lat, real_lon)
+        }
     }
 }
 
 //def grid_to_coord(grid, corner=''):
-//    grid = grid.strip().lower()
-//    if len(grid) not in (2, 4, 6, 8, 10):
-//        raise ValueError('Not a grid square')
-//    field_lon = ord(grid[0]) - ord('a')
-//    field_lat = ord(grid[1]) - ord('a')
-//    center_offset = 5*24*10*24
-//    if len(grid) > 2:
-//        square_lon = int(grid[2])
-//        square_lat = int(grid[3])
-//        center_offset = 12*10*24
-//    else:
-//        square_lon = 0
-//        square_lat = 0
-//    if len(grid) > 4:
-//        subsquare_lon = ord(grid[4]) - ord('a')
-//        subsquare_lat = ord(grid[5]) - ord('a')
-//        center_offset = 5*24
-//    else:
-//        subsquare_lon = 0
-//        subsquare_lat = 0
-//    if len(grid) > 6:
-//        extsquare_lon = int(grid[6])
-//        extsquare_lat = int(grid[7])
-//        center_offset = 12
-//    else:
-//        extsquare_lon = 0
-//        extsquare_lat = 0
-//    if len(grid) > 8:
-//        a_lon = ord(grid[8]) - ord('a')
-//        a_lat = ord(grid[9]) - ord('a')
-//        center_offset = 0
-//    else:
-//        a_lon = 0
-//        a_lat = 0
-//    lon = field_lon
-//    lat = field_lat
-//    lon *= 10
-//    lat *= 10
-//    lon += square_lon
-//    lat += square_lat
-//    lon *= 24
-//    lat *= 24
-//    lon += subsquare_lon
-//    lat += subsquare_lat
-//    lon *= 10
-//    lat *= 10
-//    lon += extsquare_lon
-//    lat += extsquare_lat
-//    lon *= 24
-//    lat *= 24
-//    lon += a_lon
-//    lat += a_lat
-//    if 'E' in corner:
-//        lon += 2*center_offset
-//    elif 'W' not in corner:
-//        lon += center_offset
-//    if 'N' in corner:
-//        lat += 2*center_offset
-//    elif 'S' not in corner:
-//        lat += center_offset
-//    lon /= 12*10*24
-//    lat /= 24*10*24
-//    lon -= 180
-//    lat -= 90
-//    return lat, lon
 //
 //class Position:
 //    pass
@@ -131,10 +139,6 @@ class Locator {
 //
 //
 //class LocatorTest(unittest.TestCase):
-//    def test_grid_to_coord_10char(self):
-//        lat, lon = grid_to_coord('CN85NU94FG')
-//        self.assertAlmostEqual(lat, 45.851151, delta=1/(1*24*10*24))
-//        self.assertAlmostEqual(lon, -122.839653, delta=1/(0.5*24*10*24))
 //
 //    def test_grid_to_coord_4char(self):
 //        lat, lon = grid_to_coord('CN85', corner='SW')
