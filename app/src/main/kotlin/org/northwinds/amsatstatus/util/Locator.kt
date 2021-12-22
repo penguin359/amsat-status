@@ -114,8 +114,6 @@ class Locator {
     }
 }
 
-//def grid_to_coord(grid, corner=''):
-//
 //class Position:
 //    pass
 //
@@ -136,43 +134,3 @@ class Locator {
 //
 //    def grid(self):
 //        return coord_to_grid(self.lat, self.lon)
-//
-//
-//class LocatorTest(unittest.TestCase):
-//
-//    def test_grid_to_coord_4char(self):
-//        lat, lon = grid_to_coord('CN85', corner='SW')
-//        self.assertEqual(lat, 45.)
-//        self.assertEqual(lon, -124.)
-//
-//        lat, lon = grid_to_coord('CN96', corner='SW')
-//        self.assertEqual(lat, 46.)
-//        self.assertEqual(lon, -122.)
-//
-//    def test_grid_to_coord_4char_offset(self):
-//        lat, lon = grid_to_coord('CN85', corner='NE')
-//        self.assertEqual(lat, 46.)
-//        self.assertEqual(lon, -122.)
-//
-//        lat, lon = grid_to_coord('CN85', corner='NW')
-//        self.assertEqual(lat, 46.)
-//        self.assertEqual(lon, -124.)
-//
-//        lat, lon = grid_to_coord('CN85', corner='SE')
-//        self.assertEqual(lat, 45.)
-//        self.assertEqual(lon, -122.)
-//
-//    def test_grid_to_coord_4char_center(self):
-//        lat, lon = grid_to_coord('CN85', corner='')
-//        self.assertEqual(lat, 45.5)
-//        self.assertEqual(lon, -123.)
-//
-//
-//if __name__ == '__main__':
-//    lat = 45.851151
-//    lon = -122.839653
-//    print(coord_to_grid(lat, lon))
-//    assert coord_to_grid(lat, lon).upper() == 'CN85NU94FG'
-//    unittest.main()
-//    print(grid_to_coord('CN85NU94FG'))
-//    print(grid_to_coord('CN85'))

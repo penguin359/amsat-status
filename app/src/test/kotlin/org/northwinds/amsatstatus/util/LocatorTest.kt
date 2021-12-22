@@ -26,4 +26,34 @@ class LocatorTest {
         assertEquals(45.851151, pos.latitude, absoluteTolerance=1.0/(1*24*10*24))
         assertEquals(-122.839653, pos.longitude, absoluteTolerance=1.0/(0.5*24*10*24))
     }
+
+    @Test fun `test_grid_to_coord_4char`() {
+        val pos = Locator.grid_to_coord("CN85", corner = "SW")
+        assertEquals(45.0, pos.latitude)
+        assertEquals(-124.0, pos.longitude)
+
+        val pos2 = Locator.grid_to_coord("CN96", corner = "SW")
+        assertEquals(46.0, pos2.latitude)
+        assertEquals(-122.0, pos2.longitude)
+    }
+
+    @Test fun `test_grid_to_coord_4char_offset`() {
+        val pos = Locator.grid_to_coord("CN85", corner = "NE")
+        assertEquals(46.0, pos.latitude)
+        assertEquals(-122.0, pos.longitude)
+
+        val pos2 = Locator.grid_to_coord("CN85", corner = "NW")
+        assertEquals(46.0, pos2.latitude)
+        assertEquals(-124.0, pos2.longitude)
+
+        val pos3 = Locator.grid_to_coord("CN85", corner = "SE")
+        assertEquals(45.0, pos3.latitude)
+        assertEquals(-122.0, pos3.longitude)
+    }
+
+    @Test fun `test_grid_to_coord_4char_center`() {
+        val pos = Locator.grid_to_coord("CN85", corner = "")
+        assertEquals(45.5, pos.latitude)
+        assertEquals(-123.0, pos.longitude)
+    }
 }
