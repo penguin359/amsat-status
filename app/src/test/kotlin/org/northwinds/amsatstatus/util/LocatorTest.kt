@@ -1,4 +1,4 @@
-package org.northwinds.amsatstatus
+package org.northwinds.amsatstatus.util
 
 import java.util.Calendar
 import java.util.TimeZone
