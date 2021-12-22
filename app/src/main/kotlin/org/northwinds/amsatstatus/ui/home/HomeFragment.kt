@@ -1,11 +1,16 @@
 package org.northwinds.amsatstatus.ui.home
 
+import android.content.Context
 import android.content.SharedPreferences
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import java.util.Calendar
 import java.util.TimeZone
 
 import android.os.Build
 import android.os.Bundle
+import android.os.Looper
 import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +21,9 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
 import kotlinx.android.synthetic.main.fragment_dashboard_item.*
 import org.northwinds.amsatstatus.*
+import org.northwinds.amsatstatus.util.Locator
+import java.util.concurrent.Executor
+import java.util.function.Consumer
 
 class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragment() {
     constructor() : this(Clock(), AmsatApi())
@@ -111,6 +119,32 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
         gridsquare = root.findViewById(R.id.gridsquare) as EditText
         gridsquare?.setText(prefs.getString(requireContext().getString(R.string.preference_default_grid), ""))
 
+        val location_btn =
+            root.findViewById<View>(R.id.location_button) as ImageButton
+        location_btn.setOnClickListener {
+            val service = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            try {
+                val location = service.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+                service.requestSingleUpdate(LocationManager.GPS_PROVIDER, object : LocationListener {
+                    override fun onLocationChanged(location: Location) {
+//                        gridsquare.setText("" + location.longitude + ":" + location.latitude)
+                        gridsquare.setText(Locator.coord_to_grid(location.latitude, location.longitude).subSequence(0, 6))
+                    }
+                    override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
+                    override fun onProviderEnabled(provider: String) {}
+                    override fun onProviderDisabled(provider: String) {}
+                }, Looper.getMainLooper())
+//                service.getCurrentLocation(LocationManager.NETWORK_PROVIDER, null, requireContext().mainExecutor,
+//                    Consumer { location ->
+//                        gridsquare.setText(location.latitude.toString())
+//                    })
+                if(location != null) {
+                    gridsquare.setText(Locator.coord_to_grid(location.latitude, location.longitude).subSequence(0, 6))
+                }
+            } catch (ex: SecurityException) {
+                return@setOnClickListener
+            }
+        }
         setTimePickerInterval(timePicker)
         val submit_btn =
             root.findViewById<View>(R.id.submit_button) as Button
@@ -194,11 +228,11 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
             //    }
             //}).start()
         }
-        Toast.makeText(
-            requireActivity().applicationContext,
-            "Application is loaded!",
-            Toast.LENGTH_SHORT
-        ).show()
+//        Toast.makeText(
+//            requireActivity().applicationContext,
+//            "Application is loaded!",
+//            Toast.LENGTH_SHORT
+//        ).show()
         return root
     }
 

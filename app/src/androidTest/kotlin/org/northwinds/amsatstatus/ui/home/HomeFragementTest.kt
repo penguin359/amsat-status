@@ -6,7 +6,9 @@ package org.northwinds.amsatstatus.ui.home
 //import org.mockito.Mockito.mock
 //import org.mockito.Mockito.verify
 import android.widget.DatePicker
+import android.widget.EditText
 import android.widget.TimePicker
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.edit
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.preference.PreferenceManager
@@ -307,5 +309,20 @@ class HomeFragmentTest {
         }
 
         onView(withId(R.id.time_mode)).check(matches(withText(StringContains("UTC"))))
+    }
+
+    @Test
+    fun find_my_location() {
+        val frag = launchFragmentInContainer<HomeFragment>()
+/*
+        val client: LocationClient
+        val dummyLocation: Location  = Location("dummy")
+*/
+        onView(withId(R.id.location_button)).perform(scrollTo(), click())
+        Thread.sleep(300)
+        onView(withId(R.id.gridsquare)).check { view, _ ->
+            val editView = view as EditText
+            assertEquals("CM87wk", editView.text.toString())
+        }
     }
 }
