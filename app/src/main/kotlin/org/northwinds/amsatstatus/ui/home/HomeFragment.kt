@@ -1,7 +1,9 @@
 package org.northwinds.amsatstatus.ui.home
 
+import android.Manifest
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -16,6 +18,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
@@ -30,6 +33,7 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
 
     //private ArrayAdapter<CharSequence>  mSatelliteAdapter;
 
+    private val REQUEST_PERMISSION_LOCATION: Int = 1000
     private lateinit var homeViewModel: HomeViewModel
 
     lateinit var callsign: EditText
@@ -124,6 +128,8 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
         location_btn.setOnClickListener {
             val service = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
             try {
+                if(!checkPermissionForLocation(requireContext()))
+                    return@setOnClickListener
                 val location = service.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
                 service.requestSingleUpdate(LocationManager.GPS_PROVIDER, object : LocationListener {
                     override fun onLocationChanged(location: Location) {
@@ -271,6 +277,36 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
                 .toTypedArray()
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == REQUEST_PERMISSION_LOCATION) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(context,"Permission granted",Toast.LENGTH_SHORT).show()
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    private fun checkPermissionForLocation(context: Context): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            if (context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED){
+                true
+            }else{
+                // Show the permission request
+                ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                    REQUEST_PERMISSION_LOCATION)
+                false
+            }
+        } else {
+            true
         }
     }
 
