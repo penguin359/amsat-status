@@ -26,7 +26,7 @@
 -->
 
     <fragment
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_maps"
         android:name="org.northwinds.amsatstatus.ui.maps.MapsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_maps" />
