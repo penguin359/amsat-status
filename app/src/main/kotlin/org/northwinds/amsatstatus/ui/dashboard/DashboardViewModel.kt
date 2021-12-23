@@ -26,25 +26,29 @@ class DashboardViewModel : ViewModel() {
             "DEMO-1",
             Report.NOT_HEARD,
             makeReportTimeFromString("2018-02-27T03:00:00Z"),
-            "K7IW"
+            "K7IW",
+            "CN85nu"
         ),
         SatReport(
             "DEMO-1",
             Report.TELEMETRY_ONLY,
             makeReportTimeFromString("2018-02-27T03:15:00Z"),
-            "ZL1D"
+            "ZL1D",
+            "CN96az"
         ),
         SatReport(
             "DEMO-1",
             Report.CREW_ACTIVE,
             makeReportTimeFromString("2018-02-27T04:30:00Z"),
-            "KG7GAN"
+            "KG7GAN",
+            "DM43",
         ),
         SatReport(
             "DEMO-1",
             Report.HEARD,
             makeReportTimeFromString("2018-02-27T05:45:00Z"),
-            "AG7NC"
+            "AG7NC",
+            "CM59ax"
         ),
         SatReport(
             "DEMO-1",

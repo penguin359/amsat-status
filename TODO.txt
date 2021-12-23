@@ -37,3 +37,4 @@ Update Home fields on settings change
   time to match now
 Find my gridsquare
 *Back button on Preferences
+Make sure markers are cleared
