@@ -31,6 +31,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.model.*
 
@@ -92,6 +93,12 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 //                adapter = MyReportRecyclerViewAdapter(it)
 //            }
 //        })
+
+        val prefs = PreferenceManager(context).sharedPreferences
+        val satHeard = prefs.getString(requireContext().getString(R.string.preference_satellite), "")
+        val idx = requireContext().resources.getStringArray(R.array.satellite_ids).indexOf(satHeard)
+        if(idx >= 0)
+            nameView.setSelection(idx)
 
         return binding.root
     }
