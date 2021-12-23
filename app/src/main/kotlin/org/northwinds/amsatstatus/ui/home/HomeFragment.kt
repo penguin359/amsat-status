@@ -1,26 +1,63 @@
 package org.northwinds.amsatstatus.ui.home
 
+import android.content.Context
+import android.content.SharedPreferences
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
+import java.util.Calendar
+import java.util.TimeZone
+
 import android.os.Build
 import android.os.Bundle
+import android.os.Looper
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import org.northwinds.amsatstatus.R
-import org.northwinds.amsatstatus.AmsatApi
-import org.northwinds.amsatstatus.Report
-import org.northwinds.amsatstatus.SatReport
-import org.northwinds.amsatstatus.makeReportTimeFromComponents
+import androidx.preference.PreferenceManager
+import kotlinx.android.synthetic.main.fragment_dashboard_item.*
+import org.northwinds.amsatstatus.*
+import org.northwinds.amsatstatus.util.Locator
+import java.util.concurrent.Executor
+import java.util.function.Consumer
 
-class HomeFragment : Fragment() {
-
-    var api = AmsatApi()
+class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragment() {
+    constructor() : this(Clock(), AmsatApi())
 
     //private ArrayAdapter<CharSequence>  mSatelliteAdapter;
 
     private lateinit var homeViewModel: HomeViewModel
+
+    lateinit var callsign: EditText
+    lateinit var gridsquare: EditText
+    lateinit var timeMode: TextView
+
+    lateinit var prefs : SharedPreferences
+    inner class Changer : SharedPreferences.OnSharedPreferenceChangeListener {
+        fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
+
+        override fun onSharedPreferenceChanged(prefs: SharedPreferences?, key: String?) {
+            if (key!!.equals(context!!.getString(R.string.preference_local_time))) {
+                if(prefs!!.getBoolean(context!!.getString(R.string.preference_local_time), false)) {
+                    timeMode.setText(R.string.local_time)
+                } else {
+                    timeMode.setText(R.string.utc_time)
+                }
+            }
+            if(key!! == getString(R.string.preference_callsign)) {
+                callsign.text = prefs!!.getString(getString(R.string.preference_callsign), "")?.toEditable()
+            }
+            if(key!! == getString(R.string.preference_default_grid)) {
+                gridsquare.text = prefs!!.getString(getString(R.string.preference_default_grid), "")?.toEditable()
+            }
+        }
+    }
+
+    val changer = Changer()
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -53,6 +90,61 @@ class HomeFragment : Fragment() {
 //            }
 //        });
         timePicker.setIs24HourView(true)
+
+        var date_picker = root.findViewById(R.id.date_fixture) as DatePicker
+        prefs = PreferenceManager(context).sharedPreferences
+        //val clock = Clock()
+        timeMode = root.findViewById(R.id.time_mode) as TextView
+        val picker_time = if(prefs.getBoolean(requireContext().getString(R.string.preference_local_time), false)) {
+            timeMode.setText(R.string.local_time)
+            clock.localCalendar
+        } else {
+            timeMode.setText(R.string.utc_time)
+            clock.utcCalendar
+        }
+        prefs.registerOnSharedPreferenceChangeListener(changer)
+        date_picker.updateDate(
+                picker_time.get(Calendar.YEAR),
+                picker_time.get(Calendar.MONTH),
+                picker_time.get(Calendar.DAY_OF_MONTH))
+        if(Build.VERSION.SDK_INT < 23) {
+            timePicker.currentHour = picker_time.get(Calendar.HOUR_OF_DAY)
+            timePicker.currentMinute = picker_time.get(Calendar.MINUTE) / 15
+        } else {
+            timePicker.hour = picker_time.get(Calendar.HOUR_OF_DAY)
+            timePicker.minute = picker_time.get(Calendar.MINUTE) / 15
+        }
+        callsign = root.findViewById(R.id.callsign) as EditText
+        callsign?.setText(prefs.getString(requireContext().getString(R.string.preference_callsign), ""))
+        gridsquare = root.findViewById(R.id.gridsquare) as EditText
+        gridsquare?.setText(prefs.getString(requireContext().getString(R.string.preference_default_grid), ""))
+
+        val location_btn =
+            root.findViewById<View>(R.id.location_button) as ImageButton
+        location_btn.setOnClickListener {
+            val service = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            try {
+                val location = service.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+                service.requestSingleUpdate(LocationManager.GPS_PROVIDER, object : LocationListener {
+                    override fun onLocationChanged(location: Location) {
+//                        gridsquare.setText("" + location.longitude + ":" + location.latitude)
+                        gridsquare.setText(Locator.coord_to_grid(location.latitude, location.longitude).subSequence(0, 6))
+                    }
+                    override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
+                    override fun onProviderEnabled(provider: String) {}
+                    override fun onProviderDisabled(provider: String) {}
+                }, Looper.getMainLooper())
+//                service.getCurrentLocation(LocationManager.NETWORK_PROVIDER, null, requireContext().mainExecutor,
+//                    Consumer { location ->
+//                        gridsquare.setText(location.latitude.toString())
+//                    })
+                if(location != null) {
+                    gridsquare.setText(Locator.coord_to_grid(location.latitude, location.longitude).subSequence(0, 6))
+                }
+            } catch (ex: SecurityException) {
+                return@setOnClickListener
+            }
+        }
         setTimePickerInterval(timePicker)
         val submit_btn =
             root.findViewById<View>(R.id.submit_button) as Button
@@ -79,8 +171,6 @@ class HomeFragment : Fragment() {
                 R.id.crewActiveRadio -> Report.CREW_ACTIVE
                 else -> Report.NOT_HEARD
             }
-            val date_picker =
-                root.findViewById<View>(R.id.date_fixture) as DatePicker
             val day = date_picker.dayOfMonth.toString()
             val month = String.format("%02d", date_picker.month + 1)
             val year = date_picker.year.toString()
@@ -100,20 +190,26 @@ class HomeFragment : Fragment() {
             val callsign = callsign_w.text
             val grid_w = root.findViewById(R.id.gridsquare) as EditText
             val grid = grid_w.text
-            val time = makeReportTimeFromComponents(
-                year = date_picker.year,
-                month = date_picker.month,
-                day = date_picker.dayOfMonth,
-                hour = if(Build.VERSION.SDK_INT < 23) { time_picker.currentHour } else { time_picker.hour },
-                quarter = if(Build.VERSION.SDK_INT < 23) { time_picker.currentMinute } else { time_picker.minute })
+            val calendar = if(prefs.getBoolean(requireContext().getString(R.string.preference_local_time), false)) {
+                Calendar.getInstance()
+            } else {
+                Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+            }
+            calendar.set(Calendar.YEAR, date_picker.year)
+            calendar.set(Calendar.MONTH, date_picker.month)
+            calendar.set(Calendar.DAY_OF_MONTH, date_picker.dayOfMonth)
+            calendar.set(Calendar.HOUR_OF_DAY, if(Build.VERSION.SDK_INT < 23) { time_picker.currentHour } else { time_picker.hour })
+            calendar.set(Calendar.MINUTE, if(Build.VERSION.SDK_INT < 23) { time_picker.currentMinute } else { time_picker.minute } * 15)
+            calendar.set(Calendar.SECOND, 0)
+            val time = ReportTime(calendar)
             val satReport = SatReport(satellite_ids[id], reportType, time, callsign.toString(), grid.toString())
             Toast.makeText(
-                activity!!.applicationContext,
+                requireActivity().applicationContext,
                 "Submit SatName: " + satellite_ids[id] + ", SatReport: " + value + ", Period: " + period + ", SatHour: " + hour + ", SatDay: " + day + ", SatMonth: " + month + ", SatYear: " + year + ", SatCall: " + callsign + ", SatGridSquare: " + grid,
                 Toast.LENGTH_LONG
             ).show()
             Toast.makeText(
-                activity!!.applicationContext,
+                requireActivity().applicationContext,
                 satReport.toString(),
                 Toast.LENGTH_LONG
             ).show()
@@ -132,12 +228,17 @@ class HomeFragment : Fragment() {
             //    }
             //}).start()
         }
-        Toast.makeText(
-            activity!!.applicationContext,
-            "Application is loaded!",
-            Toast.LENGTH_SHORT
-        ).show()
+//        Toast.makeText(
+//            requireActivity().applicationContext,
+//            "Application is loaded!",
+//            Toast.LENGTH_SHORT
+//        ).show()
         return root
+    }
+
+    override fun onDestroyView() {
+        prefs.unregisterOnSharedPreferenceChangeListener(changer)
+        super.onDestroyView()
     }
 
     //@SuppressLint("NewApi")

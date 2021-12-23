@@ -23,8 +23,13 @@ fun reportFromString(str: String) : Report {
     return Report.NOT_HEARD
 }
 
-class ReportTime(time: Calendar) {
-    val time = time
+class ReportTime(timestamp: Long) {
+    private val time = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
+        timeInMillis = timestamp
+    }
+
+    constructor(time: Calendar) : this(time.timeInMillis)
+
     val year get() = this.time.get(Calendar.YEAR)
     val month get() = this.time.get(Calendar.MONTH)
     val day get() = this.time.get(Calendar.DAY_OF_MONTH)

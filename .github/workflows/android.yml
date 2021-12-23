@@ -2,9 +2,9 @@ name: Android CI
 
 on:
   push:
-    branches: [ master, dex, google-maps, github-ci ]
+    branches: [ master, main, dex, google-maps, github-ci ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, main ]
 
 jobs:
   build:

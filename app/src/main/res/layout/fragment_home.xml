@@ -93,6 +93,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/radioGroup"
                 tools:targetApi="lollipop" />
 
+            <TextView
+                android:id="@+id/time_mode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="UTC" />
+
             <TimePicker
                 android:id="@+id/time_fixture"
                 android:layout_width="wrap_content"
@@ -118,6 +124,12 @@
                 android:hint="@string/grid"
                 android:importantForAutofill="no"
                 android:inputType="textCapCharacters" />
+
+            <ImageButton
+                android:id="@+id/location_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/ic_menu_mylocation" />
 
             <Button
                 android:id="@+id/submit_button"
