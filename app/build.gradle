@@ -15,8 +15,8 @@ android {
         applicationId "org.northwinds.amsatstatus"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 5
-        versionName "0.3 Beta"
+        versionCode 6
+        versionName "0.4 Beta"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
