@@ -123,6 +123,12 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
         gridsquare = root.findViewById(R.id.gridsquare) as EditText
         gridsquare?.setText(prefs.getString(requireContext().getString(R.string.preference_default_grid), ""))
 
+        val satelliteSpinner = root.findViewById<Spinner>(R.id.satHeard)
+        val satHeard = prefs.getString(requireContext().getString(R.string.preference_satellite), "")
+        val idx = requireContext().resources.getStringArray(R.array.satellite_ids).indexOf(satHeard)
+        if(idx >= 0)
+            satelliteSpinner.setSelection(idx)
+
         val location_btn =
             root.findViewById<View>(R.id.location_button) as ImageButton
         location_btn.setOnClickListener {

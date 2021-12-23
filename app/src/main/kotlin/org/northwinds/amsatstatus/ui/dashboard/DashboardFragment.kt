@@ -9,6 +9,7 @@ import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import org.northwinds.amsatstatus.R
 
@@ -63,6 +64,12 @@ class DashboardFragment : Fragment() {
                 adapter = MyReportRecyclerViewAdapter(it)
             }
         })
+
+        val prefs = PreferenceManager(context).sharedPreferences
+        val satHeard = prefs.getString(requireContext().getString(R.string.preference_satellite), "")
+        val idx = requireContext().resources.getStringArray(R.array.satellite_ids).indexOf(satHeard)
+        if(idx >= 0)
+            nameView.setSelection(idx)
 
         return root
     }
