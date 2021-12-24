@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -259,9 +260,16 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
             val classForid =
                 Class.forName("com.android.internal.R\$id")
             // Field timePickerField = classForid.getField("timePicker");
-            val field = classForid.getField("minute")
-            val minutePicker = timePicker
-                .findViewById<View>(field.getInt(null)) as NumberPicker
+//            val field = try {classForid.getField("minute")} catch(ex: NoSuchFieldException) {classForid.getField("currentMinute")}
+//            val minutePicker = timePicker
+//                .findViewById<View>(field.getInt(null)) as NumberPicker
+            val minutePicker: NumberPicker = timePicker.findViewById(
+                Resources.getSystem().getIdentifier(
+                    "minute",
+                    "id",
+                    "android"
+                )
+            )
             val TIME_PICKER_INTERVAL = 15
             minutePicker.minValue = 0
             minutePicker.maxValue = 3
