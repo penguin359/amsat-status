@@ -335,6 +335,84 @@ class HomeFragmentTest {
     }
 
     @Test
+    fun dateTimeSubmitsCorrectFixedManualLocalTime() {
+        val expectedCallsign = "Z3ZZ"
+        val expectedGridsquare = ""
+        PreferenceManager(appContext).sharedPreferences.edit {
+            putString(appContext.getString(R.string.preference_callsign), expectedCallsign)
+            putString(appContext.getString(R.string.preference_default_grid), expectedGridsquare)
+            putBoolean(appContext.getString(R.string.preference_local_time), true)
+        }
+
+        val apiMock = mock<AmsatApi> {}
+        TimeZone.setDefault(TimeZone.getTimeZone(ref_timezone))
+        val frag = launchFragmentInContainer<HomeFragment>(instantiate = {
+            HomeFragment(Clock(ref_time), apiMock)
+        })
+
+        onView(withId(R.id.crewActiveRadio)).perform(scrollTo(), click())
+        onView(withId(R.id.satHeard)).perform(scrollTo(), click())
+        onData(allOf(`is`(instanceOf(String::class.java)), `is`("Delfi-C3 (DO-64)"))).perform(click())
+        onView(withId(R.id.satHeard)).check(matches(withSpinnerText(containsString("Delfi-C3 (DO-64)"))))
+        onView(withId(R.id.date_fixture)).perform(PickerActions.setDate(2022, 4, 28))
+        onView(withId(R.id.time_fixture)).perform(PickerActions.setTime(23, 2))
+        onView(withId(R.id.submit_button)).perform(scrollTo(), click())
+
+        val arg = argumentCaptor<SatReport>()
+        verify(apiMock).sendReport(arg.capture())
+        assertEquals(expectedCallsign, arg.firstValue.callsign)
+        assertEquals(expectedGridsquare, arg.firstValue.gridSquare)
+        assertEquals(Report.CREW_ACTIVE, arg.firstValue.report)
+        assertEquals("Delfi-C3", arg.firstValue.name)
+        val time =  arg.firstValue.time
+        assertEquals("Bad year", 2022, time.year)
+        assertEquals("Bad month", 4, time.month+1)
+        assertEquals("Bad day",29, time.day)
+        assertEquals("Bad hour", 6, time.hour)
+        assertEquals("Bad minute", 30, time.minute)
+        assertEquals("Bad quarter", 2, time.quarter)
+    }
+
+    @Test
+    fun dateTimeSubmitsCorrectFixedManualLocalTimeNewYears() {
+        val expectedCallsign = "Z3ZZ"
+        val expectedGridsquare = ""
+        PreferenceManager(appContext).sharedPreferences.edit {
+            putString(appContext.getString(R.string.preference_callsign), expectedCallsign)
+            putString(appContext.getString(R.string.preference_default_grid), expectedGridsquare)
+            putBoolean(appContext.getString(R.string.preference_local_time), true)
+        }
+
+        val apiMock = mock<AmsatApi> {}
+        TimeZone.setDefault(TimeZone.getTimeZone(ref_timezone))
+        val frag = launchFragmentInContainer<HomeFragment>(instantiate = {
+            HomeFragment(Clock(ref_time), apiMock)
+        })
+
+        onView(withId(R.id.notHeardRadio)).perform(scrollTo(), click())
+        onView(withId(R.id.satHeard)).perform(scrollTo(), click())
+        onData(allOf(`is`(instanceOf(String::class.java)), `is`("Delfi-C3 (DO-64)"))).perform(click())
+        onView(withId(R.id.satHeard)).check(matches(withSpinnerText(containsString("Delfi-C3 (DO-64)"))))
+        onView(withId(R.id.date_fixture)).perform(PickerActions.setDate(2022, 12, 31))
+        onView(withId(R.id.time_fixture)).perform(PickerActions.setTime(20, 1))
+        onView(withId(R.id.submit_button)).perform(scrollTo(), click())
+
+        val arg = argumentCaptor<SatReport>()
+        verify(apiMock).sendReport(arg.capture())
+        assertEquals(expectedCallsign, arg.firstValue.callsign)
+        assertEquals(expectedGridsquare, arg.firstValue.gridSquare)
+        assertEquals(Report.NOT_HEARD, arg.firstValue.report)
+        assertEquals("Delfi-C3", arg.firstValue.name)
+        val time =  arg.firstValue.time
+        assertEquals("Bad year", 2023, time.year)
+        assertEquals("Bad month", 1, time.month+1)
+        assertEquals("Bad day",1, time.day)
+        assertEquals("Bad hour", 4, time.hour)
+        assertEquals("Bad minute", 15, time.minute)
+        assertEquals("Bad quarter", 1, time.quarter)
+    }
+
+    @Test
     fun timePickerHasCorrectValueRange() {
         val apiMock = mock<AmsatApi> {}
         TimeZone.setDefault(TimeZone.getTimeZone(ref_timezone))
