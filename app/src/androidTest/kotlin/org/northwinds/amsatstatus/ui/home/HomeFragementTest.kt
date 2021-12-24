@@ -464,7 +464,7 @@ class HomeFragmentTest {
         val dummyLocation: Location  = Location("dummy")
 */
         onView(withId(R.id.location_button)).perform(scrollTo(), click())
-        Thread.sleep(300)
+        Thread.sleep(5000)
         onView(withId(R.id.gridsquare)).check { view, _ ->
             val editView = view as EditText
             assertEquals("CM87wk", editView.text.toString())

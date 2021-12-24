@@ -232,6 +232,7 @@ class SettingsTest {
         )
         appCompatImageButton.perform(click())
 
+/*
         val appCompatImageButton2 = onView(
             allOf(
                 withContentDescription("Navigate up"),
@@ -269,6 +270,7 @@ class SettingsTest {
         appCompatImageButton3.perform(click())
 
         pressBack()
+*/
     }
 
     private fun childAtPosition(
