@@ -274,11 +274,6 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
                     i += TIME_PICKER_INTERVAL
                 }
             }
-            var i = 0
-            while (i < 60) {
-                displayedValues.add(String.format("%02d", i))
-                i += TIME_PICKER_INTERVAL
-            }
             minutePicker.displayedValues = displayedValues
                 .toTypedArray()
         } catch (e: Exception) {

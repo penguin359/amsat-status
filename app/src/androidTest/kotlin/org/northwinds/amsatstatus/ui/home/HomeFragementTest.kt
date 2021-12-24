@@ -7,6 +7,7 @@ package org.northwinds.amsatstatus.ui.home
 //import org.mockito.Mockito.verify
 import android.widget.DatePicker
 import android.widget.EditText
+import android.widget.NumberPicker
 import android.widget.TimePicker
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.edit
@@ -17,6 +18,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.PickerActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -31,6 +33,7 @@ import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.northwinds.amsatstatus.*
+import java.lang.ClassCastException
 import java.util.*
 
 
@@ -290,6 +293,70 @@ class HomeFragmentTest {
         assertEquals("Bad hour", 5, time.hour)
         assertEquals("Bad minute", 15, time.minute)
         assertEquals("Bad quarter", 1, time.quarter)
+    }
+
+    @Test
+    fun dateTimeSubmitsCorrectFixedManualUtcTime() {
+        val expectedCallsign = "A1BC"
+        val expectedGridsquare = "BP51"
+        PreferenceManager(appContext).sharedPreferences.edit {
+            putString(appContext.getString(R.string.preference_callsign), expectedCallsign)
+            putString(appContext.getString(R.string.preference_default_grid), expectedGridsquare)
+            putBoolean(appContext.getString(R.string.preference_local_time), false)
+        }
+
+        val apiMock = mock<AmsatApi> {}
+        TimeZone.setDefault(TimeZone.getTimeZone(ref_timezone))
+        val frag = launchFragmentInContainer<HomeFragment>(instantiate = {
+            HomeFragment(Clock(ref_time), apiMock)
+        })
+
+        onView(withId(R.id.telemetryOnlyRadio)).perform(scrollTo(), click())
+        onView(withId(R.id.satHeard)).perform(scrollTo(), click())
+        onData(allOf(`is`(instanceOf(String::class.java)), `is`("ISS SSTV"))).perform(click())
+        onView(withId(R.id.satHeard)).check(matches(withSpinnerText(containsString("ISS SSTV"))))
+        onView(withId(R.id.date_fixture)).perform(PickerActions.setDate(2021, 6, 17))
+        onView(withId(R.id.time_fixture)).perform(PickerActions.setTime(18, 3))
+        onView(withId(R.id.submit_button)).perform(scrollTo(), click())
+
+        val arg = argumentCaptor<SatReport>()
+        verify(apiMock).sendReport(arg.capture())
+        assertEquals(expectedCallsign, arg.firstValue.callsign)
+        assertEquals(expectedGridsquare, arg.firstValue.gridSquare)
+        assertEquals(Report.TELEMETRY_ONLY, arg.firstValue.report)
+        assertEquals("ISS-SSTV", arg.firstValue.name)
+        val time =  arg.firstValue.time
+        assertEquals("Bad year", 2021, time.year)
+        assertEquals("Bad month", 6, time.month+1)
+        assertEquals("Bad day",17, time.day)
+        assertEquals("Bad hour", 18, time.hour)
+        assertEquals("Bad minute", 45, time.minute)
+        assertEquals("Bad quarter", 3, time.quarter)
+    }
+
+    @Test
+    fun timePickerHasCorrectValueRange() {
+        val apiMock = mock<AmsatApi> {}
+        TimeZone.setDefault(TimeZone.getTimeZone(ref_timezone))
+        val frag = launchFragmentInContainer<HomeFragment>(instantiate = {
+            HomeFragment(Clock(ref_time), apiMock)
+        })
+
+        onView(allOf(
+            isDescendantOfA(withId(R.id.time_fixture))/*, instanceOf<NumberPicker>()*/, `is`(
+            instanceOf(NumberPicker::class.java)), hasDescendant(withContentDescription(containsString("minute")))/*, hasDescendant(anyOf(withContentDescription("minute"), withText("minute"))))*/)).check { view, exception ->
+            if(view == null)
+                throw exception
+            val picker = try { view as NumberPicker } catch(ex: ClassCastException) { return@check }
+            assertEquals(0, picker.minValue)
+            assertEquals(3, picker.maxValue)
+            val choices = picker.displayedValues
+            assertEquals(4, choices.size)
+            assertEquals("00", choices[0])
+            assertEquals("15", choices[1])
+            assertEquals("30", choices[2])
+            assertEquals("45", choices[3])
+        }
     }
 
     @Test
