@@ -23,7 +23,6 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
-import kotlinx.android.synthetic.main.fragment_dashboard_item.*
 import org.northwinds.amsatstatus.*
 import org.northwinds.amsatstatus.util.Locator
 import java.util.concurrent.Executor
