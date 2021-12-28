@@ -56,6 +56,36 @@ open class AmsatApi(private val client: HttpTransport) {
         return list
     }
 
+    fun getReportsBySlot(name: String, hours: Int) : List<SatReportSlot> {
+        val groups = ArrayList<SatReportSlot>()
+        val all_reports = getReport(name, hours)
+        if(all_reports.size == 0)
+            return groups
+        var reports = ArrayList<SatReport>()
+        var group_report = all_reports[0].report
+        var group_time = all_reports[0].time
+        for(report in all_reports) {
+                if(report.time == group_time) {
+                    if(report.report != group_report) {
+                        group_report = Report.CONFLICTED
+                    }
+                } else {
+                    val group = SatReportSlot(name, group_report, group_time, reports)
+                    groups.add(group)
+                    reports = ArrayList<SatReport>()
+                    group_report = report.report
+                    group_time = report.time
+                }
+                reports.add(report)
+        }
+        if(reports.size > 0) {
+            val group = SatReportSlot(name, group_report, group_time, reports)
+            groups.add(group)
+        }
+        return groups
+//        return listOf(SatReportSlot(name, Report.NOT_HEARD, ReportTime(0), listOf()))
+    }
+
     open fun sendReport(report: SatReport) {
         val uri = GenericUrl(AMSAT_API_POST_URL)
         val params: MutableMap<String, String> = LinkedHashMap()

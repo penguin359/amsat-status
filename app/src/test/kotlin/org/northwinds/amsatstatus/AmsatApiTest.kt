@@ -369,4 +369,158 @@ class AmsatApiTest {
         api.sendReport(report)
         httpClientMock.verify().post().withHeader("User-Agent", StringContains("AMSATStatus/1.0")).called()
     }
+
+    @Test fun `get reports group by each time slot`() {
+        val json = """[
+            {
+                "name": "NO-84_PSK",
+                "reported_time": "2020-10-02T09:30:00Z",
+                "callsign": "0P1SD",
+                "report": "Not Heard",
+                "grid_square": "JN47"
+            },
+            {
+                "name": "NO-84_PSK",
+                "reported_time": "2020-10-02T09:30:00Z",
+                "callsign": "AK7NO",
+                "report": "Not Heard",
+                "grid_square": "BP43"
+            },
+            {
+                "name": "NO-84_PSK",
+                "reported_time": "2020-10-02T09:45:00Z",
+                "callsign": "CN2A",
+                "report": "Heard",
+                "grid_square": "NA12nl"
+            },
+            {
+                "name": "NO-84_PSK",
+                "reported_time": "2020-10-02T09:45:00Z",
+                "callsign": "AK7NO",
+                "report": "Not Heard",
+                "grid_square": "BP43"
+            },
+            {
+                "name": "NO-84_PSK",
+                "reported_time": "2020-10-02T10:30:00Z",
+                "callsign": "A1AA",
+                "report": "Heard",
+                "grid_square": ""
+            },
+            {
+                "name": "NO-84_PSK",
+                "reported_time": "2020-10-02T10:30:00Z",
+                "callsign": "B2BB",
+                "report": "Heard",
+                "grid_square": "DF87"
+            },
+            {
+                "name": "NO-84_PSK",
+                "reported_time": "2020-10-02T10:30:00Z",
+                "callsign": "C3CC",
+                "report": "Heard",
+                "grid_square": ""
+            },
+            {
+                "name": "NO-84_PSK",
+                "reported_time": "2020-10-02T10:45:00Z",
+                "callsign": "D4DD",
+                "report": "Not Heard",
+                "grid_square": "GH43"
+            }
+        ]"""
+
+        val httpClientMock = HttpClientMock()
+        httpClientMock.onGet().doReturn(json)
+
+        val transport = ApacheHttpTransport(httpClientMock)
+        val api = AmsatApi(transport)
+        val reportSlots = api.getReportsBySlot("NO-84_PSK", 24)
+
+        assertEquals(4, reportSlots.size)
+
+        reportSlots[0].also {
+            assertEquals("NO-84_PSK", it.name)
+            assertEquals("2020-10-02T09:30:00Z", it.time.toString())
+            assertEquals(Report.NOT_HEARD, it.report)
+            assertEquals(2, it.reports.size)
+            it.reports[0].also {
+                assertEquals("NO-84_PSK", it.name)
+                assertEquals("2020-10-02T09:30:00Z", it.time.toString())
+                assertEquals(Report.NOT_HEARD, it.report)
+                assertEquals("0P1SD", it.callsign)
+                assertEquals("JN47", it.gridSquare)
+            }
+            it.reports[1].also {
+                assertEquals("NO-84_PSK", it.name)
+                assertEquals("2020-10-02T09:30:00Z", it.time.toString())
+                assertEquals(Report.NOT_HEARD, it.report)
+                assertEquals("AK7NO", it.callsign)
+                assertEquals("BP43", it.gridSquare)
+            }
+        }
+
+        reportSlots[1].also {
+            assertEquals("NO-84_PSK", it.name)
+            assertEquals("2020-10-02T09:45:00Z", it.time.toString())
+            assertEquals(Report.CONFLICTED, it.report)
+            assertEquals(2, it.reports.size)
+            it.reports[0].also {
+                assertEquals("NO-84_PSK", it.name)
+                assertEquals("2020-10-02T09:45:00Z", it.time.toString())
+                assertEquals(Report.HEARD, it.report)
+                assertEquals("CN2A", it.callsign)
+                assertEquals("NA12nl", it.gridSquare)
+            }
+            it.reports[1].also {
+                assertEquals("NO-84_PSK", it.name)
+                assertEquals("2020-10-02T09:45:00Z", it.time.toString())
+                assertEquals(Report.NOT_HEARD, it.report)
+                assertEquals("AK7NO", it.callsign)
+                assertEquals("BP43", it.gridSquare)
+            }
+        }
+
+        reportSlots[2].also {
+            assertEquals("NO-84_PSK", it.name)
+            assertEquals("2020-10-02T10:30:00Z", it.time.toString())
+            assertEquals(Report.HEARD, it.report)
+            assertEquals(3, it.reports.size)
+            it.reports[0].also {
+                assertEquals("NO-84_PSK", it.name)
+                assertEquals("2020-10-02T10:30:00Z", it.time.toString())
+                assertEquals(Report.HEARD, it.report)
+                assertEquals("A1AA", it.callsign)
+                assertEquals("", it.gridSquare)
+            }
+            it.reports[1].also {
+                assertEquals("NO-84_PSK", it.name)
+                assertEquals("2020-10-02T10:30:00Z", it.time.toString())
+                assertEquals(Report.HEARD, it.report)
+                assertEquals("B2BB", it.callsign)
+                assertEquals("DF87", it.gridSquare)
+            }
+            it.reports[2].also {
+                assertEquals("NO-84_PSK", it.name)
+                assertEquals("2020-10-02T10:30:00Z", it.time.toString())
+                assertEquals(Report.HEARD, it.report)
+                assertEquals("C3CC", it.callsign)
+                assertEquals("", it.gridSquare)
+            }
+        }
+
+        reportSlots[3].also {
+            assertEquals("NO-84_PSK", it.name)
+            assertEquals("2020-10-02T10:45:00Z", it.time.toString())
+            assertEquals(Report.NOT_HEARD, it.report)
+            assertEquals(1, it.reports.size)
+            it.reports[0].also {
+                assertEquals("NO-84_PSK", it.name)
+                assertEquals("2020-10-02T10:45:00Z", it.time.toString())
+                assertEquals(Report.NOT_HEARD, it.report)
+                assertEquals("D4DD", it.callsign)
+                assertEquals("GH43", it.gridSquare)
+            }
+        }
+    }
 }
