@@ -242,7 +242,7 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
                     Report.CREW_ACTIVE -> 3
                 }
                 putLong(FirebaseAnalytics.Param.SCORE, statusId)
-                putLong(FirebaseAnalytics.Param.LEVEL, date_picker.dayOfMonth+1L)
+                putLong(FirebaseAnalytics.Param.LEVEL, date_picker.month+1L)
                 putString(FirebaseAnalytics.Param.CHARACTER, satellite_ids[id])
             }
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.POST_SCORE, params)
