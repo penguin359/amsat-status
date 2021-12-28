@@ -23,10 +23,11 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import org.northwinds.amsatstatus.*
 import org.northwinds.amsatstatus.util.Locator
-import java.util.concurrent.Executor
-import java.util.function.Consumer
 
 class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragment() {
     constructor() : this(Clock(), AmsatApi())
@@ -35,6 +36,7 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
 
     private val REQUEST_PERMISSION_LOCATION: Int = 1000
     private lateinit var homeViewModel: HomeViewModel
+    private lateinit var mFirebaseAnalytics: FirebaseAnalytics
 
     lateinit var callsign: EditText
     lateinit var gridsquare: EditText
@@ -68,6 +70,13 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
+        mFirebaseAnalytics = Firebase.analytics
+        val params = Bundle().apply {
+            putString(FirebaseAnalytics.Param.SCREEN_CLASS, "MainActivity")
+            putString(FirebaseAnalytics.Param.SCREEN_NAME, "Home")
+        }
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, params)
+
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
@@ -225,6 +234,18 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
                 satReport.toString(),
                 Toast.LENGTH_LONG
             ).show()
+            val params = Bundle().apply {
+                val statusId = when(reportType) {
+                    Report.NOT_HEARD -> 0L
+                    Report.TELEMETRY_ONLY -> 1
+                    Report.HEARD -> 2
+                    Report.CREW_ACTIVE -> 3
+                }
+                putLong(FirebaseAnalytics.Param.SCORE, statusId)
+                putLong(FirebaseAnalytics.Param.LEVEL, date_picker.dayOfMonth+1L)
+                putString(FirebaseAnalytics.Param.CHARACTER, satellite_ids[id])
+            }
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.POST_SCORE, params)
             //thread() {
             //    api.sendreport(satreport)
             //}

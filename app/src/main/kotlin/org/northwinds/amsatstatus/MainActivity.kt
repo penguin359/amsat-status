@@ -28,6 +28,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, null)
+
         PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false)
 
         // Obtain the FirebaseAnalytics instance.
