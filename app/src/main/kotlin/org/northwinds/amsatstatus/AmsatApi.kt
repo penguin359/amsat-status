@@ -57,6 +57,13 @@ private const val DEMO_SAT_REPORT = """[
         "callsign": "OM/DL1IBM",
         "report": "Heard",
         "grid_square": "DM57"
+    },
+    {
+        "name": "DEMO-1",
+        "reported_time": "2018-02-27T06:30:00Z",
+        "callsign": "ZA1FG",
+        "report": "Not Heard",
+        "grid_square": "EA85as"
     }
 ]"""
 

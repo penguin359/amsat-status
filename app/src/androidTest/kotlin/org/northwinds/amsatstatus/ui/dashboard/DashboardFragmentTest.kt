@@ -1,5 +1,6 @@
 package org.northwinds.amsatstatus.ui.dashboard
 
+import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.View
 import android.widget.ExpandableListView
@@ -27,7 +28,6 @@ import org.northwinds.amsatstatus.ui.dashboard.adapters.MyReportRecyclerViewAdap
 
 
 //@RunWith(AndroidJUnit4::class)
-@Ignore("Currently, this is replaced by multi-level dashboard view")
 class DashboardFragmentTest {
     /*
     val a = object : BoundedMatcher<RecyclerView.ViewHolder, MyReportRecyclerViewAdapter.ViewHolder>(RecyclerView.ViewHolder::class.java, MyReportRecyclerViewAdapter.ViewHolder::class.java) {
@@ -63,6 +63,7 @@ class DashboardFragmentTest {
 
     val appContext = InstrumentationRegistry.getInstrumentation().targetContext
 
+    @Ignore("Currently, this is replaced by multi-level dashboard view")
     @Test
     fun dashboardShouldShowDemoSatellite() {
         val frag = launchFragmentInContainer<DashboardFragment>()
@@ -85,6 +86,8 @@ class DashboardFragmentTest {
 }
 
 class DashboardMultiFragmentTest {
+    val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
     @Test
     fun dashboardShouldShowDemoSatelliteOnLaunch() {
         val frag = launchFragmentInContainer<DashboardFragment>()
@@ -288,5 +291,100 @@ class DashboardMultiFragmentTest {
             .atPosition(0)
             .onChildView(withId(R.id.multi_time))
             .check(matches(withText(containsString("2018-02-27"))))
+    }
+
+    @Test
+    fun dashboardShouldShowCorrectColorsDemoSatellite() {
+        val frag = launchFragmentInContainer<DashboardFragment>()
+        Thread.sleep(100)
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(0)
+            .check { view, noViewFoundException ->
+                if(view == null)
+                    throw noViewFoundException
+                assertThat(view.background, describedAs("has a solid background",
+                    instanceOf(ColorDrawable::class.java),
+                "color drawable"))
+                assertEquals(appContext.getColor(R.color.heard),
+                    (view.background as ColorDrawable).color)
+            }
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(1)
+            .check { view, noViewFoundException ->
+                if(view == null)
+                    throw noViewFoundException
+                assertThat(view.background, describedAs("has a solid background",
+                    instanceOf(ColorDrawable::class.java),
+                    "color drawable"))
+                assertEquals(appContext.getColor(R.color.notHeard),
+                    (view.background as ColorDrawable).color)
+            }
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(2)
+            .check { view, noViewFoundException ->
+                if(view == null)
+                    throw noViewFoundException
+                assertThat(view.background, describedAs("has a solid background",
+                    instanceOf(ColorDrawable::class.java),
+                    "color drawable"))
+                assertEquals(appContext.getColor(R.color.telemetryOnly),
+                    (view.background as ColorDrawable).color)
+            }
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(3)
+            .check { view, noViewFoundException ->
+                if(view == null)
+                    throw noViewFoundException
+                assertThat(view.background, describedAs("has a solid background",
+                    instanceOf(ColorDrawable::class.java),
+                    "color drawable"))
+                assertEquals(appContext.getColor(R.color.crewActive),
+                    (view.background as ColorDrawable).color)
+            }
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(5)
+            .check { view, noViewFoundException ->
+                if(view == null)
+                    throw noViewFoundException
+                assertThat(view.background, describedAs("has a solid background",
+                    instanceOf(ColorDrawable::class.java),
+                    "color drawable"))
+                assertEquals(appContext.getColor(R.color.conflict),
+                    (view.background as ColorDrawable).color)
+            }
+
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(5)
+            .perform(click())
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(6)
+            .check { view, noViewFoundException ->
+                if(view == null)
+                    throw noViewFoundException
+                assertThat(view.background, describedAs("has a solid background",
+                    instanceOf(ColorDrawable::class.java),
+                    "color drawable"))
+                assertEquals(appContext.getColor(R.color.heard),
+                    (view.background as ColorDrawable).color)
+            }
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(7)
+            .check { view, noViewFoundException ->
+                if(view == null)
+                    throw noViewFoundException
+                assertThat(view.background, describedAs("has a solid background",
+                    instanceOf(ColorDrawable::class.java),
+                    "color drawable"))
+                assertEquals(appContext.getColor(R.color.notHeard),
+                    (view.background as ColorDrawable).color)
+            }
     }
 }

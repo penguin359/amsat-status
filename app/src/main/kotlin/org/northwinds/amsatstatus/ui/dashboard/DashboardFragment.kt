@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import org.northwinds.amsatstatus.R
+import org.northwinds.amsatstatus.ui.dashboard.adapters.MultiDashboardViewAdapter
 
 import org.northwinds.amsatstatus.ui.dashboard.adapters.MyReportRecyclerViewAdapter
 
@@ -108,7 +109,7 @@ class DashboardFragment : Fragment() {
                     }
                     reportItems.add(list)
                 }
-                setAdapter(SimpleExpandableListAdapter(requireActivity(),
+                setAdapter(MultiDashboardViewAdapter(requireActivity(),
                         reportGroups,
                     R.layout.fragment_dashboard_multi_group,
                     arrayOf("status", "time"),
