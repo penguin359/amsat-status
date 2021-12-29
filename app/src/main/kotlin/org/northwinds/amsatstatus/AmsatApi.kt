@@ -15,6 +15,51 @@ const val TAG = "AmsatApi"
 const val AMSAT_API_URL = "https://amsat.org/status/api/v1/sat_info.php"
 const val AMSAT_API_POST_URL = "https://amsat.org/status/submit.php"
 
+private const val DEMO_SAT_REPORT = """[
+    {
+        "name": "DEMO-2",
+        "reported_time": "2018-02-27T02:00:00Z",
+        "callsign": "AB1C",
+        "report": "Heard",
+        "grid_square": ""
+    },
+    {
+        "name": "DEMO-1",
+        "reported_time": "2018-02-27T03:00:00Z",
+        "callsign": "K7IW",
+        "report": "Not Heard",
+        "grid_square": ""
+    },
+    {
+        "name": "DEMO-1",
+        "reported_time": "2018-02-27T03:15:00Z",
+        "callsign": "ZL1D",
+        "report": "Telemetry Only",
+        "grid_square": ""
+    },
+    {
+        "name": "DEMO-1",
+        "reported_time": "2018-02-27T04:30:00Z",
+        "callsign": "KG7GAN",
+        "report": "Crew Active",
+        "grid_square": ""
+    },
+    {
+        "name": "DEMO-1",
+        "reported_time": "2018-02-27T05:45:00Z",
+        "callsign": "AG7NC",
+        "report": "Heard",
+        "grid_square": ""
+    },
+    {
+        "name": "DEMO-1",
+        "reported_time": "2018-02-27T06:30:00Z",
+        "callsign": "OM/DL1IBM",
+        "report": "Heard",
+        "grid_square": ""
+    }
+]"""
+
 open class AmsatApi(private val client: HttpTransport) {
     constructor() : this(NetHttpTransport())
 
@@ -24,20 +69,24 @@ open class AmsatApi(private val client: HttpTransport) {
         uri.`set`("name", name)
         uri.`set`("hours", hours)
         Log.d(TAG, "To build")
-        val httpGet = client.createRequestFactory().buildGetRequest(uri)
-        httpGet.headers.userAgent = "AMSATStatus/1.0"
-        Log.d(TAG, "Done")
-        var list = ArrayList<SatReport>()
-        Log.d(TAG, "To execute")
-        var rawResponse = "[]"
-        try {
-                rawResponse = httpGet.execute().parseAsString()
-        } catch(ex: Exception) {
+        var rawResponse = if(name == "DEMO-1") {
+            DEMO_SAT_REPORT
+        } else {
+            val httpGet = client.createRequestFactory().buildGetRequest(uri)
+            httpGet.headers.userAgent = "AMSATStatus/1.0"
+            Log.d(TAG, "Done")
+            Log.d(TAG, "To execute")
+            try {
+                httpGet.execute().parseAsString()
+            } catch (ex: Exception) {
                 Log.d(TAG, "Died on ex" + ex)
+                "[]"
+            }
         }
         Log.d(TAG, "Done")
         Log.d(TAG, rawResponse)
 
+        var list = ArrayList<SatReport>()
             val jsonList = JSONTokener(rawResponse).nextValue() as JSONArray
 
             for(idx in 0..jsonList.length()-1) {

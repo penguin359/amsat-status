@@ -523,4 +523,52 @@ class AmsatApiTest {
             }
         }
     }
+
+    @Test fun `can get demo satellite with default implementation`() {
+        val api = AmsatApi()
+        val reports = api.getReport("DEMO-1", 24)
+        assertEquals(6, reports.size)
+
+        reports[0].also {
+            assertEquals("DEMO-2", it.name)
+            assertEquals(Report.HEARD, it.report)
+            assertEquals("2018-02-27T02:00:00Z", it.time.toString())
+            assertEquals("AB1C", it.callsign)
+        }
+
+        reports[1].also {
+            assertEquals("DEMO-1", it.name)
+            assertEquals(Report.NOT_HEARD, it.report)
+            assertEquals("2018-02-27T03:00:00Z", it.time.toString())
+            assertEquals("K7IW", it.callsign)
+        }
+
+        reports[2].also {
+            assertEquals("DEMO-1", it.name)
+            assertEquals(Report.TELEMETRY_ONLY, it.report)
+            assertEquals("2018-02-27T03:15:00Z", it.time.toString())
+            assertEquals("ZL1D", it.callsign)
+        }
+
+        reports[3].also {
+            assertEquals("DEMO-1", it.name)
+            assertEquals(Report.CREW_ACTIVE, it.report)
+            assertEquals("2018-02-27T04:30:00Z", it.time.toString())
+            assertEquals("KG7GAN", it.callsign)
+        }
+
+        reports[4].also {
+            assertEquals("DEMO-1", it.name)
+            assertEquals(Report.HEARD, it.report)
+            assertEquals("2018-02-27T05:45:00Z", it.time.toString())
+            assertEquals("AG7NC", it.callsign)
+        }
+
+        reports[5].also {
+            assertEquals("DEMO-1", it.name)
+            assertEquals(Report.HEARD, it.report)
+            assertEquals("2018-02-27T06:30:00Z", it.time.toString())
+            assertEquals("OM/DL1IBM", it.callsign)
+        }
+    }
 }
