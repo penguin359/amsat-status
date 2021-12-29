@@ -4,7 +4,10 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -13,13 +16,15 @@ import androidx.test.platform.app.InstrumentationRegistry
 import org.hamcrest.BaseMatcher
 import org.hamcrest.Description
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.*
+import org.junit.Ignore
 import org.junit.Test
 import org.northwinds.amsatstatus.R
 import org.northwinds.amsatstatus.ui.dashboard.adapters.MyReportRecyclerViewAdapter
 
 
 //@RunWith(AndroidJUnit4::class)
+@Ignore("Currently, this is replaced by multi-level dashboard view")
 class DashboardFragmentTest {
     /*
     val a = object : BoundedMatcher<RecyclerView.ViewHolder, MyReportRecyclerViewAdapter.ViewHolder>(RecyclerView.ViewHolder::class.java, MyReportRecyclerViewAdapter.ViewHolder::class.java) {
@@ -73,5 +78,56 @@ class DashboardFragmentTest {
         //onView(withId(R.id.reports)).perform(RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(withText("DEMO-2")))
         onView(withId(R.id.reports)).perform(RecyclerViewActions.scrollTo<MyReportRecyclerViewAdapter.ViewHolder>(
             allOf(hasDescendant(withId(R.id.name)), hasDescendant(withText("DEMO-2")))))
+    }
+}
+
+class DashboardMultiFragmentTest {
+    @Test
+    fun dashboardShouldShowDemoSatellite() {
+        val frag = launchFragmentInContainer<DashboardFragment>()
+        onView(withId(R.id.name))
+            .check(matches(withSpinnerText(containsString("DEMO"))))
+        onView(withId(R.id.name))
+            .perform(click())
+        onData(hasToString("AO-27"))
+            .perform(click())
+//        onData(anything())
+//            .inAdapterView(withId(R.id.name))
+//            .atPosition(3)
+//            .perform(click())
+        onView(withId(R.id.name))
+            .check(matches(withSpinnerText(containsString("AO-27"))))
+        onView(withId(R.id.name))
+            .perform(click())
+        onData(hasToString(containsString("DEMO")))
+            .perform(click())
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(0)
+            .onChildView(withId(R.id.multi_time))
+            .check(matches(withText(containsString("19:30"))))
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(0)
+            .onChildView(withId(R.id.multi_status))
+            .check(matches(withText("heard")))
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(1)
+            .check(matches(hasDescendant(withText(containsString("heard")))))
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(1)
+            .onChildView(withId(R.id.multi_time))
+            .check(matches(withText(containsString("19:45"))))
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(0)
+            .perform(click())
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(1)
+            .onChildView(withId(R.id.multi_callsign))
+            .check(matches(withText(containsString("AB1C"))))
     }
 }
