@@ -2,6 +2,7 @@ package org.northwinds.amsatstatus.ui.dashboard
 
 import android.util.Log
 import android.view.View
+import android.widget.ExpandableListView
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onData
@@ -19,6 +20,8 @@ import org.hamcrest.Matcher
 import org.hamcrest.Matchers.*
 import org.junit.Ignore
 import org.junit.Test
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.northwinds.amsatstatus.R
 import org.northwinds.amsatstatus.ui.dashboard.adapters.MyReportRecyclerViewAdapter
 
@@ -83,43 +86,67 @@ class DashboardFragmentTest {
 
 class DashboardMultiFragmentTest {
     @Test
-    fun dashboardShouldShowDemoSatellite() {
+    fun dashboardShouldShowDemoSatelliteOnLaunch() {
         val frag = launchFragmentInContainer<DashboardFragment>()
         onView(withId(R.id.name))
             .check(matches(withSpinnerText(containsString("DEMO"))))
-        onView(withId(R.id.name))
-            .perform(click())
-        onData(hasToString("AO-27"))
-            .perform(click())
-//        onData(anything())
-//            .inAdapterView(withId(R.id.name))
-//            .atPosition(3)
-//            .perform(click())
-        onView(withId(R.id.name))
-            .check(matches(withSpinnerText(containsString("AO-27"))))
-        onView(withId(R.id.name))
-            .perform(click())
-        onData(hasToString(containsString("DEMO")))
-            .perform(click())
+
+        onView(withId(R.id.reports))
+            .check { view, noViewFoundException ->
+                if(view == null)
+                    throw noViewFoundException
+                val listView = view as ExpandableListView
+                assertEquals(6, listView.adapter.count)
+            }
+
         onData(anything())
             .inAdapterView(withId(R.id.reports))
             .atPosition(0)
             .onChildView(withId(R.id.multi_time))
-            .check(matches(withText(containsString("19:30"))))
+            .check(matches(withText(containsString("2018-02-27"))))
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(0)
+            .onChildView(withId(R.id.multi_time))
+            .check(matches(withText(containsString("02:00"))))
         onData(anything())
             .inAdapterView(withId(R.id.reports))
             .atPosition(0)
             .onChildView(withId(R.id.multi_status))
-            .check(matches(withText("heard")))
-        onData(anything())
-            .inAdapterView(withId(R.id.reports))
-            .atPosition(1)
-            .check(matches(hasDescendant(withText(containsString("heard")))))
+            .check(matches(withText("Heard")))
+
         onData(anything())
             .inAdapterView(withId(R.id.reports))
             .atPosition(1)
             .onChildView(withId(R.id.multi_time))
-            .check(matches(withText(containsString("19:45"))))
+            .check(matches(withText(containsString("2018-02-27"))))
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(1)
+            .onChildView(withId(R.id.multi_time))
+            .check(matches(withText(containsString("03:00"))))
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(1)
+            .onChildView(withId(R.id.multi_status))
+            .check(matches(withText(containsString("Not Heard"))))
+
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(3)
+            .onChildView(withId(R.id.multi_time))
+            .check(matches(withText(containsString("2018-02-27"))))
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(3)
+            .onChildView(withId(R.id.multi_time))
+            .check(matches(withText(containsString("04:30"))))
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(3)
+            .onChildView(withId(R.id.multi_status))
+            .check(matches(withText(containsString("Crew Active"))))
+
         onData(anything())
             .inAdapterView(withId(R.id.reports))
             .atPosition(0)
@@ -129,5 +156,137 @@ class DashboardMultiFragmentTest {
             .atPosition(1)
             .onChildView(withId(R.id.multi_callsign))
             .check(matches(withText(containsString("AB1C"))))
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(1)
+            .onChildView(withId(R.id.multi_grid))
+            .check(matches(withText(containsString("AB34"))))
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(1)
+            .onChildView(withId(R.id.multi_report))
+            .check(matches(withText("Heard")))
+
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(6)
+            .perform(click())
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(7)
+            .onChildView(withId(R.id.multi_callsign))
+            .check(matches(withText(containsString("OM/DL1IBM"))))
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(7)
+            .onChildView(withId(R.id.multi_grid))
+            .check(matches(withText(containsString("DM57"))))
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(7)
+            .onChildView(withId(R.id.multi_report))
+            .check(matches(withText(containsString("Heard"))))
+    }
+
+    @Test
+    fun dashboardShouldShowNoReportsOnDeadSatellite() {
+        val frag = launchFragmentInContainer<DashboardFragment>()
+        onView(withId(R.id.name))
+            .check(matches(withSpinnerText(containsString("DEMO"))))
+        onView(withId(R.id.name))
+            .perform(click())
+        onData(hasToString("MAYA-1"))
+            .perform(click())
+        onView(withId(R.id.name))
+            .check(matches(withSpinnerText(containsString("MAYA-1"))))
+
+        onView(withId(R.id.reports))
+            .check { view, noViewFoundException ->
+                if(view == null)
+                    throw noViewFoundException
+                val listView = view as ExpandableListView
+                assertEquals(0, listView.adapter.count)
+            }
+    }
+
+    @Test
+    fun dashboardShouldShowManyReportsOnLiveSatellite() {
+        val frag = launchFragmentInContainer<DashboardFragment>()
+        onView(withId(R.id.name))
+            .check(matches(withSpinnerText(containsString("DEMO"))))
+        onView(withId(R.id.name))
+            .perform(click())
+        onData(hasToString("AO-91"))
+            .perform(click())
+        onView(withId(R.id.name))
+            .check(matches(withSpinnerText(containsString("AO-91"))))
+
+        Thread.sleep(300)
+        onView(withId(R.id.reports))
+            .check { view, noViewFoundException ->
+                if(view == null)
+                    throw noViewFoundException
+                val listView = view as ExpandableListView
+                assertNotEquals(0, listView.adapter.count)
+            }
+
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(0)
+            .onChildView(withId(R.id.multi_time))
+            .check(matches(not(withText(containsString("2018-02-27")))))
+    }
+
+    @Test
+    fun dashboardShouldRestoreDemoSatelliteWhenReselected() {
+        val frag = launchFragmentInContainer<DashboardFragment>()
+        onView(withId(R.id.name))
+            .check(matches(withSpinnerText(containsString("DEMO"))))
+        onView(withId(R.id.reports))
+            .check { view, noViewFoundException ->
+                if(view == null)
+                    throw noViewFoundException
+                val listView = view as ExpandableListView
+                assertEquals(6, listView.adapter.count)
+            }
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(0)
+            .onChildView(withId(R.id.multi_time))
+            .check(matches(withText(containsString("2018-02-27"))))
+
+        onView(withId(R.id.name))
+            .perform(click())
+        onData(hasToString("MAYA-1"))
+            .perform(click())
+        onView(withId(R.id.name))
+            .check(matches(withSpinnerText(containsString("MAYA-1"))))
+        Thread.sleep(300)
+        onView(withId(R.id.reports))
+            .check { view, noViewFoundException ->
+                if(view == null)
+                    throw noViewFoundException
+                val listView = view as ExpandableListView
+                assertEquals(0, listView.adapter.count)
+            }
+
+        onView(withId(R.id.name))
+            .perform(click())
+        onData(hasToString("DEMO 1"))
+            .perform(click())
+        onView(withId(R.id.name))
+            .check(matches(withSpinnerText(containsString("DEMO 1"))))
+        onView(withId(R.id.reports))
+            .check { view, noViewFoundException ->
+                if(view == null)
+                    throw noViewFoundException
+                val listView = view as ExpandableListView
+                assertEquals(6, listView.adapter.count)
+            }
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(0)
+            .onChildView(withId(R.id.multi_time))
+            .check(matches(withText(containsString("2018-02-27"))))
     }
 }

@@ -21,7 +21,7 @@ private const val DEMO_SAT_REPORT = """[
         "reported_time": "2018-02-27T02:00:00Z",
         "callsign": "AB1C",
         "report": "Heard",
-        "grid_square": ""
+        "grid_square": "AB34"
     },
     {
         "name": "DEMO-1",
@@ -56,7 +56,7 @@ private const val DEMO_SAT_REPORT = """[
         "reported_time": "2018-02-27T06:30:00Z",
         "callsign": "OM/DL1IBM",
         "report": "Heard",
-        "grid_square": ""
+        "grid_square": "DM57"
     }
 ]"""
 
