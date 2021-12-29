@@ -15,49 +15,8 @@ import org.northwinds.amsatstatus.makeReportTimeFromString
 private val TAG = "DashboardViewModel"
 
 class DashboardViewModel : ViewModel() {
-    private val _demo_reports = listOf(
-        SatReport(
-            "DEMO-2",
-            Report.HEARD,
-            makeReportTimeFromString("2018-02-27T02:00:00Z"),
-            "AB1C"
-        ),
-        SatReport(
-            "DEMO-1",
-            Report.NOT_HEARD,
-            makeReportTimeFromString("2018-02-27T03:00:00Z"),
-            "K7IW"
-        ),
-        SatReport(
-            "DEMO-1",
-            Report.TELEMETRY_ONLY,
-            makeReportTimeFromString("2018-02-27T03:15:00Z"),
-            "ZL1D"
-        ),
-        SatReport(
-            "DEMO-1",
-            Report.CREW_ACTIVE,
-            makeReportTimeFromString("2018-02-27T04:30:00Z"),
-            "KG7GAN"
-        ),
-        SatReport(
-            "DEMO-1",
-            Report.HEARD,
-            makeReportTimeFromString("2018-02-27T05:45:00Z"),
-            "AG7NC"
-        ),
-        SatReport(
-            "DEMO-1",
-            Report.HEARD,
-            makeReportTimeFromString("2018-02-27T06:30:00Z"),
-            "OM/DL1IBM"
-        )
-    )
-
     private val executor = Executors.newSingleThreadScheduledExecutor()
-    private val _reports = MutableLiveData<List<SatReport>>().apply {
-        value = _demo_reports
-    }
+    private val _reports = MutableLiveData<List<SatReport>>()
 
     val reports: LiveData<List<SatReport>> = _reports
 
@@ -70,11 +29,7 @@ class DashboardViewModel : ViewModel() {
             override fun run(): Unit {
                 val api = AmsatApi()
                 Log.v(TAG, "Posting request")
-                if(name == "DEMO-1") {
-                    _reports.postValue(_demo_reports)
-                } else {
-                    _reports.postValue(api.getReport(name, 24))
-                }
+                _reports.postValue(api.getReport(name, 24))
             }
         })
     }
