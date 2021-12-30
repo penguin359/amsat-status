@@ -28,7 +28,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     flavorDimensions "version"
+
     productFlavors {
         dev {
             dimension "version"
@@ -38,6 +40,16 @@ android {
         prod {
         }
     }
+
+    android.variantFilter { variant ->
+        File srcDir = new File(projectDir, "src")
+        File variantDir = new File(srcDir, variant.getFlavors().get(0).name)
+        File servicesFile = new File(variantDir, "google-services.json")
+        if(variant.getFlavors().get(0).name.equals('prod') && !servicesFile.exists()) {
+            setIgnore(true)
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
