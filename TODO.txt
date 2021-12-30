@@ -50,3 +50,8 @@ Favorite satellites
 Sort order of reports
 Make sure all assertions in same direction
 All settings trigger immediate change on fragment when leaving it
+Manifest theme attribute Holo/Material
+Day/Night mode
+Searchable spinner
+Alternate satellite names
+Define activity parents

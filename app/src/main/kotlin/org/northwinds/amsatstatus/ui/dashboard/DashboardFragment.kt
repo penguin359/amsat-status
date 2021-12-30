@@ -42,18 +42,6 @@ class DashboardFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_dashboard_multi, container, false)
         val listView = root.findViewById<ExpandableListView>(R.id.reports)
 
-//        dashboardViewModel.reports.observe(viewLifecycleOwner, Observer {
-//            with(reportView) {
-//                adapter = MyReportRecyclerViewAdapter(it)
-//            }
-//        })
-
-        /*
-        val textView: TextView = root.findViewById(R.id.text_dashboard)
-        dashboardViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-        */
         val nameView: Spinner = root.findViewById(R.id.name)
         nameView.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -61,8 +49,6 @@ class DashboardFragment : Fragment() {
             }
 
             override fun onItemSelected(p0: AdapterView<*>?, view: View?, position: Int, _id: Long) {
-                //val spinner = view as Spinner
-                //val id = spinner.selectedItemPosition
                 val id = position
                 val satellite_ids =
                     resources.getStringArray(R.array.satellite_ids)
@@ -79,13 +65,6 @@ class DashboardFragment : Fragment() {
                     putString(FirebaseAnalytics.Param.ITEM_LIST_NAME, "Dashboard")
                 }
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, params)
-                /*
-                Toast.makeText(
-                    activity!!.applicationContext,
-                    "Sat Item " + position.toString() + " (" + satellite_ids[id] + ")",
-                    Toast.LENGTH_LONG
-                ).show()
-                */
                 dashboardViewModel.updateSlots(satellite_ids[id])
             }
         }
@@ -98,26 +77,7 @@ class DashboardFragment : Fragment() {
         val reportView: ExpandableListView = root.findViewById(R.id.reports)
         dashboardViewModel.reportSlots.observe(viewLifecycleOwner, Observer {
             with(reportView) {
-                val reportSlots = dashboardViewModel.reportSlots.value!!
-                val reportGroups = ArrayList<Map<String, String>>()
-                val reportItems = ArrayList<ArrayList<Map<String, String>>>()
-                for(slot in reportSlots) {
-                    reportGroups.add(mapOf("status" to slot.report.value, "time" to slot.time.toString()))
-                    val list = ArrayList<Map<String, String>>()
-                    for(report in slot.reports) {
-                        list.add(mapOf("report" to report.report.value, "callsign" to report.callsign, "grid" to report.gridSquare))
-                    }
-                    reportItems.add(list)
-                }
-                setAdapter(MultiDashboardViewAdapter(requireActivity(),
-                        reportGroups,
-                    R.layout.fragment_dashboard_multi_group,
-                    arrayOf("status", "time"),
-                    intArrayOf(R.id.multi_status, R.id.multi_time),
-                    reportItems,
-                    R.layout.fragment_dashboard_multi_item,
-                    arrayOf("report", "callsign", "grid"),
-                    intArrayOf(R.id.multi_report, R.id.multi_callsign, R.id.multi_grid)))
+                setAdapter(MultiDashboardViewAdapter(requireActivity(), it))
             }
         })
 

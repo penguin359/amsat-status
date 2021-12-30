@@ -527,7 +527,7 @@ class AmsatApiTest {
     @Test fun `can get demo satellite with default implementation`() {
         val api = AmsatApi()
         val reports = api.getReport("DEMO-1", 24)
-        assertEquals(6, reports.size)
+        assertEquals(7, reports.size)
 
         reports[0].also {
             assertEquals("DEMO-2", it.name)
