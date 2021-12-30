@@ -240,6 +240,7 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
                     Report.TELEMETRY_ONLY -> 1
                     Report.HEARD -> 2
                     Report.CREW_ACTIVE -> 3
+                    Report.CONFLICTED -> 4
                 }
                 putLong(FirebaseAnalytics.Param.SCORE, statusId)
                 putLong(FirebaseAnalytics.Param.LEVEL, date_picker.month+1L)
