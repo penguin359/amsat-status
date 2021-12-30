@@ -14,7 +14,7 @@ class MultiDashboardViewAdapter(
 ) : SimpleExpandableListAdapter(
     context,
     reportSlots.map { slot ->
-        mapOf("status" to slot.report.value, "time" to slot.time.toString())
+        mapOf("status" to slot.report.value, "time" to slot.time.toString().replace('T', '\n'))
     },
     R.layout.fragment_dashboard_multi_group,
     arrayOf("status", "time"),
@@ -46,7 +46,7 @@ class MultiDashboardViewAdapter(
             Report.CREW_ACTIVE -> R.color.crewActive
             Report.CONFLICTED -> R.color.conflict
         }
-        view.setBackgroundColor(context.resources.getColor(color))
+        view.findViewById<View>(R.id.multi_group_cell).setBackgroundColor(context.resources.getColor(color))
         return view
     }
 
@@ -66,7 +66,7 @@ class MultiDashboardViewAdapter(
             Report.CREW_ACTIVE -> R.color.crewActive
             else -> 0
         }
-        view.setBackgroundColor(context.resources.getColor(color))
+        view.findViewById<View>(R.id.multi_cell).setBackgroundColor(context.resources.getColor(color))
         return view
     }
 }

@@ -300,6 +300,7 @@ class DashboardMultiFragmentTest {
         onData(anything())
             .inAdapterView(withId(R.id.reports))
             .atPosition(0)
+            .onChildView(withId(R.id.multi_group_cell))
             .check { view, noViewFoundException ->
                 if(view == null)
                     throw noViewFoundException
@@ -312,6 +313,7 @@ class DashboardMultiFragmentTest {
         onData(anything())
             .inAdapterView(withId(R.id.reports))
             .atPosition(1)
+            .onChildView(withId(R.id.multi_group_cell))
             .check { view, noViewFoundException ->
                 if(view == null)
                     throw noViewFoundException
@@ -324,6 +326,7 @@ class DashboardMultiFragmentTest {
         onData(anything())
             .inAdapterView(withId(R.id.reports))
             .atPosition(2)
+            .onChildView(withId(R.id.multi_group_cell))
             .check { view, noViewFoundException ->
                 if(view == null)
                     throw noViewFoundException
@@ -336,6 +339,7 @@ class DashboardMultiFragmentTest {
         onData(anything())
             .inAdapterView(withId(R.id.reports))
             .atPosition(3)
+            .onChildView(withId(R.id.multi_group_cell))
             .check { view, noViewFoundException ->
                 if(view == null)
                     throw noViewFoundException
@@ -348,6 +352,7 @@ class DashboardMultiFragmentTest {
         onData(anything())
             .inAdapterView(withId(R.id.reports))
             .atPosition(5)
+            .onChildView(withId(R.id.multi_group_cell))
             .check { view, noViewFoundException ->
                 if(view == null)
                     throw noViewFoundException
@@ -365,6 +370,7 @@ class DashboardMultiFragmentTest {
         onData(anything())
             .inAdapterView(withId(R.id.reports))
             .atPosition(6)
+            .onChildView(withId(R.id.multi_cell))
             .check { view, noViewFoundException ->
                 if(view == null)
                     throw noViewFoundException
@@ -377,6 +383,7 @@ class DashboardMultiFragmentTest {
         onData(anything())
             .inAdapterView(withId(R.id.reports))
             .atPosition(7)
+            .onChildView(withId(R.id.multi_cell))
             .check { view, noViewFoundException ->
                 if(view == null)
                     throw noViewFoundException
