@@ -28,10 +28,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
-        PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false)
-
         // Obtain the FirebaseAnalytics instance.
         firebaseAnalytics = Firebase.analytics
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, null)
+
+        PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false)
 
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each

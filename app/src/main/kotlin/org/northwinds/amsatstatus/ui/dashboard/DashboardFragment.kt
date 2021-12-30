@@ -11,6 +11,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import org.northwinds.amsatstatus.R
 
 import org.northwinds.amsatstatus.ui.dashboard.adapters.MyReportRecyclerViewAdapter
@@ -21,12 +24,20 @@ import org.northwinds.amsatstatus.ui.dashboard.adapters.MyReportRecyclerViewAdap
 class DashboardFragment : Fragment() {
 
     private lateinit var dashboardViewModel: DashboardViewModel
+    private lateinit var mFirebaseAnalytics: FirebaseAnalytics
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
+        mFirebaseAnalytics = Firebase.analytics
+        val params = Bundle().apply {
+            putString(FirebaseAnalytics.Param.SCREEN_CLASS, "MainActivity")
+            putString(FirebaseAnalytics.Param.SCREEN_NAME, "Dashboard")
+        }
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, params)
+
         dashboardViewModel =
                 ViewModelProviders.of(this).get(DashboardViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
@@ -48,6 +59,19 @@ class DashboardFragment : Fragment() {
                 val id = position
                 val satellite_ids =
                     resources.getStringArray(R.array.satellite_ids)
+                val params = Bundle().apply {
+                    val item = Bundle().apply {
+                        val satelliteNames =
+                            resources.getStringArray(R.array.satellite_names)
+                        putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "satellite")
+                        putString(FirebaseAnalytics.Param.ITEM_ID, satellite_ids[id])
+                        putString(FirebaseAnalytics.Param.ITEM_NAME, satelliteNames[id])
+                    }
+                    putParcelableArray(FirebaseAnalytics.Param.ITEMS, arrayOf(item))
+                    putString(FirebaseAnalytics.Param.ITEM_LIST_ID, "dashboard")
+                    putString(FirebaseAnalytics.Param.ITEM_LIST_NAME, "Dashboard")
+                }
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, params)
                 /*
                 Toast.makeText(
                     activity!!.applicationContext,
