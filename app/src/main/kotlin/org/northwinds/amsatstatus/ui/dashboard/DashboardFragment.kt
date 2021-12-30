@@ -59,6 +59,19 @@ class DashboardFragment : Fragment() {
                 val id = position
                 val satellite_ids =
                     resources.getStringArray(R.array.satellite_ids)
+                val params = Bundle().apply {
+                    val item = Bundle().apply {
+                        val satelliteNames =
+                            resources.getStringArray(R.array.satellite_names)
+                        putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "satellite")
+                        putString(FirebaseAnalytics.Param.ITEM_ID, satellite_ids[id])
+                        putString(FirebaseAnalytics.Param.ITEM_NAME, satelliteNames[id])
+                    }
+                    putParcelableArray(FirebaseAnalytics.Param.ITEMS, arrayOf(item))
+                    putString(FirebaseAnalytics.Param.ITEM_LIST_ID, "dashboard")
+                    putString(FirebaseAnalytics.Param.ITEM_LIST_NAME, "Dashboard")
+                }
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, params)
                 /*
                 Toast.makeText(
                     activity!!.applicationContext,
