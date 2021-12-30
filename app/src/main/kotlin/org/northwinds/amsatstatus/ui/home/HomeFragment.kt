@@ -244,6 +244,7 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
                 putLong(FirebaseAnalytics.Param.SCORE, statusId)
                 putLong(FirebaseAnalytics.Param.LEVEL, date_picker.month+1L)
                 putString(FirebaseAnalytics.Param.CHARACTER, satellite_ids[id])
+                putString("satellite_report", reportType.value)
             }
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.POST_SCORE, params)
             //thread() {
