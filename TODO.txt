@@ -61,3 +61,7 @@ Day/Night mode
 Searchable spinner
 Alternate satellite names
 Define activity parents
+Automatically update satellite list
+  Why does AMSAT API not go back 96 hours?
+  Why sometimes conflict/other not
+  Why Crew Active hide other report types?
