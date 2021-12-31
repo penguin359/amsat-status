@@ -40,3 +40,4 @@ Find my gridsquare
 Favorite satellites
 Ignore emulators from analytics
 Combine reports
+Add a mock flavor

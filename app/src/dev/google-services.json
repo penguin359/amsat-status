@@ -42,6 +42,35 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:200865736642:android:2519f1cdd0e9c2b460585b",
+        "android_client_info": {
+          "package_name": "org.northwinds.amsatstatus.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "200865736642-9q73ll86vfgmetmjj29lelv529u4kl7s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5qdiib2x6CxNpBqeKxGYVMbcxKCGwEqs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "200865736642-9q73ll86vfgmetmjj29lelv529u4kl7s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
