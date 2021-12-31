@@ -9,6 +9,7 @@ install:
   - mkdir %ANDROID_HOME%\\cmdline-tools
   - mv %ANDROID_HOME%\\latest %ANDROID_HOME%\\cmdline-tools
   - yes | sdkmanager --licenses
+  - echo MAPS_API_KEY=a >> local.properties
 build_script:
   - gradlew dependencies
   - gradlew assemble
