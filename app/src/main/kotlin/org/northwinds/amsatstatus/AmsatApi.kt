@@ -28,28 +28,28 @@ private const val DEMO_SAT_REPORT = """[
         "reported_time": "2018-02-27T03:00:00Z",
         "callsign": "K7IW",
         "report": "Not Heard",
-        "grid_square": ""
+        "grid_square": "CN85nu"
     },
     {
         "name": "DEMO-1",
         "reported_time": "2018-02-27T03:15:00Z",
         "callsign": "ZL1D",
         "report": "Telemetry Only",
-        "grid_square": ""
+        "grid_square": "CN96az"
     },
     {
         "name": "DEMO-1",
         "reported_time": "2018-02-27T04:30:00Z",
         "callsign": "KG7GAN",
         "report": "Crew Active",
-        "grid_square": ""
+        "grid_square": "DM43"
     },
     {
         "name": "DEMO-1",
         "reported_time": "2018-02-27T05:45:00Z",
         "callsign": "AG7NC",
         "report": "Heard",
-        "grid_square": ""
+        "grid_square": "CM59ax"
     },
     {
         "name": "DEMO-1",
