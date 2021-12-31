@@ -1,0 +1,16 @@
+environment:
+  JAVA_HOME: "C:\\Program Files\\Java\\jdk11"
+  ANDROID_HOME: "C:\\android-sdk-windows"
+  PATH: "C:\\android-sdk-windows\\cmdline-tools\\latest\\bin;%PATH%"
+install:
+  - appveyor DownloadFile https://dl.google.com/android/repository/commandlinetools-win-7583922_latest.zip
+  - 7z x commandlinetools-win-7583922_latest.zip -o%ANDROID_HOME% > nul
+  - mv %ANDROID_HOME%\\cmdline-tools %ANDROID_HOME%\\latest
+  - mkdir %ANDROID_HOME%\\cmdline-tools
+  - mv %ANDROID_HOME%\\latest %ANDROID_HOME%\\cmdline-tools
+  - yes | sdkmanager --licenses
+build_script:
+  - gradlew dependencies
+  - gradlew assemble
+test_script:
+  - gradlew check
