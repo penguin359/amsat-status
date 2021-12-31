@@ -37,9 +37,15 @@ Update Home fields on settings change
   time to match now
 Find my gridsquare
 *Back button on Preferences
+Make sure markers are cleared
 Favorite satellites
 Ignore emulators from analytics
 Combine reports
+Format/analyze/cleanup code in Android Studio
+Show more history
+Show missing time slots
+Localized date/time
+java.text.ParseException: Unparseable date: "2020-10-2T09:30:00+00:0"
 Add a mock flavor
 Format/analyze/cleanup code in Android Studio
 Show more history

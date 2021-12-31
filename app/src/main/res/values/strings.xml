@@ -3,6 +3,7 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="title_maps">Map</string>
     <string name="uplink_and_downlink_active">Uplink and Downlink Active</string>
     <string name="downlink_only">Downlink Only</string>
     <string name="not_heard">Not Heard</string>
