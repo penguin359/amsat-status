@@ -1,5 +1,5 @@
-Implement preferences
-Load live satellite reports
+*Implement preferences
+*Load live satellite reports
 Colorize reports
 Clean all lint warnings/errors
 Clean all other warnings
@@ -10,19 +10,19 @@ Constrained, side-by-side layout on Home
 Find icons
 Internationalize
 Visually impaired support
-Use Google HTTP Client
-AndroidTest
-User agent
-Map positions
+*Use Google HTTP Client
+*AndroidTest
+*User agent
+*Map positions
 Show dates/times localized
 Fix display of dashboard
-Add map of reports
-Progress bar on list load
+*Add map of reports
+Progress bar on list loadZZ
 Capitalize callsign
 Home screen widget
 Notifications/Alerts
 Multiple satellites
-Enable TLS 1.2 on older Android
+*Enable TLS 1.2 on older Android
 Enhanced logging
 Analytics
 Google Maps locations
@@ -41,3 +41,17 @@ Favorite satellites
 Ignore emulators from analytics
 Combine reports
 Add a mock flavor
+Format/analyze/cleanup code in Android Studio
+Show more history
+Show missing time slots
+Localized date/time
+java.text.ParseException: Unparseable date: "2020-10-2T09:30:00+00:0"
+Favorite satellites
+Sort order of reports
+Make sure all assertions in same direction
+All settings trigger immediate change on fragment when leaving it
+Manifest theme attribute Holo/Material
+Day/Night mode
+Searchable spinner
+Alternate satellite names
+Define activity parents

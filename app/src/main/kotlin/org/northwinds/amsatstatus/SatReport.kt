@@ -11,7 +11,8 @@ enum class Report(val value: String) {
     HEARD("Heard"),
     TELEMETRY_ONLY("Telemetry Only"),
     NOT_HEARD("Not Heard"),
-    CREW_ACTIVE("Crew Active");
+    CREW_ACTIVE("Crew Active"),
+    CONFLICTED("Conflicted");
 }
 
 fun reportFromString(str: String) : Report {
@@ -36,6 +37,9 @@ class ReportTime(timestamp: Long) {
     val hour get() = this.time.get(Calendar.HOUR_OF_DAY)
     val minute get() = this.time.get(Calendar.MINUTE)
     val quarter get() = this.time.get(Calendar.MINUTE) / 15
+
+    override fun equals(other: Any?): Boolean
+        = (other is ReportTime) && time == other.time
 
     override fun toString() : String {
         //val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
@@ -88,3 +92,10 @@ data class SatReport(
     val time: ReportTime,
     val callsign: String,
     val gridSquare: String = "")
+
+data class SatReportSlot(
+    val name: String,
+    val report: Report,
+    val time: ReportTime,
+    val reports: List<SatReport>,
+)

@@ -15,6 +15,58 @@ const val TAG = "AmsatApi"
 const val AMSAT_API_URL = "https://amsat.org/status/api/v1/sat_info.php"
 const val AMSAT_API_POST_URL = "https://amsat.org/status/submit.php"
 
+private const val DEMO_SAT_REPORT = """[
+    {
+        "name": "DEMO-2",
+        "reported_time": "2018-02-27T02:00:00Z",
+        "callsign": "AB1C",
+        "report": "Heard",
+        "grid_square": "AB34"
+    },
+    {
+        "name": "DEMO-1",
+        "reported_time": "2018-02-27T03:00:00Z",
+        "callsign": "K7IW",
+        "report": "Not Heard",
+        "grid_square": ""
+    },
+    {
+        "name": "DEMO-1",
+        "reported_time": "2018-02-27T03:15:00Z",
+        "callsign": "ZL1D",
+        "report": "Telemetry Only",
+        "grid_square": ""
+    },
+    {
+        "name": "DEMO-1",
+        "reported_time": "2018-02-27T04:30:00Z",
+        "callsign": "KG7GAN",
+        "report": "Crew Active",
+        "grid_square": ""
+    },
+    {
+        "name": "DEMO-1",
+        "reported_time": "2018-02-27T05:45:00Z",
+        "callsign": "AG7NC",
+        "report": "Heard",
+        "grid_square": ""
+    },
+    {
+        "name": "DEMO-1",
+        "reported_time": "2018-02-27T06:30:00Z",
+        "callsign": "OM/DL1IBM",
+        "report": "Heard",
+        "grid_square": "DM57"
+    },
+    {
+        "name": "DEMO-1",
+        "reported_time": "2018-02-27T06:30:00Z",
+        "callsign": "ZA1FG",
+        "report": "Not Heard",
+        "grid_square": "EA85as"
+    }
+]"""
+
 open class AmsatApi(private val client: HttpTransport) {
     constructor() : this(NetHttpTransport())
 
@@ -24,20 +76,24 @@ open class AmsatApi(private val client: HttpTransport) {
         uri.`set`("name", name)
         uri.`set`("hours", hours)
         Log.d(TAG, "To build")
-        val httpGet = client.createRequestFactory().buildGetRequest(uri)
-        httpGet.headers.userAgent = "AMSATStatus/1.0"
-        Log.d(TAG, "Done")
-        var list = ArrayList<SatReport>()
-        Log.d(TAG, "To execute")
-        var rawResponse = "[]"
-        try {
-                rawResponse = httpGet.execute().parseAsString()
-        } catch(ex: Exception) {
+        var rawResponse = if(name == "DEMO-1") {
+            DEMO_SAT_REPORT
+        } else {
+            val httpGet = client.createRequestFactory().buildGetRequest(uri)
+            httpGet.headers.userAgent = "AMSATStatus/1.0"
+            Log.d(TAG, "Done")
+            Log.d(TAG, "To execute")
+            try {
+                httpGet.execute().parseAsString()
+            } catch (ex: Exception) {
                 Log.d(TAG, "Died on ex" + ex)
+                "[]"
+            }
         }
         Log.d(TAG, "Done")
         Log.d(TAG, rawResponse)
 
+        var list = ArrayList<SatReport>()
             val jsonList = JSONTokener(rawResponse).nextValue() as JSONArray
 
             for(idx in 0..jsonList.length()-1) {
@@ -54,6 +110,36 @@ open class AmsatApi(private val client: HttpTransport) {
             }
 
         return list
+    }
+
+    fun getReportsBySlot(name: String, hours: Int) : List<SatReportSlot> {
+        val groups = ArrayList<SatReportSlot>()
+        val all_reports = getReport(name, hours)
+        if(all_reports.size == 0)
+            return groups
+        var reports = ArrayList<SatReport>()
+        var group_report = all_reports[0].report
+        var group_time = all_reports[0].time
+        for(report in all_reports) {
+                if(report.time == group_time) {
+                    if(report.report != group_report) {
+                        group_report = Report.CONFLICTED
+                    }
+                } else {
+                    val group = SatReportSlot(name, group_report, group_time, reports)
+                    groups.add(group)
+                    reports = ArrayList<SatReport>()
+                    group_report = report.report
+                    group_time = report.time
+                }
+                reports.add(report)
+        }
+        if(reports.size > 0) {
+            val group = SatReportSlot(name, group_report, group_time, reports)
+            groups.add(group)
+        }
+        return groups
+//        return listOf(SatReportSlot(name, Report.NOT_HEARD, ReportTime(0), listOf()))
     }
 
     open fun sendReport(report: SatReport) {
