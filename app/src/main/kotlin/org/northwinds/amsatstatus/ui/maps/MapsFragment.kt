@@ -142,6 +142,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                     Report.TELEMETRY_ONLY -> HUE_YELLOW
                     Report.CREW_ACTIVE -> HUE_VIOLET
                     Report.NOT_HEARD -> HUE_RED
+                    Report.CONFLICTED -> 0.0f
                 }
                     mMap.addMarker(
                         MarkerOptions().position(LatLng(pos.latitude, pos.longitude))
