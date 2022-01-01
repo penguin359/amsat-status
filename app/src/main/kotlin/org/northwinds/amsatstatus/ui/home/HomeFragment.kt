@@ -26,13 +26,18 @@ import androidx.preference.PreferenceManager
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.AndroidEntryPoint
 import org.northwinds.amsatstatus.*
 import org.northwinds.amsatstatus.util.Locator
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragment() {
     constructor() : this(Clock(), AmsatApi())
 
     //private ArrayAdapter<CharSequence>  mSatelliteAdapter;
+    @Inject
+    lateinit var mApi: AmsatApi
 
     private val REQUEST_PERMISSION_LOCATION: Int = 1000
     private lateinit var homeViewModel: HomeViewModel
@@ -253,7 +258,7 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
             //}
             class R: Runnable {
                 public override fun run() {
-                    api.sendReport(satReport)
+                    mApi.sendReport(satReport)
                 }
             }
             Thread(R()).start()

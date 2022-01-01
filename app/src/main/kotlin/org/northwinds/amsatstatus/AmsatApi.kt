@@ -9,6 +9,7 @@ import com.google.api.client.http.javanet.NetHttpTransport
 import org.json.JSONArray
 import org.json.JSONObject
 import org.json.JSONTokener
+import javax.inject.Inject
 
 const val TAG = "AmsatApi"
 
@@ -68,6 +69,7 @@ private const val DEMO_SAT_REPORT = """[
 ]"""
 
 open class AmsatApi(private val client: HttpTransport) {
+    @Inject
     constructor() : this(NetHttpTransport())
 
     fun getReport(name: String, hours: Int) : List<SatReport> {
