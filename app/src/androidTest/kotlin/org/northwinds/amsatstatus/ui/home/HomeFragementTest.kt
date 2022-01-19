@@ -35,6 +35,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.northwinds.amsatstatus.*
+import org.northwinds.amsatstatus.testing.launchFragmentInHiltContainer
 import java.lang.ClassCastException
 import java.util.*
 
@@ -50,7 +51,8 @@ class HomeFragmentTest {
 
     @Test
     fun dateTimePickersLoadCurrentUtcTime() {
-        val frag = launchFragmentInContainer<HomeFragment>()
+//        val frag = launchFragmentInContainer<HomeFragment>()
+//        val frag = launchFragmentInHiltContainer<HomeFragment>()
 
         val utc_time = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
 
@@ -59,7 +61,8 @@ class HomeFragmentTest {
         var day = 0
         var hour = 0
         var minute = 0
-        frag.onFragment {
+//        frag.onFragment {
+        launchFragmentInHiltContainer<HomeFragment>() {
             val date_widget = it.view!!.findViewById(R.id.date_fixture) as DatePicker
             year = date_widget.year
             month = date_widget.month

@@ -21,6 +21,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -36,8 +37,6 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
     constructor() : this(Clock(), AmsatApi())
 
     //private ArrayAdapter<CharSequence>  mSatelliteAdapter;
-    @Inject
-    lateinit var mApi: AmsatApi
 
     private val REQUEST_PERMISSION_LOCATION: Int = 1000
     private lateinit var homeViewModel: HomeViewModel
@@ -83,7 +82,7 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, params)
 
         homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel::class.java)
+                ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
 
         /*
@@ -258,7 +257,7 @@ class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragme
             //}
             class R: Runnable {
                 public override fun run() {
-                    mApi.sendReport(satReport)
+                    homeViewModel.mApi.sendReport(satReport)
                 }
             }
             Thread(R()).start()
