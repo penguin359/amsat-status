@@ -11,7 +11,6 @@ import android.widget.NumberPicker
 import android.widget.TimePicker
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.edit
-import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.preference.PreferenceManager
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
@@ -51,8 +50,7 @@ class HomeFragmentTest {
 
     @Test
     fun dateTimePickersLoadCurrentUtcTime() {
-//        val frag = launchFragmentInContainer<HomeFragment>()
-//        val frag = launchFragmentInHiltContainer<HomeFragment>()
+        val frag = launchFragmentInHiltContainer<HomeFragment>()
 
         val utc_time = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
 
@@ -61,8 +59,8 @@ class HomeFragmentTest {
         var day = 0
         var hour = 0
         var minute = 0
-//        frag.onFragment {
-        launchFragmentInHiltContainer<HomeFragment>() {
+        frag.onFragment {
+//        launchFragmentInHiltContainer<HomeFragment>() {
             val date_widget = it.view!!.findViewById(R.id.date_fixture) as DatePicker
             year = date_widget.year
             month = date_widget.month
@@ -93,7 +91,7 @@ class HomeFragmentTest {
 
         TimeZone.setDefault(TimeZone.getTimeZone("MST"))
         val local_time = Calendar.getInstance(TimeZone.getTimeZone("MST"))
-        val frag = launchFragmentInContainer<HomeFragment>()
+        val frag = launchFragmentInHiltContainer<HomeFragment>()
 
         frag.onFragment {
             val date_widget = it.view!!.findViewById(R.id.date_fixture) as DatePicker
@@ -117,7 +115,7 @@ class HomeFragmentTest {
     fun dateTimePickersLoadFixedUtcTime() {
         TimeZone.setDefault(TimeZone.getTimeZone(ref_timezone))
 
-        val frag = launchFragmentInContainer<HomeFragment>(instantiate = {
+        val frag = launchFragmentInHiltContainer<HomeFragment>(instantiate = {
             HomeFragment(Clock(ref_time), AmsatApi())
         })
 
@@ -143,7 +141,7 @@ class HomeFragmentTest {
 
         TimeZone.setDefault(TimeZone.getTimeZone(ref_timezone))
 
-        val frag = launchFragmentInContainer<HomeFragment>(instantiate = {
+        val frag = launchFragmentInHiltContainer<HomeFragment>(instantiate = {
             HomeFragment(Clock(ref_time), AmsatApi())
         })
 
@@ -163,7 +161,7 @@ class HomeFragmentTest {
 
     @Test
     fun verifyDefaultReportFields() {
-        val frag = launchFragmentInContainer<HomeFragment>()
+        val frag = launchFragmentInHiltContainer<HomeFragment>()
         onView(withId(R.id.callsign)).check(matches(withText("")))
         onView(withId(R.id.gridsquare)).check(matches(withText("")))
     }
@@ -176,14 +174,14 @@ class HomeFragmentTest {
             putString(appContext.getString(R.string.preference_callsign), EXPECTED_CALLSIGN)
             putString(appContext.getString(R.string.preference_default_grid), EXPECTED_GRIDSQUARE)
         }
-        val frag = launchFragmentInContainer<HomeFragment>()
+        val frag = launchFragmentInHiltContainer<HomeFragment>()
         onView(withId(R.id.callsign)).check(matches(withText(EXPECTED_CALLSIGN)))
         onView(withId(R.id.gridsquare)).check(matches(withText(EXPECTED_GRIDSQUARE)))
     }
 
     @Test
     fun homeFragmentLoad() {
-        val frag = launchFragmentInContainer<HomeFragment>()
+        val frag = launchFragmentInHiltContainer<HomeFragment>()
 
         TimeZone.setDefault(TimeZone.getTimeZone("America/Los_Angeles"))
         val utc_time = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
@@ -228,7 +226,7 @@ class HomeFragmentTest {
         val apiMock = mock<AmsatApi> {}
         TimeZone.setDefault(TimeZone.getTimeZone(ref_timezone))
         //val utc_time = Calendar.getInstance(TimeZone.getTimeZone("MST"))
-        val frag = launchFragmentInContainer<HomeFragment>(instantiate = {
+        val frag = launchFragmentInHiltContainer<HomeFragment>(instantiate = {
             HomeFragment(
                 Clock(ref_time),
                 apiMock
@@ -274,7 +272,7 @@ class HomeFragmentTest {
 
         val apiMock = mock<AmsatApi> {}
         TimeZone.setDefault(TimeZone.getTimeZone(ref_timezone))
-        val frag = launchFragmentInContainer<HomeFragment>(instantiate = {
+        val frag = launchFragmentInHiltContainer<HomeFragment>(instantiate = {
             HomeFragment(Clock(ref_time), apiMock)
         })
 
@@ -312,7 +310,7 @@ class HomeFragmentTest {
 
         val apiMock = mock<AmsatApi> {}
         TimeZone.setDefault(TimeZone.getTimeZone(ref_timezone))
-        val frag = launchFragmentInContainer<HomeFragment>(instantiate = {
+        val frag = launchFragmentInHiltContainer<HomeFragment>(instantiate = {
             HomeFragment(Clock(ref_time), apiMock)
         })
 
@@ -351,7 +349,7 @@ class HomeFragmentTest {
 
         val apiMock = mock<AmsatApi> {}
         TimeZone.setDefault(TimeZone.getTimeZone(ref_timezone))
-        val frag = launchFragmentInContainer<HomeFragment>(instantiate = {
+        val frag = launchFragmentInHiltContainer<HomeFragment>(instantiate = {
             HomeFragment(Clock(ref_time), apiMock)
         })
 
@@ -390,7 +388,7 @@ class HomeFragmentTest {
 
         val apiMock = mock<AmsatApi> {}
         TimeZone.setDefault(TimeZone.getTimeZone(ref_timezone))
-        val frag = launchFragmentInContainer<HomeFragment>(instantiate = {
+        val frag = launchFragmentInHiltContainer<HomeFragment>(instantiate = {
             HomeFragment(Clock(ref_time), apiMock)
         })
 
@@ -421,7 +419,7 @@ class HomeFragmentTest {
     fun timePickerHasCorrectValueRange() {
         val apiMock = mock<AmsatApi> {}
         TimeZone.setDefault(TimeZone.getTimeZone(ref_timezone))
-        val frag = launchFragmentInContainer<HomeFragment>(instantiate = {
+        val frag = launchFragmentInHiltContainer<HomeFragment>(instantiate = {
             HomeFragment(Clock(ref_time), apiMock)
         })
 
@@ -444,7 +442,7 @@ class HomeFragmentTest {
 
     @Test
     fun timeLabelUpdatesWithPreferences() {
-        val frag = launchFragmentInContainer<HomeFragment>()
+        val frag = launchFragmentInHiltContainer<HomeFragment>()
 
         onView(withId(R.id.time_mode)).check(matches(withText(StringContains("UTC"))))
 
@@ -468,7 +466,7 @@ class HomeFragmentTest {
     //@Ignore("Skipping test for now because it requires user interaction to approve permission")
     @Test
     fun find_my_location() {
-        val frag = launchFragmentInContainer<HomeFragment>()
+        val frag = launchFragmentInHiltContainer<HomeFragment>()
 /*
         val client: LocationClient
         val dummyLocation: Location  = Location("dummy")
