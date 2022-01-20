@@ -91,6 +91,7 @@ class DashboardMultiFragmentTest {
     @Test
     fun dashboardShouldShowDemoSatelliteOnLaunch() {
         val frag = launchFragmentInContainer<DashboardFragment>()
+        Thread.sleep(500)
         onView(withId(R.id.name))
             .check(matches(withSpinnerText(containsString("DEMO"))))
 
