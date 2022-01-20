@@ -8,12 +8,14 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.AndroidEntryPoint
 import org.northwinds.amsatstatus.R
 import org.northwinds.amsatstatus.ui.dashboard.adapters.MultiDashboardViewAdapter
 
@@ -22,6 +24,7 @@ import org.northwinds.amsatstatus.ui.dashboard.adapters.MyReportRecyclerViewAdap
 /**
  * Dashboard showing recent status of satellites
  */
+@AndroidEntryPoint
 class DashboardFragment : Fragment() {
 
     private lateinit var dashboardViewModel: DashboardViewModel
@@ -40,7 +43,7 @@ class DashboardFragment : Fragment() {
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, params)
 
         dashboardViewModel =
-                ViewModelProviders.of(this).get(DashboardViewModel::class.java)
+                ViewModelProvider(this).get(DashboardViewModel::class.java)
 //        val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
         val root = inflater.inflate(R.layout.fragment_dashboard_multi, container, false)
         val listView = root.findViewById<ExpandableListView>(R.id.reports)

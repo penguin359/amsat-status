@@ -4,7 +4,6 @@ import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.View
 import android.widget.ExpandableListView
-import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
@@ -24,6 +23,7 @@ import org.junit.Test
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.northwinds.amsatstatus.R
+import org.northwinds.amsatstatus.testing.launchFragmentInHiltContainer
 import org.northwinds.amsatstatus.ui.dashboard.adapters.MyReportRecyclerViewAdapter
 
 
@@ -66,7 +66,7 @@ class DashboardFragmentTest {
     @Ignore("Currently, this is replaced by multi-level dashboard view")
     @Test
     fun dashboardShouldShowDemoSatellite() {
-        val frag = launchFragmentInContainer<DashboardFragment>()
+        val frag = launchFragmentInHiltContainer<DashboardFragment>()
         val aa = object : BaseMatcher<View>() {
             override fun describeTo(description: Description?) {
             }
@@ -90,8 +90,8 @@ class DashboardMultiFragmentTest {
 
     @Test
     fun dashboardShouldShowDemoSatelliteOnLaunch() {
-        val frag = launchFragmentInContainer<DashboardFragment>()
-        Thread.sleep(500)
+        val frag = launchFragmentInHiltContainer<DashboardFragment>()
+        //Thread.sleep(500)
         onView(withId(R.id.name))
             .check(matches(withSpinnerText(containsString("DEMO"))))
 
@@ -194,7 +194,7 @@ class DashboardMultiFragmentTest {
 
     @Test
     fun dashboardShouldShowNoReportsOnDeadSatellite() {
-        val frag = launchFragmentInContainer<DashboardFragment>()
+        val frag = launchFragmentInHiltContainer<DashboardFragment>()
         onView(withId(R.id.name))
             .check(matches(withSpinnerText(containsString("DEMO"))))
         onView(withId(R.id.name))
@@ -216,7 +216,7 @@ class DashboardMultiFragmentTest {
     @Test
     fun dashboardShouldShowManyReportsOnLiveSatellite() {
         val live_satellite = "SO-50"  // "AO-91"
-        val frag = launchFragmentInContainer<DashboardFragment>()
+        val frag = launchFragmentInHiltContainer<DashboardFragment>()
         onView(withId(R.id.name))
             .check(matches(withSpinnerText(containsString("DEMO"))))
         onView(withId(R.id.name))
@@ -226,7 +226,7 @@ class DashboardMultiFragmentTest {
         onView(withId(R.id.name))
             .check(matches(withSpinnerText(containsString(live_satellite))))
 
-        Thread.sleep(3000)
+        //Thread.sleep(3000)
         onView(withId(R.id.reports))
             .check { view, noViewFoundException ->
                 if(view == null)
@@ -244,7 +244,7 @@ class DashboardMultiFragmentTest {
 
     @Test
     fun dashboardShouldRestoreDemoSatelliteWhenReselected() {
-        val frag = launchFragmentInContainer<DashboardFragment>()
+        val frag = launchFragmentInHiltContainer<DashboardFragment>()
         onView(withId(R.id.name))
             .check(matches(withSpinnerText(containsString("DEMO"))))
         onView(withId(R.id.reports))
@@ -260,14 +260,14 @@ class DashboardMultiFragmentTest {
             .onChildView(withId(R.id.multi_time))
             .check(matches(withText(containsString("2018-02-27"))))
 
-        Thread.sleep(300)
+        //Thread.sleep(300)
         onView(withId(R.id.name))
             .perform(click())
         onData(hasToString("MAYA-1"))
             .perform(click())
         onView(withId(R.id.name))
             .check(matches(withSpinnerText(containsString("MAYA-1"))))
-        Thread.sleep(300)
+        //Thread.sleep(300)
         onView(withId(R.id.reports))
             .check { view, noViewFoundException ->
                 if(view == null)
@@ -276,7 +276,7 @@ class DashboardMultiFragmentTest {
                 assertEquals(0, listView.adapter.count)
             }
 
-        Thread.sleep(300)
+        //Thread.sleep(300)
         onView(withId(R.id.name))
             .perform(click())
         onData(hasToString("DEMO 1"))
@@ -299,8 +299,8 @@ class DashboardMultiFragmentTest {
 
     @Test
     fun dashboardShouldShowCorrectColorsDemoSatellite() {
-        val frag = launchFragmentInContainer<DashboardFragment>()
-        Thread.sleep(100)
+        val frag = launchFragmentInHiltContainer<DashboardFragment>()
+        //Thread.sleep(100)
         onData(anything())
             .inAdapterView(withId(R.id.reports))
             .atPosition(0)

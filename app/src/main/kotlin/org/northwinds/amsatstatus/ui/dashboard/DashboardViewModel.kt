@@ -6,12 +6,16 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import org.northwinds.amsatstatus.*
+import java.util.concurrent.ExecutorService
+import javax.inject.Inject
 
 private const val TAG = "DashboardViewModel"
 
-class DashboardViewModel : ViewModel() {
-    private val executor = Executors.newSingleThreadScheduledExecutor()
+@HiltViewModel
+class DashboardViewModel @Inject constructor(private val executor: ExecutorService) : ViewModel() {
+    //private val executor = Executors.newSingleThreadScheduledExecutor()
     private val _reports = MutableLiveData<List<SatReport>>()
     private val _reportSlots = MutableLiveData<List<SatReportSlot>>().apply {
         value = AmsatApi().getReportsBySlot("DEMO-1", 24)
