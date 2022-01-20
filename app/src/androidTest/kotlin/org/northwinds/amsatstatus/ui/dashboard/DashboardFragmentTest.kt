@@ -5,15 +5,21 @@ import android.util.Log
 import android.view.View
 import android.widget.ExpandableListView
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.idling.concurrent.IdlingThreadPoolExecutor
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.internal.util.Checks
 import androidx.test.platform.app.InstrumentationRegistry
+import dagger.hilt.EntryPoints
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.BaseMatcher
 import org.hamcrest.Description
 import org.hamcrest.Matcher
@@ -22,9 +28,13 @@ import org.junit.Ignore
 import org.junit.Test
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
+import org.junit.Rule
 import org.northwinds.amsatstatus.R
 import org.northwinds.amsatstatus.testing.launchFragmentInHiltContainer
 import org.northwinds.amsatstatus.ui.dashboard.adapters.MyReportRecyclerViewAdapter
+import org.northwinds.amsatstatus.util.EspressoThreadModule
+import java.util.concurrent.ExecutorService
+import javax.inject.Inject
 
 
 //@RunWith(AndroidJUnit4::class)
@@ -85,8 +95,12 @@ class DashboardFragmentTest {
     }
 }
 
+@HiltAndroidTest
 class DashboardMultiFragmentTest {
     val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+    @get:Rule
+    val hiltRule = HiltAndroidRule(this)
 
     @Test
     fun dashboardShouldShowDemoSatelliteOnLaunch() {
@@ -213,33 +227,50 @@ class DashboardMultiFragmentTest {
             }
     }
 
+    @Inject
+    lateinit var executor: IdlingThreadPoolExecutor
+
     @Test
     fun dashboardShouldShowManyReportsOnLiveSatellite() {
         val live_satellite = "SO-50"  // "AO-91"
+        hiltRule.inject()
+        IdlingRegistry.getInstance().register(executor)
         val frag = launchFragmentInHiltContainer<DashboardFragment>()
-        onView(withId(R.id.name))
-            .check(matches(withSpinnerText(containsString("DEMO"))))
-        onView(withId(R.id.name))
-            .perform(click())
-        onData(hasToString(live_satellite))
-            .perform(click())
-        onView(withId(R.id.name))
-            .check(matches(withSpinnerText(containsString(live_satellite))))
+        //var executor: IdlingThreadPoolExecutor? = null
+//        var executor: ExecutorService? = null
+//        var executor: IdlingThreadPoolExecutor = g
+/*
+        frag.onFragment {
+            executor = (EntryPoints.get(it.requireActivity(), EspressoThreadModule::class.java).provideIdlingThreadExecutor()) //as IdlingThreadPoolExecutor
+        }
+*/
+        try {
+            onView(withId(R.id.name))
+                .check(matches(withSpinnerText(containsString("DEMO"))))
+            onView(withId(R.id.name))
+                .perform(click())
+            onData(hasToString(live_satellite))
+                .perform(click())
+            onView(withId(R.id.name))
+                .check(matches(withSpinnerText(containsString(live_satellite))))
 
-        //Thread.sleep(3000)
-        onView(withId(R.id.reports))
-            .check { view, noViewFoundException ->
-                if(view == null)
-                    throw noViewFoundException
-                val listView = view as ExpandableListView
-                assertNotEquals(0, listView.adapter.count)
-            }
+            //Thread.sleep(3000)
+            onView(withId(R.id.reports))
+                .check { view, noViewFoundException ->
+                    if (view == null)
+                        throw noViewFoundException
+                    val listView = view as ExpandableListView
+                    assertNotEquals(0, listView.adapter.count)
+                }
 
-        onData(anything())
-            .inAdapterView(withId(R.id.reports))
-            .atPosition(0)
-            .onChildView(withId(R.id.multi_time))
-            .check(matches(not(withText(containsString("2018-02-27")))))
+            onData(anything())
+                .inAdapterView(withId(R.id.reports))
+                .atPosition(0)
+                .onChildView(withId(R.id.multi_time))
+                .check(matches(not(withText(containsString("2018-02-27")))))
+        } finally {
+            IdlingRegistry.getInstance().unregister(executor)
+        }
     }
 
     @Test
