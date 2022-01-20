@@ -215,17 +215,18 @@ class DashboardMultiFragmentTest {
 
     @Test
     fun dashboardShouldShowManyReportsOnLiveSatellite() {
+        val live_satellite = "SO-50"  // "AO-91"
         val frag = launchFragmentInContainer<DashboardFragment>()
         onView(withId(R.id.name))
             .check(matches(withSpinnerText(containsString("DEMO"))))
         onView(withId(R.id.name))
             .perform(click())
-        onData(hasToString("AO-91"))
+        onData(hasToString(live_satellite))
             .perform(click())
         onView(withId(R.id.name))
-            .check(matches(withSpinnerText(containsString("AO-91"))))
+            .check(matches(withSpinnerText(containsString(live_satellite))))
 
-        Thread.sleep(300)
+        Thread.sleep(3000)
         onView(withId(R.id.reports))
             .check { view, noViewFoundException ->
                 if(view == null)
@@ -259,6 +260,7 @@ class DashboardMultiFragmentTest {
             .onChildView(withId(R.id.multi_time))
             .check(matches(withText(containsString("2018-02-27"))))
 
+        Thread.sleep(300)
         onView(withId(R.id.name))
             .perform(click())
         onData(hasToString("MAYA-1"))
@@ -274,6 +276,7 @@ class DashboardMultiFragmentTest {
                 assertEquals(0, listView.adapter.count)
             }
 
+        Thread.sleep(300)
         onView(withId(R.id.name))
             .perform(click())
         onData(hasToString("DEMO 1"))

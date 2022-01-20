@@ -22,6 +22,7 @@ import androidx.test.espresso.contrib.PickerActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.rule.GrantPermissionRule
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -30,6 +31,7 @@ import org.hamcrest.core.StringContains
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Ignore
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.northwinds.amsatstatus.*
@@ -456,7 +458,11 @@ class HomeFragmentTest {
         onView(withId(R.id.time_mode)).check(matches(withText(StringContains("UTC"))))
     }
 
-    @Ignore("Skipping test for now because it requires user interaction to approve permission")
+    @Rule
+    @JvmField
+    val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION)
+
+    //@Ignore("Skipping test for now because it requires user interaction to approve permission")
     @Test
     fun find_my_location() {
         val frag = launchFragmentInContainer<HomeFragment>()
