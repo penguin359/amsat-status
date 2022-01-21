@@ -347,7 +347,7 @@ class DashboardMultiFragmentTest {
                 assertThat(view.background, describedAs("has a solid background",
                     instanceOf(ColorDrawable::class.java),
                 "color drawable"))
-                assertEquals(appContext.getColor(R.color.heard),
+                assertEquals(appContext.resources.getColor(R.color.heard),
                     (view.background as ColorDrawable).color)
             }
         onData(anything())
@@ -360,7 +360,7 @@ class DashboardMultiFragmentTest {
                 assertThat(view.background, describedAs("has a solid background",
                     instanceOf(ColorDrawable::class.java),
                     "color drawable"))
-                assertEquals(appContext.getColor(R.color.notHeard),
+                assertEquals(appContext.resources.getColor(R.color.notHeard),
                     (view.background as ColorDrawable).color)
             }
         onData(anything())
@@ -373,7 +373,7 @@ class DashboardMultiFragmentTest {
                 assertThat(view.background, describedAs("has a solid background",
                     instanceOf(ColorDrawable::class.java),
                     "color drawable"))
-                assertEquals(appContext.getColor(R.color.telemetryOnly),
+                assertEquals(appContext.resources.getColor(R.color.telemetryOnly),
                     (view.background as ColorDrawable).color)
             }
         onData(anything())
@@ -386,7 +386,7 @@ class DashboardMultiFragmentTest {
                 assertThat(view.background, describedAs("has a solid background",
                     instanceOf(ColorDrawable::class.java),
                     "color drawable"))
-                assertEquals(appContext.getColor(R.color.crewActive),
+                assertEquals(appContext.resources.getColor(R.color.crewActive),
                     (view.background as ColorDrawable).color)
             }
         onData(anything())
@@ -399,7 +399,7 @@ class DashboardMultiFragmentTest {
                 assertThat(view.background, describedAs("has a solid background",
                     instanceOf(ColorDrawable::class.java),
                     "color drawable"))
-                assertEquals(appContext.getColor(R.color.conflict),
+                assertEquals(appContext.resources.getColor(R.color.conflict),
                     (view.background as ColorDrawable).color)
             }
 
@@ -417,7 +417,7 @@ class DashboardMultiFragmentTest {
                 assertThat(view.background, describedAs("has a solid background",
                     instanceOf(ColorDrawable::class.java),
                     "color drawable"))
-                assertEquals(appContext.getColor(R.color.heard),
+                assertEquals(appContext.resources.getColor(R.color.heard),
                     (view.background as ColorDrawable).color)
             }
         onData(anything())
@@ -430,7 +430,7 @@ class DashboardMultiFragmentTest {
                 assertThat(view.background, describedAs("has a solid background",
                     instanceOf(ColorDrawable::class.java),
                     "color drawable"))
-                assertEquals(appContext.getColor(R.color.notHeard),
+                assertEquals(appContext.resources.getColor(R.color.notHeard),
                     (view.background as ColorDrawable).color)
             }
     }
