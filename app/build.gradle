@@ -37,6 +37,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+
+	debug {
+	    multiDexKeepProguard file('multidex-config.pro')
+	}
     }
 
     flavorDimensions "version"
