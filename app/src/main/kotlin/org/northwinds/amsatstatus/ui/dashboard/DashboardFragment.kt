@@ -2,6 +2,7 @@ package org.northwinds.amsatstatus.ui.dashboard
 
 import android.os.Bundle
 import android.util.ArrayMap
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,8 @@ import org.northwinds.amsatstatus.R
 import org.northwinds.amsatstatus.ui.dashboard.adapters.MultiDashboardViewAdapter
 
 import org.northwinds.amsatstatus.ui.dashboard.adapters.MyReportRecyclerViewAdapter
+
+private const val TAG = "AmsatStatus-Dashboard"
 
 /**
  * Dashboard showing recent status of satellites
@@ -72,6 +75,7 @@ class DashboardFragment : Fragment() {
                 }
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, params)
                 dashboardViewModel.updateSlots(satellite_ids[id])
+                Log.v(TAG, "Spinner on item selected complete.")
             }
         }
 //        val reportView: RecyclerView = root.findViewById(R.id.reports)
@@ -92,6 +96,10 @@ class DashboardFragment : Fragment() {
         val idx = requireContext().resources.getStringArray(R.array.satellite_ids).indexOf(satHeard)
         if(idx >= 0)
             nameView.setSelection(idx)
+        else
+            nameView.setSelection(0)
+
+        Log.v(TAG, "Dashboard onCreateView() complete.")
 
         return root
     }

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingPolicies
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -15,6 +16,7 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.idling.concurrent.IdlingThreadPoolExecutor
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.internal.util.Checks
 import androidx.test.platform.app.InstrumentationRegistry
 import dagger.hilt.EntryPoints
@@ -28,12 +30,15 @@ import org.junit.Ignore
 import org.junit.Test
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
+import org.junit.Before
 import org.junit.Rule
+import org.junit.runner.RunWith
 import org.northwinds.amsatstatus.R
 import org.northwinds.amsatstatus.testing.launchFragmentInHiltContainer
 import org.northwinds.amsatstatus.ui.dashboard.adapters.MyReportRecyclerViewAdapter
 import org.northwinds.amsatstatus.util.EspressoThreadModule
 import java.util.concurrent.ExecutorService
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -95,6 +100,7 @@ class DashboardFragmentTest {
     }
 }
 
+@RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
 class DashboardMultiFragmentTest {
     val appContext = InstrumentationRegistry.getInstrumentation().targetContext
@@ -102,10 +108,17 @@ class DashboardMultiFragmentTest {
     @get:Rule
     val hiltRule = HiltAndroidRule(this)
 
+    @Inject lateinit var idlingThreadPoolExecutor: IdlingThreadPoolExecutor
+
+    @Before
+    fun setUp() {
+        IdlingPolicies.setIdlingResourceTimeout(60, TimeUnit.SECONDS)
+    }
+
     @Test
     fun dashboardShouldShowDemoSatelliteOnLaunch() {
+        hiltRule.inject()
         val frag = launchFragmentInHiltContainer<DashboardFragment>()
-        //Thread.sleep(500)
         onView(withId(R.id.name))
             .check(matches(withSpinnerText(containsString("DEMO"))))
 
@@ -208,6 +221,7 @@ class DashboardMultiFragmentTest {
 
     @Test
     fun dashboardShouldShowNoReportsOnDeadSatellite() {
+        hiltRule.inject()
         val frag = launchFragmentInHiltContainer<DashboardFragment>()
         onView(withId(R.id.name))
             .check(matches(withSpinnerText(containsString("DEMO"))))
@@ -227,54 +241,38 @@ class DashboardMultiFragmentTest {
             }
     }
 
-    @Inject
-    lateinit var executor: IdlingThreadPoolExecutor
-
     @Test
     fun dashboardShouldShowManyReportsOnLiveSatellite() {
-        val live_satellite = "SO-50"  // "AO-91"
         hiltRule.inject()
-        IdlingRegistry.getInstance().register(executor)
+        val live_satellite = "AO-91"
         val frag = launchFragmentInHiltContainer<DashboardFragment>()
-        //var executor: IdlingThreadPoolExecutor? = null
-//        var executor: ExecutorService? = null
-//        var executor: IdlingThreadPoolExecutor = g
-/*
-        frag.onFragment {
-            executor = (EntryPoints.get(it.requireActivity(), EspressoThreadModule::class.java).provideIdlingThreadExecutor()) //as IdlingThreadPoolExecutor
-        }
-*/
-        try {
-            onView(withId(R.id.name))
-                .check(matches(withSpinnerText(containsString("DEMO"))))
-            onView(withId(R.id.name))
-                .perform(click())
-            onData(hasToString(live_satellite))
-                .perform(click())
-            onView(withId(R.id.name))
-                .check(matches(withSpinnerText(containsString(live_satellite))))
+        onView(withId(R.id.name))
+            .check(matches(withSpinnerText(containsString("DEMO"))))
+        onView(withId(R.id.name))
+            .perform(click())
+        onData(hasToString(live_satellite))
+            .perform(click())
+        onView(withId(R.id.name))
+            .check(matches(withSpinnerText(containsString(live_satellite))))
 
-            //Thread.sleep(3000)
-            onView(withId(R.id.reports))
-                .check { view, noViewFoundException ->
-                    if (view == null)
-                        throw noViewFoundException
-                    val listView = view as ExpandableListView
-                    assertNotEquals(0, listView.adapter.count)
-                }
+        onView(withId(R.id.reports))
+            .check { view, noViewFoundException ->
+                if (view == null)
+                    throw noViewFoundException
+                val listView = view as ExpandableListView
+                assertNotEquals(0, listView.adapter.count)
+            }
 
-            onData(anything())
-                .inAdapterView(withId(R.id.reports))
-                .atPosition(0)
-                .onChildView(withId(R.id.multi_time))
-                .check(matches(not(withText(containsString("2018-02-27")))))
-        } finally {
-            IdlingRegistry.getInstance().unregister(executor)
-        }
+        onData(anything())
+            .inAdapterView(withId(R.id.reports))
+            .atPosition(0)
+            .onChildView(withId(R.id.multi_time))
+            .check(matches(not(withText(containsString("2018-02-27")))))
     }
 
     @Test
     fun dashboardShouldRestoreDemoSatelliteWhenReselected() {
+        hiltRule.inject()
         val frag = launchFragmentInHiltContainer<DashboardFragment>()
         onView(withId(R.id.name))
             .check(matches(withSpinnerText(containsString("DEMO"))))
@@ -291,14 +289,12 @@ class DashboardMultiFragmentTest {
             .onChildView(withId(R.id.multi_time))
             .check(matches(withText(containsString("2018-02-27"))))
 
-        //Thread.sleep(300)
         onView(withId(R.id.name))
             .perform(click())
         onData(hasToString("MAYA-1"))
             .perform(click())
         onView(withId(R.id.name))
             .check(matches(withSpinnerText(containsString("MAYA-1"))))
-        //Thread.sleep(300)
         onView(withId(R.id.reports))
             .check { view, noViewFoundException ->
                 if(view == null)
@@ -307,7 +303,6 @@ class DashboardMultiFragmentTest {
                 assertEquals(0, listView.adapter.count)
             }
 
-        //Thread.sleep(300)
         onView(withId(R.id.name))
             .perform(click())
         onData(hasToString("DEMO 1"))
@@ -330,8 +325,15 @@ class DashboardMultiFragmentTest {
 
     @Test
     fun dashboardShouldShowCorrectColorsDemoSatellite() {
+        hiltRule.inject()
         val frag = launchFragmentInHiltContainer<DashboardFragment>()
-        //Thread.sleep(100)
+        onView(withId(R.id.reports))
+            .check { view, noViewFoundException ->
+                if(view == null)
+                    throw noViewFoundException
+                val listView = view as ExpandableListView
+                assertThat(listView.adapter.count, `is`(equalTo(6)))
+            }
         onData(anything())
             .inAdapterView(withId(R.id.reports))
             .atPosition(0)

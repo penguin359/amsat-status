@@ -78,7 +78,7 @@ open class AmsatApi(private val client: HttpTransport) {
         uri.`set`("name", name)
         uri.`set`("hours", hours)
         Log.d(TAG, "To build")
-        var rawResponse = if(name == "DEMO-1") {
+        val rawResponse = if(name == "DEMO-1") {
             DEMO_SAT_REPORT
         } else {
             val httpGet = client.createRequestFactory().buildGetRequest(uri)
@@ -86,7 +86,9 @@ open class AmsatApi(private val client: HttpTransport) {
             Log.d(TAG, "Done")
             Log.d(TAG, "To execute")
             try {
-                httpGet.execute().parseAsString()
+                val response = httpGet.execute()
+                Log.d(TAG, "Have a response")
+                response.parseAsString()
             } catch (ex: Exception) {
                 Log.d(TAG, "Died on ex" + ex)
                 "[]"
@@ -95,7 +97,7 @@ open class AmsatApi(private val client: HttpTransport) {
         Log.d(TAG, "Done")
         Log.d(TAG, rawResponse)
 
-        var list = ArrayList<SatReport>()
+        val list = ArrayList<SatReport>()
             val jsonList = JSONTokener(rawResponse).nextValue() as JSONArray
 
             for(idx in 0..jsonList.length()-1) {

@@ -5,16 +5,14 @@ import dagger.Provides
 import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import dagger.hilt.testing.TestInstallIn
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 
 import androidx.test.espresso.idling.concurrent.IdlingThreadPoolExecutor
 import dagger.Binds
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import java.lang.RuntimeException
-import java.util.concurrent.LinkedBlockingDeque
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.*
+import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Singleton
 
 @Module
@@ -23,14 +21,6 @@ import javax.inject.Singleton
     replaces = arrayOf(ThreadModule::class)
 )
 abstract class EspressoThreadModule {
-/*
-    @Provides
-    @ActivityRetainedScoped
-    fun provideIdlingThreadExecutor(): IdlingThreadPoolExecutor {
-        return IdlingThreadPoolExecutor("EspressoTestPool", 1, 5, 50, TimeUnit.MILLISECONDS, LinkedBlockingDeque<Runnable>(), Executors.defaultThreadFactory())
-    }
-*/
-
     @Binds
     abstract fun provideThreadExecutor(executor: IdlingThreadPoolExecutor): ExecutorService
 }
@@ -43,6 +33,11 @@ class IdleEspressoThreadModule {
 //    @ActivityRetainedScoped
     @Singleton
     fun provideIdlingThreadExecutor(): IdlingThreadPoolExecutor {
-        return IdlingThreadPoolExecutor("EspressoTestPool", 1, 5, 50, TimeUnit.MILLISECONDS, LinkedBlockingDeque<Runnable>(), Executors.defaultThreadFactory())
+        val id = counter.getAndIncrement()
+        return IdlingThreadPoolExecutor("EspressoTestPool-$id", 5, 5, 50, TimeUnit.MILLISECONDS, LinkedBlockingQueue<Runnable>(), Executors.defaultThreadFactory())
+    }
+
+    companion object {
+        val counter = AtomicInteger(1)
     }
 }
