@@ -25,6 +25,8 @@ import androidx.test.rule.GrantPermissionRule
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Matchers.*
 import org.hamcrest.core.StringContains
 import org.junit.Assert.assertEquals
@@ -40,7 +42,11 @@ import java.util.*
 
 
 @RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
 class HomeFragmentTest {
+    @get:Rule
+    val hiltRule = HiltAndroidRule(this)
+
     val appContext = InstrumentationRegistry.getInstrumentation().targetContext
 
     @Before

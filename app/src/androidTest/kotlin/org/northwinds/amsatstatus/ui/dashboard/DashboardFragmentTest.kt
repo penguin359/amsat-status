@@ -39,8 +39,12 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
-//@RunWith(AndroidJUnit4::class)
+@RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
 class DashboardFragmentTest {
+    @get:Rule
+    val hiltRule = HiltAndroidRule(this)
+
     /*
     val a = object : BoundedMatcher<RecyclerView.ViewHolder, MyReportRecyclerViewAdapter.ViewHolder>(RecyclerView.ViewHolder::class.java, MyReportRecyclerViewAdapter.ViewHolder::class.java) {
         override fun matchesSafely(item: MyReportRecyclerViewAdapter.ViewHolder?): Boolean {

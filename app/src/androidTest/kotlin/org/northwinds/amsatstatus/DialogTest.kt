@@ -10,6 +10,8 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Matchers.*
 import org.junit.Assert.*
 import org.junit.Rule
@@ -18,9 +20,12 @@ import org.junit.runner.RunWith
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
 class DialogTest {
-    @Rule
-    @JvmField
+    @get:Rule
+    val hiltRule = HiltAndroidRule(this)
+
+    @get:Rule
     var mActivityTestRule = MainActivityTestRule(true)
     val appContext = InstrumentationRegistry.getInstrumentation().targetContext
     val pref_enable_analytics = appContext.getString(R.string.preference_enable_analytics)
