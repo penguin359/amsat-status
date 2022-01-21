@@ -34,7 +34,8 @@ class IdleEspressoThreadModule {
     @Singleton
     fun provideIdlingThreadExecutor(): IdlingThreadPoolExecutor {
         val id = counter.getAndIncrement()
-        return IdlingThreadPoolExecutor("EspressoTestPool-$id", 5, 5, 50, TimeUnit.MILLISECONDS, LinkedBlockingQueue<Runnable>(), Executors.defaultThreadFactory())
+//        return IdlingThreadPoolExecutor("EspressoTestPool-$id", 5, 5, 50, TimeUnit.MILLISECONDS, LinkedBlockingQueue<Runnable>(), Executors.defaultThreadFactory())
+        return IdlingThreadPoolExecutor("EspressoTestPool", 5, 5, 50, TimeUnit.MILLISECONDS, LinkedBlockingQueue<Runnable>(), Executors.defaultThreadFactory())
     }
 
     companion object {

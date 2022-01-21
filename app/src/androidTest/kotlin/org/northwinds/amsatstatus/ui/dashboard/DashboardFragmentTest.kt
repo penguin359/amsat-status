@@ -26,12 +26,9 @@ import org.hamcrest.BaseMatcher
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.*
-import org.junit.Ignore
-import org.junit.Test
+import org.junit.*
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
-import org.junit.Before
-import org.junit.Rule
 import org.junit.runner.RunWith
 import org.northwinds.amsatstatus.R
 import org.northwinds.amsatstatus.testing.launchFragmentInHiltContainer
@@ -113,6 +110,12 @@ class DashboardMultiFragmentTest {
     @Before
     fun setUp() {
         IdlingPolicies.setIdlingResourceTimeout(60, TimeUnit.SECONDS)
+    }
+
+    @After
+    fun tearDown() {
+        idlingThreadPoolExecutor.shutdownNow()
+        idlingThreadPoolExecutor.awaitTermination(5, TimeUnit.SECONDS)
     }
 
     @Test
