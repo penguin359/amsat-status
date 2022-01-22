@@ -3,7 +3,14 @@
     package="org.northwinds.amsatstatus">
     <application>
         <activity
-            android:name=".testing.HiltTestActivity"
-            android:exported="false" />
+            android:name=".testing.HiltFragmentScenario$HiltEmptyFragmentActivity"
+            android:theme="@style/FragmentScenarioEmptyFragmentActivityTheme"
+            android:taskAffinity=""
+            android:multiprocess="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>
