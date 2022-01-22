@@ -13,7 +13,7 @@ public class HomeFragmentFactory extends FragmentFactory {
         cArg[1] = Clock.class;
         try {
             Class<? extends Fragment> cls = loadFragmentClass(classLoader, className);
-            return cls.getConstructor(cArg).newInstance(new Clock(), new Clock());
+            return cls.getConstructor(cArg).newInstance(new MyClock(), new MyClock());
         } catch (Exception e) {
             throw new Fragment.InstantiationException("Unable to instantiate fragment " + className
                     + ": bad stuff happened", e);

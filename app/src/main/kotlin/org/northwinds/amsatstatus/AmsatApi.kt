@@ -6,6 +6,10 @@ import com.google.api.client.http.GenericUrl
 import com.google.api.client.http.HttpTransport
 import com.google.api.client.http.UrlEncodedContent
 import com.google.api.client.http.javanet.NetHttpTransport
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import org.json.JSONArray
 import org.json.JSONObject
 import org.json.JSONTokener
@@ -69,7 +73,6 @@ private const val DEMO_SAT_REPORT = """[
 ]"""
 
 open class AmsatApi(private val client: HttpTransport) {
-    @Inject
     constructor() : this(NetHttpTransport())
 
     fun getReport(name: String, hours: Int) : List<SatReport> {
@@ -167,5 +170,14 @@ open class AmsatApi(private val client: HttpTransport) {
         val rawResponse = httpPost.execute().parseAsString()
         Log.v(TAG, "Posting report")
         Log.v(TAG, report.toString())
+    }
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+class AmsatApiModule {
+    @Provides
+    fun provideAmsatApi(): AmsatApi {
+        return AmsatApi()
     }
 }

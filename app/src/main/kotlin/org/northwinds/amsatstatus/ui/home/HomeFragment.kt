@@ -33,8 +33,8 @@ import org.northwinds.amsatstatus.util.Locator
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class HomeFragment(private val clock: Clock, private val api: AmsatApi) : Fragment() {
-    constructor() : this(Clock(), AmsatApi())
+class HomeFragment : Fragment() {
+    @Inject lateinit var clock: Clock
 
     //private ArrayAdapter<CharSequence>  mSatelliteAdapter;
 
