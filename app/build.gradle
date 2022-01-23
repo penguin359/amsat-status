@@ -22,7 +22,7 @@ android {
 
     defaultConfig {
         applicationId "org.northwinds.amsatstatus"
-        minSdkVersion 19
+        minSdkVersion 16
         targetSdkVersion 31
         versionCode 7
         versionName "0.5 Beta"
@@ -168,12 +168,12 @@ dependencies {
     androidTestImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0'
 
     // Import the BoM for the Firebase platform
-    implementation platform('com.google.firebase:firebase-bom:29.0.3')
+    //implementation platform('com.google.firebase:firebase-bom:18.0.0')
 
     // Declare the dependency for the Analytics library
     // When using the BoM, you don't specify versions in Firebase library dependencies
-    implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx:19.0.2'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.2.7'
 
     // Dependency injection for testing AmsatApi on device
     implementation "com.google.dagger:hilt-android:2.40.5"
