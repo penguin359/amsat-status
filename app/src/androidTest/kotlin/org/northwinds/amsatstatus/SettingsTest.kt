@@ -12,8 +12,10 @@ import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import androidx.test.runner.AndroidJUnit4
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.`is`
@@ -26,10 +28,12 @@ import org.junit.runner.RunWith
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
 class SettingsSimpleTest {
+    @get:Rule
+    val hiltRule = HiltAndroidRule(this)
 
-    @Rule
-    @JvmField
+    @get:Rule
     var mActivityTestRule = ActivityScenarioRule<SettingsActivity>(SettingsActivity::class.java)
 
     @Test(expected = NoActivityResumedException::class)
@@ -87,10 +91,12 @@ class SettingsSimpleTest {
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
 class SettingsTest {
+    @get:Rule
+    val hiltRule = HiltAndroidRule(this)
 
-    @Rule
-    @JvmField
+    @get:Rule
     var mActivityTestRule = MainActivityTestRule()
 
     @Test

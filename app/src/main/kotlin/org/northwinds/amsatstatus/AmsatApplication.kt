@@ -13,7 +13,9 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class AmsatApplication : MultiDexApplication() {
     companion object {
         private const val TAG = "AmsatStatus-AmsatApplication"

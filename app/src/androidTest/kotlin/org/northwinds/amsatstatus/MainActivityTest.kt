@@ -20,6 +20,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.`is`
@@ -53,9 +55,12 @@ class MainActivityTestRule(private val showDialog: Boolean = false, private val 
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
 class MainActivityCustomTest {
-    @Rule
-    @JvmField
+    @get:Rule
+    val hiltRule = HiltAndroidRule(this)
+
+    @get:Rule
     var mActivityTestRule = MainActivityTestRule(false, "AB1CDE", "CN85nu")
 
     @Test
@@ -77,9 +82,12 @@ class MainActivityCustomTest {
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
 class MainActivityTest {
-    @Rule
-    @JvmField
+    @get:Rule
+    val hiltRule = HiltAndroidRule(this)
+
+    @get:Rule
     var mActivityTestRule = MainActivityTestRule()
 
     @Test

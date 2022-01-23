@@ -6,9 +6,14 @@ import com.google.api.client.http.GenericUrl
 import com.google.api.client.http.HttpTransport
 import com.google.api.client.http.UrlEncodedContent
 import com.google.api.client.http.javanet.NetHttpTransport
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import org.json.JSONArray
 import org.json.JSONObject
 import org.json.JSONTokener
+import javax.inject.Inject
 
 const val TAG = "AmsatApi"
 
@@ -76,7 +81,7 @@ open class AmsatApi(private val client: HttpTransport) {
         uri.`set`("name", name)
         uri.`set`("hours", hours)
         Log.d(TAG, "To build")
-        var rawResponse = if(name == "DEMO-1") {
+        val rawResponse = if(name == "DEMO-1") {
             DEMO_SAT_REPORT
         } else {
             val httpGet = client.createRequestFactory().buildGetRequest(uri)
@@ -84,7 +89,9 @@ open class AmsatApi(private val client: HttpTransport) {
             Log.d(TAG, "Done")
             Log.d(TAG, "To execute")
             try {
-                httpGet.execute().parseAsString()
+                val response = httpGet.execute()
+                Log.d(TAG, "Have a response")
+                response.parseAsString()
             } catch (ex: Exception) {
                 Log.d(TAG, "Died on ex" + ex)
                 "[]"
@@ -93,7 +100,7 @@ open class AmsatApi(private val client: HttpTransport) {
         Log.d(TAG, "Done")
         Log.d(TAG, rawResponse)
 
-        var list = ArrayList<SatReport>()
+        val list = ArrayList<SatReport>()
             val jsonList = JSONTokener(rawResponse).nextValue() as JSONArray
 
             for(idx in 0..jsonList.length()-1) {
@@ -163,5 +170,14 @@ open class AmsatApi(private val client: HttpTransport) {
         val rawResponse = httpPost.execute().parseAsString()
         Log.v(TAG, "Posting report")
         Log.v(TAG, report.toString())
+    }
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+class AmsatApiModule {
+    @Provides
+    fun provideAmsatApi(): AmsatApi {
+        return AmsatApi()
     }
 }

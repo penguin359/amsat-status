@@ -4,31 +4,47 @@ import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.View
 import android.widget.ExpandableListView
-import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingPolicies
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.idling.concurrent.IdlingThreadPoolExecutor
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.internal.util.Checks
 import androidx.test.platform.app.InstrumentationRegistry
+import dagger.hilt.EntryPoints
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.BaseMatcher
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.*
-import org.junit.Ignore
-import org.junit.Test
+import org.junit.*
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
+import org.junit.runner.RunWith
 import org.northwinds.amsatstatus.R
+import org.northwinds.amsatstatus.testing.launchFragmentInHiltContainer
 import org.northwinds.amsatstatus.ui.dashboard.adapters.MyReportRecyclerViewAdapter
+import org.northwinds.amsatstatus.util.EspressoThreadModule
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 
-//@RunWith(AndroidJUnit4::class)
+@RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
 class DashboardFragmentTest {
+    @get:Rule
+    val hiltRule = HiltAndroidRule(this)
+
     /*
     val a = object : BoundedMatcher<RecyclerView.ViewHolder, MyReportRecyclerViewAdapter.ViewHolder>(RecyclerView.ViewHolder::class.java, MyReportRecyclerViewAdapter.ViewHolder::class.java) {
         override fun matchesSafely(item: MyReportRecyclerViewAdapter.ViewHolder?): Boolean {
@@ -66,7 +82,7 @@ class DashboardFragmentTest {
     @Ignore("Currently, this is replaced by multi-level dashboard view")
     @Test
     fun dashboardShouldShowDemoSatellite() {
-        val frag = launchFragmentInContainer<DashboardFragment>()
+        val frag = launchFragmentInHiltContainer<DashboardFragment>()
         val aa = object : BaseMatcher<View>() {
             override fun describeTo(description: Description?) {
             }
@@ -85,13 +101,31 @@ class DashboardFragmentTest {
     }
 }
 
+@RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
 class DashboardMultiFragmentTest {
     val appContext = InstrumentationRegistry.getInstrumentation().targetContext
 
+    @get:Rule
+    val hiltRule = HiltAndroidRule(this)
+
+    @Inject lateinit var idlingThreadPoolExecutor: IdlingThreadPoolExecutor
+
+    @Before
+    fun setUp() {
+        IdlingPolicies.setIdlingResourceTimeout(60, TimeUnit.SECONDS)
+    }
+
+    @After
+    fun tearDown() {
+        idlingThreadPoolExecutor.shutdownNow()
+        idlingThreadPoolExecutor.awaitTermination(5, TimeUnit.SECONDS)
+    }
+
     @Test
     fun dashboardShouldShowDemoSatelliteOnLaunch() {
-        val frag = launchFragmentInContainer<DashboardFragment>()
-        Thread.sleep(500)
+        hiltRule.inject()
+        val frag = launchFragmentInHiltContainer<DashboardFragment>()
         onView(withId(R.id.name))
             .check(matches(withSpinnerText(containsString("DEMO"))))
 
@@ -194,7 +228,8 @@ class DashboardMultiFragmentTest {
 
     @Test
     fun dashboardShouldShowNoReportsOnDeadSatellite() {
-        val frag = launchFragmentInContainer<DashboardFragment>()
+        hiltRule.inject()
+        val frag = launchFragmentInHiltContainer<DashboardFragment>()
         onView(withId(R.id.name))
             .check(matches(withSpinnerText(containsString("DEMO"))))
         onView(withId(R.id.name))
@@ -215,8 +250,9 @@ class DashboardMultiFragmentTest {
 
     @Test
     fun dashboardShouldShowManyReportsOnLiveSatellite() {
-        val live_satellite = "SO-50"  // "AO-91"
-        val frag = launchFragmentInContainer<DashboardFragment>()
+        hiltRule.inject()
+        val live_satellite = "AO-91"
+        val frag = launchFragmentInHiltContainer<DashboardFragment>()
         onView(withId(R.id.name))
             .check(matches(withSpinnerText(containsString("DEMO"))))
         onView(withId(R.id.name))
@@ -226,10 +262,9 @@ class DashboardMultiFragmentTest {
         onView(withId(R.id.name))
             .check(matches(withSpinnerText(containsString(live_satellite))))
 
-        Thread.sleep(3000)
         onView(withId(R.id.reports))
             .check { view, noViewFoundException ->
-                if(view == null)
+                if (view == null)
                     throw noViewFoundException
                 val listView = view as ExpandableListView
                 assertNotEquals(0, listView.adapter.count)
@@ -244,7 +279,8 @@ class DashboardMultiFragmentTest {
 
     @Test
     fun dashboardShouldRestoreDemoSatelliteWhenReselected() {
-        val frag = launchFragmentInContainer<DashboardFragment>()
+        hiltRule.inject()
+        val frag = launchFragmentInHiltContainer<DashboardFragment>()
         onView(withId(R.id.name))
             .check(matches(withSpinnerText(containsString("DEMO"))))
         onView(withId(R.id.reports))
@@ -260,14 +296,12 @@ class DashboardMultiFragmentTest {
             .onChildView(withId(R.id.multi_time))
             .check(matches(withText(containsString("2018-02-27"))))
 
-        Thread.sleep(300)
         onView(withId(R.id.name))
             .perform(click())
         onData(hasToString("MAYA-1"))
             .perform(click())
         onView(withId(R.id.name))
             .check(matches(withSpinnerText(containsString("MAYA-1"))))
-        Thread.sleep(300)
         onView(withId(R.id.reports))
             .check { view, noViewFoundException ->
                 if(view == null)
@@ -276,7 +310,6 @@ class DashboardMultiFragmentTest {
                 assertEquals(0, listView.adapter.count)
             }
 
-        Thread.sleep(300)
         onView(withId(R.id.name))
             .perform(click())
         onData(hasToString("DEMO 1"))
@@ -299,8 +332,15 @@ class DashboardMultiFragmentTest {
 
     @Test
     fun dashboardShouldShowCorrectColorsDemoSatellite() {
-        val frag = launchFragmentInContainer<DashboardFragment>()
-        Thread.sleep(100)
+        hiltRule.inject()
+        val frag = launchFragmentInHiltContainer<DashboardFragment>()
+        onView(withId(R.id.reports))
+            .check { view, noViewFoundException ->
+                if(view == null)
+                    throw noViewFoundException
+                val listView = view as ExpandableListView
+                assertThat(listView.adapter.count, `is`(equalTo(6)))
+            }
         onData(anything())
             .inAdapterView(withId(R.id.reports))
             .atPosition(0)
@@ -311,7 +351,7 @@ class DashboardMultiFragmentTest {
                 assertThat(view.background, describedAs("has a solid background",
                     instanceOf(ColorDrawable::class.java),
                 "color drawable"))
-                assertEquals(appContext.getColor(R.color.heard),
+                assertEquals(appContext.resources.getColor(R.color.heard),
                     (view.background as ColorDrawable).color)
             }
         onData(anything())
@@ -324,7 +364,7 @@ class DashboardMultiFragmentTest {
                 assertThat(view.background, describedAs("has a solid background",
                     instanceOf(ColorDrawable::class.java),
                     "color drawable"))
-                assertEquals(appContext.getColor(R.color.notHeard),
+                assertEquals(appContext.resources.getColor(R.color.notHeard),
                     (view.background as ColorDrawable).color)
             }
         onData(anything())
@@ -337,7 +377,7 @@ class DashboardMultiFragmentTest {
                 assertThat(view.background, describedAs("has a solid background",
                     instanceOf(ColorDrawable::class.java),
                     "color drawable"))
-                assertEquals(appContext.getColor(R.color.telemetryOnly),
+                assertEquals(appContext.resources.getColor(R.color.telemetryOnly),
                     (view.background as ColorDrawable).color)
             }
         onData(anything())
@@ -350,7 +390,7 @@ class DashboardMultiFragmentTest {
                 assertThat(view.background, describedAs("has a solid background",
                     instanceOf(ColorDrawable::class.java),
                     "color drawable"))
-                assertEquals(appContext.getColor(R.color.crewActive),
+                assertEquals(appContext.resources.getColor(R.color.crewActive),
                     (view.background as ColorDrawable).color)
             }
         onData(anything())
@@ -363,7 +403,7 @@ class DashboardMultiFragmentTest {
                 assertThat(view.background, describedAs("has a solid background",
                     instanceOf(ColorDrawable::class.java),
                     "color drawable"))
-                assertEquals(appContext.getColor(R.color.conflict),
+                assertEquals(appContext.resources.getColor(R.color.conflict),
                     (view.background as ColorDrawable).color)
             }
 
@@ -381,7 +421,7 @@ class DashboardMultiFragmentTest {
                 assertThat(view.background, describedAs("has a solid background",
                     instanceOf(ColorDrawable::class.java),
                     "color drawable"))
-                assertEquals(appContext.getColor(R.color.heard),
+                assertEquals(appContext.resources.getColor(R.color.heard),
                     (view.background as ColorDrawable).color)
             }
         onData(anything())
@@ -394,7 +434,7 @@ class DashboardMultiFragmentTest {
                 assertThat(view.background, describedAs("has a solid background",
                     instanceOf(ColorDrawable::class.java),
                     "color drawable"))
-                assertEquals(appContext.getColor(R.color.notHeard),
+                assertEquals(appContext.resources.getColor(R.color.notHeard),
                     (view.background as ColorDrawable).color)
             }
     }
