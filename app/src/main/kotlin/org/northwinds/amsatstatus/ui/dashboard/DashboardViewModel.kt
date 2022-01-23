@@ -49,11 +49,8 @@ class DashboardViewModel @Inject constructor(private val executor: ExecutorServi
 
         executor.execute(object : Runnable {
             override fun run(): Unit {
-                Log.v(TAG, "Starting request")
                 val api = AmsatApi()
                 Log.v(TAG, "Posting request")
-                Thread.sleep(15000)
-                Log.v(TAG, "Done.")
                 _reportSlots.postValue(api.getReportsBySlot(name, 24))
             }
         })
