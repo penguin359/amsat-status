@@ -22,13 +22,13 @@ import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import org.northwinds.amsatstatus.*
+import org.northwinds.amsatstatus.util.Clock
 import org.northwinds.amsatstatus.util.Locator
 import javax.inject.Inject
 
@@ -110,7 +110,6 @@ class HomeFragment : Fragment() {
 
         var date_picker = root.findViewById(R.id.date_fixture) as DatePicker
         prefs = PreferenceManager(context).sharedPreferences
-        //val clock = Clock()
         timeMode = root.findViewById(R.id.time_mode) as TextView
         val picker_time = if(prefs.getBoolean(requireContext().getString(R.string.preference_local_time), false)) {
             timeMode.setText(R.string.local_time)

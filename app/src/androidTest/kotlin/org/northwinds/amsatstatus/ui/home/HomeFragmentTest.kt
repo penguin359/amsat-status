@@ -39,6 +39,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.northwinds.amsatstatus.*
 import org.northwinds.amsatstatus.testing.launchFragmentInHiltContainer
+import org.northwinds.amsatstatus.util.Clock
+import org.northwinds.amsatstatus.util.ClockModule
+import org.northwinds.amsatstatus.util.MyClock
 import java.lang.ClassCastException
 import java.util.*
 
@@ -168,6 +171,27 @@ class HomeFragmentTest {
     }
 
     @Test
+    fun timePickerHasCorrectValueRange() {
+        val frag = launchFragmentInHiltContainer<HomeFragment>()
+
+        onView(allOf(
+            isDescendantOfA(withId(R.id.time_fixture))/*, instanceOf<NumberPicker>()*/, `is`(
+                instanceOf(NumberPicker::class.java)), hasDescendant(withContentDescription(containsString("minute"))))).check { view, exception ->
+            if(view == null)
+                throw exception
+            val picker = try { view as NumberPicker } catch(ex: ClassCastException) { return@check }
+            assertEquals(0, picker.minValue)
+            assertEquals(3, picker.maxValue)
+            val choices = picker.displayedValues
+            assertEquals(4, choices.size)
+            assertEquals("00", choices[0])
+            assertEquals("15", choices[1])
+            assertEquals("30", choices[2])
+            assertEquals("45", choices[3])
+        }
+    }
+
+    @Test
     fun timeLabelUpdatesWithPreferences() {
         val frag = launchFragmentInHiltContainer<HomeFragment>()
 
@@ -186,11 +210,9 @@ class HomeFragmentTest {
         onView(withId(R.id.time_mode)).check(matches(withText(StringContains("UTC"))))
     }
 
-    @Rule
-    @JvmField
+    @get:Rule
     val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION)
 
-    //@Ignore("Skipping test for now because it requires user interaction to approve permission")
     @Test
     fun find_my_location() {
         val frag = launchFragmentInHiltContainer<HomeFragment>()
@@ -210,7 +232,7 @@ class HomeFragmentTest {
 @RunWith(AndroidJUnit4::class)
 @UninstallModules(ClockModule::class, AmsatApiModule::class)
 @HiltAndroidTest
-class HomeFragment2Test {
+class HomeFragmentMocksTest {
     @get:Rule
     val hiltRule = HiltAndroidRule(this)
 
@@ -457,27 +479,5 @@ class HomeFragment2Test {
         assertEquals("Bad hour", 4, time.hour)
         assertEquals("Bad minute", 15, time.minute)
         assertEquals("Bad quarter", 1, time.quarter)
-    }
-
-    @Test
-    fun timePickerHasCorrectValueRange() {
-        TimeZone.setDefault(TimeZone.getTimeZone(ref_timezone))
-        val frag = launchFragmentInHiltContainer<HomeFragment>()
-
-        onView(allOf(
-            isDescendantOfA(withId(R.id.time_fixture))/*, instanceOf<NumberPicker>()*/, `is`(
-                instanceOf(NumberPicker::class.java)), hasDescendant(withContentDescription(containsString("minute")))/*, hasDescendant(anyOf(withContentDescription("minute"), withText("minute"))))*/)).check { view, exception ->
-            if(view == null)
-                throw exception
-            val picker = try { view as NumberPicker } catch(ex: ClassCastException) { return@check }
-            assertEquals(0, picker.minValue)
-            assertEquals(3, picker.maxValue)
-            val choices = picker.displayedValues
-            assertEquals(4, choices.size)
-            assertEquals("00", choices[0])
-            assertEquals("15", choices[1])
-            assertEquals("30", choices[2])
-            assertEquals("45", choices[3])
-        }
     }
 }

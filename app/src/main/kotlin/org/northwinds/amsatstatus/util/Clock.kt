@@ -1,4 +1,4 @@
-package org.northwinds.amsatstatus
+package org.northwinds.amsatstatus.util
 
 import dagger.Binds
 import dagger.Module
@@ -20,10 +20,4 @@ class MyClock(val timestamp: Long) : Clock {
 	override val utcCalendar get() = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply { timeInMillis = timestamp }
 
 	override val localCalendar get() = Calendar.getInstance().apply { timeInMillis = timestamp }
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-interface ClockModule {
-	@Binds fun bindClock(clock: MyClock): Clock
 }

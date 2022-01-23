@@ -4,11 +4,12 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.*
 
 import org.junit.Test
 import org.junit.runner.RunWith
 
-import org.junit.Assert.*
 import org.junit.Rule
 
 /**
@@ -26,6 +27,15 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("org.northwinds.amsatstatus.dev", appContext.packageName)
+        assertThat(
+            "Package name",
+            appContext.packageName,
+            `is`(
+                anyOf(
+                    equalTo("org.northwinds.amsatstatus"),
+                    equalTo("org.northwinds.amsatstatus.dev")
+                )
+            )
+        )
     }
 }
