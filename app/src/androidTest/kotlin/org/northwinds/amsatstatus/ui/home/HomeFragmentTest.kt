@@ -1,15 +1,9 @@
 package org.northwinds.amsatstatus.ui.home
 
-//import org.mockito.ArgumentCaptor
-//import org.mockito.Mockito.mock
-//import org.mockito.ArgumentCaptor
-//import org.mockito.Mockito.mock
-//import org.mockito.Mockito.verify
 import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.NumberPicker
 import android.widget.TimePicker
-import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import androidx.test.espresso.Espresso.onData
@@ -33,7 +27,6 @@ import org.hamcrest.Matchers.*
 import org.hamcrest.core.StringContains
 import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -42,7 +35,6 @@ import org.northwinds.amsatstatus.testing.launchFragmentInHiltContainer
 import org.northwinds.amsatstatus.util.Clock
 import org.northwinds.amsatstatus.util.ClockModule
 import org.northwinds.amsatstatus.util.MyClock
-import java.lang.ClassCastException
 import java.util.*
 
 
@@ -71,7 +63,6 @@ class HomeFragmentTest {
         var hour = 0
         var minute = 0
         frag.onFragment {
-//        launchFragmentInHiltContainer<HomeFragment>() {
             val date_widget = it.view!!.findViewById(R.id.date_fixture) as DatePicker
             year = date_widget.year
             month = date_widget.month

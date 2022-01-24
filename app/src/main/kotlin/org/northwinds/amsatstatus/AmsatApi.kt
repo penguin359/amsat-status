@@ -15,7 +15,7 @@ import org.json.JSONObject
 import org.json.JSONTokener
 import javax.inject.Inject
 
-const val TAG = "AmsatApi"
+const val TAG = "AmsatStatus-AmsatApi"
 
 const val AMSAT_API_URL = "https://amsat.org/status/api/v1/sat_info.php"
 const val AMSAT_API_POST_URL = "https://amsat.org/status/submit.php"

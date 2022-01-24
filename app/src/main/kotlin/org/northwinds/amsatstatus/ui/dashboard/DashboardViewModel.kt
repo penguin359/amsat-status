@@ -11,7 +11,7 @@ import org.northwinds.amsatstatus.*
 import java.util.concurrent.ExecutorService
 import javax.inject.Inject
 
-private const val TAG = "DashboardViewModel"
+private const val TAG = "AmsatStatus-DashboardVM"
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(private val executor: ExecutorService) : ViewModel() {
