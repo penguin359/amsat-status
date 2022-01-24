@@ -1,210 +1,210 @@
 <resources>
-  <string-array name="satellite_ids">
-    <item>DEMO-1</item>
-    <item>AISAT-1</item>
-    <item>AO-109</item>
-    <item>AO-16</item>
-    <item>AO-27</item>
-    <item>[A]_AO-7</item>
-    <item>[B]_AO-7</item>
-    <item>AO-73</item>
-    <item>AO-85</item>
-    <item>AO-91</item>
-    <item>AO-92_L/v</item>
-    <item>AO-92_U/v</item>
-    <item>AO-95_L/v</item>
-    <item>AO-95_U/v</item>
-    <item>BHUTAN-1</item>
-    <item>BO-102</item>
-    <item>BY70-2</item>
-    <item>CAS-2T</item>
-    <item>CAS-4A</item>
-    <item>CAS-4B</item>
-    <item>CubeBel-1</item>
-    <item>CUTE-1</item>
-    <item>Delfi-C3</item>
-    <item>DSTAR1</item>
-    <item>DUCHIFAT1</item>
-    <item>DUCHIFAT3</item>
-    <item>EO-79</item>
-    <item>EO-80</item>
-    <item>EO-88</item>
-    <item>ESEO</item>
-    <item>FS-3</item>
-    <item>FloripaSat-1</item>
-    <item>FMN-1</item>
-    <item>FO-29</item>
-    <item>FO-99</item>
-    <item>GO-32</item>
-    <item>HA-1</item>
-    <item>HO-107</item>
-    <item>HO-68</item>
-    <item>IO-26</item>
-    <item>IO-86</item>
-    <item>ISS-FM</item>
-    <item>ISS-DATA</item>
-    <item>ISS-SSTV</item>
-    <item>ISS-DATV</item>
-    <item>JAISAT-1</item>
-    <item>JO-97</item>
-    <item>K2SAT</item>
-    <item>LilacSat-2</item>
-    <item>LO-19</item>
-    <item>LO-87</item>
-    <item>LO-90</item>
-    <item>LO-93</item>
-    <item>LO-94</item>
-    <item>MAYA-1</item>
-    <item>neutron-1</item>
-    <item>NO-103</item>
-    <item>NO-104[APRS]</item>
-    <item>NO-104[DTMF]</item>
-    <item>NO-104[UHF]</item>
-    <item>NO-44</item>
-    <item>NO-45</item>
-    <item>NO-61</item>
-    <item>NO-62</item>
-    <item>NO-83</item>
-    <item>NO-84_Digi</item>
-    <item>NO-84_PSK</item>
-    <item>OUFTI-1</item>
-    <item>PicSat</item>
-    <item>PO-101[APRS]</item>
-    <item>PO-101[FM]</item>
-    <item>QIKCOM-1</item>
-    <item>QO-100_NB</item>
-    <item>QO-100_WB</item>
-    <item>QUAKESAT</item>
-    <item>RS-15</item>
-    <item>RS-20</item>
-    <item>RS-25</item>
-    <item>RS-44</item>
-    <item>SO-33</item>
-    <item>SO-50</item>
-    <item>SPACECUBE</item>
-    <item>Taurus-1</item>
-    <item>TO-108</item>
-    <item>UBAKUSAT</item>
-    <item>UiTMSAT-1</item>
-    <item>UKube-1</item>
-    <item>[B]_UO-11</item>
-    <item>[S]_UO-11</item>
-    <item>UVSQ-SAT</item>
-    <item>UWE-3</item>
-    <item>VO-96</item>
-    <item>X-CUBESAT</item>
-    <item>XI-IV</item>
-    <item>XI-V</item>
-    <item>XW-2A</item>
-    <item>XW-2B</item>
-    <item>XW-2C</item>
-    <item>XW-2D</item>
-    <item>XW-2E</item>
-    <item>XW-2F</item>
-    <item>XW-3</item>
-  </string-array>
-  <string-array name="satellite_names">
-    <item>DEMO 1</item>
-    <item>AISAT-1</item>
-    <item>AO-109</item>
-    <item>AO-16</item>
-    <item>AO-27</item>
-    <item>AO-7 Mode A</item>
-    <item>AO-7 Mode B</item>
-    <item>AO-73</item>
-    <item>AO-85</item>
-    <item>AO-91</item>
-    <item>AO-92 L/v</item>
-    <item>AO-92 U/v</item>
-    <item>AO-95 L/v</item>
-    <item>AO-95 U/v</item>
-    <item>BHUTAN-1</item>
-    <item>BO-102</item>
-    <item>BY70-2</item>
-    <item>CAS-2T</item>
-    <item>CAS-4A</item>
-    <item>CAS-4B</item>
-    <item>CubeBel-1</item>
-    <item>CUTE-1</item>
-    <item>Delfi-C3 (DO-64)</item>
-    <item>DSTAR1</item>
-    <item>DUCHIFAT1</item>
-    <item>DUCHIFAT3</item>
-    <item>EO-79</item>
-    <item>EO-80</item>
-    <item>EO-88</item>
-    <item>ESEO</item>
-    <item>Falconsat3</item>
-    <item>FloripaSat 1</item>
-    <item>FMN-1</item>
-    <item>FO-29</item>
-    <item>FO-99</item>
-    <item>GO-32</item>
-    <item>HA-1</item>
-    <item>HO-107</item>
-    <item>HO-68</item>
-    <item>IO-26</item>
-    <item>IO-86 </item>
-    <item>ISS FM Repeater</item>
-    <item>ISS Packet/APRS</item>
-    <item>ISS SSTV</item>
-    <item>ISS-DATV</item>
-    <item>JAISAT-1</item>
-    <item>JO-97</item>
-    <item>K2SAT</item>
-    <item>LilacSat-2</item>
-    <item>LO-19</item>
-    <item>LO-87</item>
-    <item>LO-90</item>
-    <item>LO-93</item>
-    <item>LO-94</item>
-    <item>MAYA-1</item>
-    <item>Neutron-1</item>
-    <item>NO-103</item>
-    <item>NO-104[APRS]</item>
-    <item>NO-104[DTMF]</item>
-    <item>NO-104[UHF]</item>
-    <item>NO-44</item>
-    <item>NO-45</item>
-    <item>NO-61</item>
-    <item>NO-62</item>
-    <item>NO-83</item>
-    <item>NO-84 (PSAT) Digi</item>
-    <item>NO-84 (PSAT) PSK</item>
-    <item>OUFTI-1</item>
-    <item>PicSat</item>
-    <item>PO-101[APRS]</item>
-    <item>PO-101[FM]</item>
-    <item>QIKCOM-1</item>
-    <item>QO-100 NB</item>
-    <item>QO-100 WB</item>
-    <item>QUAKESAT</item>
-    <item>RS-15</item>
-    <item>RS-20</item>
-    <item>RS-25</item>
-    <item>RS-44</item>
-    <item>SO-33</item>
-    <item>SO-50</item>
-    <item>SPACECUBE</item>
-    <item>Taurus-1</item>
-    <item>TO-108</item>
-    <item>UBAKUSAT</item>
-    <item>UiTMSAT-1</item>
-    <item>UKube-1</item>
-    <item>UO-11 Mode B</item>
-    <item>UO-11 Mode S</item>
-    <item>UVSQ-SAT</item>
-    <item>UWE-3</item>
-    <item>VO-96</item>
-    <item>X-CUBESAT</item>
-    <item>XI-IV</item>
-    <item>XI-V</item>
-    <item>XW-2A</item>
-    <item>XW-2B</item>
-    <item>XW-2C</item>
-    <item>XW-2D</item>
-    <item>XW-2E</item>
-    <item>XW-2F</item>
-    <item>XW-3 (CAS 9)</item>
-  </string-array>
+    <string-array name="satellite_ids">
+        <item>DEMO-1</item>
+        <item>AISAT-1</item>
+        <item>AO-109</item>
+        <item>AO-16</item>
+        <item>AO-27</item>
+        <item>[A]_AO-7</item>
+        <item>[B]_AO-7</item>
+        <item>AO-73</item>
+        <item>AO-85</item>
+        <item>AO-91</item>
+        <item>AO-92_L/v</item>
+        <item>AO-92_U/v</item>
+        <item>AO-95_L/v</item>
+        <item>AO-95_U/v</item>
+        <item>BHUTAN-1</item>
+        <item>BO-102</item>
+        <item>BY70-2</item>
+        <item>CAS-2T</item>
+        <item>CAS-4A</item>
+        <item>CAS-4B</item>
+        <item>CubeBel-1</item>
+        <item>CUTE-1</item>
+        <item>Delfi-C3</item>
+        <item>DSTAR1</item>
+        <item>DUCHIFAT1</item>
+        <item>DUCHIFAT3</item>
+        <item>EO-79</item>
+        <item>EO-80</item>
+        <item>EO-88</item>
+        <item>ESEO</item>
+        <item>FS-3</item>
+        <item>FloripaSat-1</item>
+        <item>FMN-1</item>
+        <item>FO-29</item>
+        <item>FO-99</item>
+        <item>GO-32</item>
+        <item>HA-1</item>
+        <item>HO-107</item>
+        <item>HO-68</item>
+        <item>IO-26</item>
+        <item>IO-86</item>
+        <item>ISS-FM</item>
+        <item>ISS-DATA</item>
+        <item>ISS-SSTV</item>
+        <item>ISS-DATV</item>
+        <item>JAISAT-1</item>
+        <item>JO-97</item>
+        <item>K2SAT</item>
+        <item>LilacSat-2</item>
+        <item>LO-19</item>
+        <item>LO-87</item>
+        <item>LO-90</item>
+        <item>LO-93</item>
+        <item>LO-94</item>
+        <item>MAYA-1</item>
+        <item>neutron-1</item>
+        <item>NO-103</item>
+        <item>NO-104[APRS]</item>
+        <item>NO-104[DTMF]</item>
+        <item>NO-104[UHF]</item>
+        <item>NO-44</item>
+        <item>NO-45</item>
+        <item>NO-61</item>
+        <item>NO-62</item>
+        <item>NO-83</item>
+        <item>NO-84_Digi</item>
+        <item>NO-84_PSK</item>
+        <item>OUFTI-1</item>
+        <item>PicSat</item>
+        <item>PO-101[APRS]</item>
+        <item>PO-101[FM]</item>
+        <item>QIKCOM-1</item>
+        <item>QO-100_NB</item>
+        <item>QO-100_WB</item>
+        <item>QUAKESAT</item>
+        <item>RS-15</item>
+        <item>RS-20</item>
+        <item>RS-25</item>
+        <item>RS-44</item>
+        <item>SO-33</item>
+        <item>SO-50</item>
+        <item>SPACECUBE</item>
+        <item>Taurus-1</item>
+        <item>TO-108</item>
+        <item>UBAKUSAT</item>
+        <item>UiTMSAT-1</item>
+        <item>UKube-1</item>
+        <item>[B]_UO-11</item>
+        <item>[S]_UO-11</item>
+        <item>UVSQ-SAT</item>
+        <item>UWE-3</item>
+        <item>VO-96</item>
+        <item>X-CUBESAT</item>
+        <item>XI-IV</item>
+        <item>XI-V</item>
+        <item>XW-2A</item>
+        <item>XW-2B</item>
+        <item>XW-2C</item>
+        <item>XW-2D</item>
+        <item>XW-2E</item>
+        <item>XW-2F</item>
+        <item>XW-3</item>
+    </string-array>
+    <string-array name="satellite_names">
+        <item>DEMO 1</item>
+        <item>AISAT-1</item>
+        <item>AO-109</item>
+        <item>AO-16</item>
+        <item>AO-27</item>
+        <item>AO-7 Mode A</item>
+        <item>AO-7 Mode B</item>
+        <item>AO-73</item>
+        <item>AO-85</item>
+        <item>AO-91</item>
+        <item>AO-92 L/v</item>
+        <item>AO-92 U/v</item>
+        <item>AO-95 L/v</item>
+        <item>AO-95 U/v</item>
+        <item>BHUTAN-1</item>
+        <item>BO-102</item>
+        <item>BY70-2</item>
+        <item>CAS-2T</item>
+        <item>CAS-4A</item>
+        <item>CAS-4B</item>
+        <item>CubeBel-1</item>
+        <item>CUTE-1</item>
+        <item>Delfi-C3 (DO-64)</item>
+        <item>DSTAR1</item>
+        <item>DUCHIFAT1</item>
+        <item>DUCHIFAT3</item>
+        <item>EO-79</item>
+        <item>EO-80</item>
+        <item>EO-88</item>
+        <item>ESEO</item>
+        <item>Falconsat3</item>
+        <item>FloripaSat 1</item>
+        <item>FMN-1</item>
+        <item>FO-29</item>
+        <item>FO-99</item>
+        <item>GO-32</item>
+        <item>HA-1</item>
+        <item>HO-107</item>
+        <item>HO-68</item>
+        <item>IO-26</item>
+        <item>IO-86 </item>
+        <item>ISS FM Repeater</item>
+        <item>ISS Packet/APRS</item>
+        <item>ISS SSTV</item>
+        <item>ISS-DATV</item>
+        <item>JAISAT-1</item>
+        <item>JO-97</item>
+        <item>K2SAT</item>
+        <item>LilacSat-2</item>
+        <item>LO-19</item>
+        <item>LO-87</item>
+        <item>LO-90</item>
+        <item>LO-93</item>
+        <item>LO-94</item>
+        <item>MAYA-1</item>
+        <item>Neutron-1</item>
+        <item>NO-103</item>
+        <item>NO-104[APRS]</item>
+        <item>NO-104[DTMF]</item>
+        <item>NO-104[UHF]</item>
+        <item>NO-44</item>
+        <item>NO-45</item>
+        <item>NO-61</item>
+        <item>NO-62</item>
+        <item>NO-83</item>
+        <item>NO-84 (PSAT) Digi</item>
+        <item>NO-84 (PSAT) PSK</item>
+        <item>OUFTI-1</item>
+        <item>PicSat</item>
+        <item>PO-101[APRS]</item>
+        <item>PO-101[FM]</item>
+        <item>QIKCOM-1</item>
+        <item>QO-100 NB</item>
+        <item>QO-100 WB</item>
+        <item>QUAKESAT</item>
+        <item>RS-15</item>
+        <item>RS-20</item>
+        <item>RS-25</item>
+        <item>RS-44</item>
+        <item>SO-33</item>
+        <item>SO-50</item>
+        <item>SPACECUBE</item>
+        <item>Taurus-1</item>
+        <item>TO-108</item>
+        <item>UBAKUSAT</item>
+        <item>UiTMSAT-1</item>
+        <item>UKube-1</item>
+        <item>UO-11 Mode B</item>
+        <item>UO-11 Mode S</item>
+        <item>UVSQ-SAT</item>
+        <item>UWE-3</item>
+        <item>VO-96</item>
+        <item>X-CUBESAT</item>
+        <item>XI-IV</item>
+        <item>XI-V</item>
+        <item>XW-2A</item>
+        <item>XW-2B</item>
+        <item>XW-2C</item>
+        <item>XW-2D</item>
+        <item>XW-2E</item>
+        <item>XW-2F</item>
+        <item>XW-3 (CAS 9)</item>
+    </string-array>
 </resources>

@@ -65,7 +65,8 @@ import com.google.api.client.http.HttpRequest
 
 
 class AppTest {
-    @Test fun testHttpClient() {
+    @Test
+    fun testHttpClient() {
         val httpclient = HttpClients.createDefault() //as CloseableHttpClient
         val httpGet = HttpGet("http://www.google.com/")
         httpclient.execute(httpGet).use {
@@ -77,7 +78,8 @@ class AppTest {
         }
     }
 
-    @Test fun testAmsatApi() {
+    @Test
+    fun testAmsatApi() {
         val httpclient = HttpClients.createDefault()
         val httpGet = HttpGet("https://amsat.org/status/api/v1/sat_info.php?name=AO-91&hours=24")
         httpclient.execute(httpGet).use { response1 ->
@@ -99,11 +101,12 @@ class AppTest {
         }
     }
 
-    @Test fun testBasicJsonObject() {
+    @Test
+    fun testBasicJsonObject() {
         val json = "{" +
-                   "  \"query\": \"Pizza\", " +
-                   "  \"locations\": [ 94043, 90210 ] " +
-                   "}"
+                "  \"query\": \"Pizza\", " +
+                "  \"locations\": [ 94043, 90210 ] " +
+                "}"
 
         val `object` = JSONTokener(json).nextValue() as JSONObject
         val _query = `object`.getString("query")
@@ -111,8 +114,10 @@ class AppTest {
         println(locations.getInt(0))
     }
 
-    @Test fun testSatelliteJson() {
-        val json = "[{\"name\":\"AO-91\",\"reported_time\":\"2020-08-20T06:30:00Z\",\"callsign\":\"W6WW\",\"report\":\"Heard\",\"grid_square\":\"DM14\"},{\"name\":\"AO-91\",\"reported_time\":\"2020-08-20T04:30:00Z\",\"callsign\":\"YD0NXX\",\"report\":\"Heard\",\"grid_square\":\"OI33js\"},{\"name\":\"AO-91\",\"reported_time\":\"2020-08-19T18:30:00Z\",\"callsign\":\"KC7MG\",\"report\":\"Heard\",\"grid_square\":\"DM42\"},{\"name\":\"AO-91\",\"reported_time\":\"2020-08-19T18:30:00Z\",\"callsign\":\"AA5PK\",\"report\":\"Heard\",\"grid_square\":\"DM91\"},{\"name\":\"AO-91\",\"reported_time\":\"2020-08-19T17:30:00Z\",\"callsign\":\"WA5KBH\",\"report\":\"Heard\",\"grid_square\":\"EM30\"},{\"name\":\"AO-91\",\"reported_time\":\"2020-08-19T15:30:00Z\",\"callsign\":\"KB9STR\",\"report\":\"Heard\",\"grid_square\":\"EM69\"},{\"name\":\"AO-91\",\"reported_time\":\"2020-08-19T10:30:00Z\",\"callsign\":\"OE\\/PE4KH\",\"report\":\"Heard\",\"grid_square\":\"JN47\"},{\"name\":\"AO-91\",\"reported_time\":\"2020-08-19T10:30:00Z\",\"callsign\":\"OK1VDD\",\"report\":\"Heard\",\"grid_square\":\"JO70ec\"},{\"name\":\"AO-91\",\"reported_time\":\"2020-08-19T10:30:00Z\",\"callsign\":\"OZ1MY\",\"report\":\"Heard\",\"grid_square\":\"JO65fr\"},{\"name\":\"AO-91\",\"reported_time\":\"2020-08-19T09:30:00Z\",\"callsign\":\"OZ1MY\",\"report\":\"Heard\",\"grid_square\":\"JO65fr\"},{\"name\":\"AO-91\",\"reported_time\":\"2020-08-19T07:30:00Z\",\"callsign\":\"W6WW\",\"report\":\"Heard\",\"grid_square\":\"DM14\"},{\"name\":\"AO-91\",\"reported_time\":\"2020-08-19T07:30:00Z\",\"callsign\":\"OZ1MY\",\"report\":\"Heard\",\"grid_square\":\"JO65fr\"},{\"name\":\"AO-91\",\"reported_time\":\"2020-08-19T06:30:00Z\",\"callsign\":\"W6WW\",\"report\":\"Heard\",\"grid_square\":\"DM14\"}]"
+    @Test
+    fun testSatelliteJson() {
+        val json =
+            "[{\"name\":\"AO-91\",\"reported_time\":\"2020-08-20T06:30:00Z\",\"callsign\":\"W6WW\",\"report\":\"Heard\",\"grid_square\":\"DM14\"},{\"name\":\"AO-91\",\"reported_time\":\"2020-08-20T04:30:00Z\",\"callsign\":\"YD0NXX\",\"report\":\"Heard\",\"grid_square\":\"OI33js\"},{\"name\":\"AO-91\",\"reported_time\":\"2020-08-19T18:30:00Z\",\"callsign\":\"KC7MG\",\"report\":\"Heard\",\"grid_square\":\"DM42\"},{\"name\":\"AO-91\",\"reported_time\":\"2020-08-19T18:30:00Z\",\"callsign\":\"AA5PK\",\"report\":\"Heard\",\"grid_square\":\"DM91\"},{\"name\":\"AO-91\",\"reported_time\":\"2020-08-19T17:30:00Z\",\"callsign\":\"WA5KBH\",\"report\":\"Heard\",\"grid_square\":\"EM30\"},{\"name\":\"AO-91\",\"reported_time\":\"2020-08-19T15:30:00Z\",\"callsign\":\"KB9STR\",\"report\":\"Heard\",\"grid_square\":\"EM69\"},{\"name\":\"AO-91\",\"reported_time\":\"2020-08-19T10:30:00Z\",\"callsign\":\"OE\\/PE4KH\",\"report\":\"Heard\",\"grid_square\":\"JN47\"},{\"name\":\"AO-91\",\"reported_time\":\"2020-08-19T10:30:00Z\",\"callsign\":\"OK1VDD\",\"report\":\"Heard\",\"grid_square\":\"JO70ec\"},{\"name\":\"AO-91\",\"reported_time\":\"2020-08-19T10:30:00Z\",\"callsign\":\"OZ1MY\",\"report\":\"Heard\",\"grid_square\":\"JO65fr\"},{\"name\":\"AO-91\",\"reported_time\":\"2020-08-19T09:30:00Z\",\"callsign\":\"OZ1MY\",\"report\":\"Heard\",\"grid_square\":\"JO65fr\"},{\"name\":\"AO-91\",\"reported_time\":\"2020-08-19T07:30:00Z\",\"callsign\":\"W6WW\",\"report\":\"Heard\",\"grid_square\":\"DM14\"},{\"name\":\"AO-91\",\"reported_time\":\"2020-08-19T07:30:00Z\",\"callsign\":\"OZ1MY\",\"report\":\"Heard\",\"grid_square\":\"JO65fr\"},{\"name\":\"AO-91\",\"reported_time\":\"2020-08-19T06:30:00Z\",\"callsign\":\"W6WW\",\"report\":\"Heard\",\"grid_square\":\"DM14\"}]"
 
         val list = JSONTokener(json).nextValue() as JSONArray
 
@@ -141,19 +146,20 @@ class AppTest {
         assertEquals(report2, "Heard")
     }
 
-    @Test fun testMockHttpClient() {
+    @Test
+    fun testMockHttpClient() {
         val json = "[{" +
-                        "\"name\":\"AO-91\"," +
-                        "\"reported_time\":\"2020-08-20T06:30:00Z\"," +
-                        "\"callsign\":\"W6WW\"," +
-                        "\"report\":\"Heard\"," + 
-                        "\"grid_square\":\"DM14\"" +
-                   "}]"
+                "\"name\":\"AO-91\"," +
+                "\"reported_time\":\"2020-08-20T06:30:00Z\"," +
+                "\"callsign\":\"W6WW\"," +
+                "\"report\":\"Heard\"," +
+                "\"grid_square\":\"DM14\"" +
+                "}]"
 
         val url = "http://localhost/login"
         val httpClientMock = HttpClientMock()
         httpClientMock.onGet(url)
-          .doReturn(json)
+            .doReturn(json)
 
         val httpGet = HttpGet(url)
         httpClientMock.execute(httpGet).use { response1 ->
@@ -188,19 +194,21 @@ class AppTest {
         }
     }
 
-    @Test fun testDateParsing() {
+    @Test
+    fun testDateParsing() {
         val date = "2020-08-20T06:30:00Z"
         val parser = SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'")
         val result = parser.parse(date)
-        assertEquals(result.year+1900, 2020)
-        assertEquals(result.month+1, 8)
+        assertEquals(result.year + 1900, 2020)
+        assertEquals(result.month + 1, 8)
         assertEquals(result.date, 20)
         assertEquals(result.hours, 6)
         assertEquals(result.minutes, 30)
         assertEquals(result.seconds, 0)
     }
 
-    @Test fun testCalendarParsing() {
+    @Test
+    fun testCalendarParsing() {
         val dateStr = "2020-08-20T06:30:00Z"
         val calendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"))
         var s = dateStr.replace("Z", "+00:00")
@@ -213,18 +221,19 @@ class AppTest {
         calendar.time = date
 
         assertEquals(2020, calendar.get(Calendar.YEAR))
-        assertEquals(8, calendar.get(Calendar.MONTH)+1)
+        assertEquals(8, calendar.get(Calendar.MONTH) + 1)
         assertEquals(20, calendar.get(Calendar.DAY_OF_MONTH))
         assertEquals(6, calendar.get(Calendar.HOUR_OF_DAY))
         assertEquals(30, calendar.get(Calendar.MINUTE))
         assertEquals(0, calendar.get(Calendar.SECOND))
     }
 
-    @Test fun testGoogleHttpClient() {
+    @Test
+    fun testGoogleHttpClient() {
         val httpclient = HttpClients.createDefault()
         val transport = ApacheHttpTransport(httpclient)
         val request: HttpRequest = transport.createRequestFactory().buildGetRequest(
-                 GenericUrl("http://www.google.com/")
+            GenericUrl("http://www.google.com/")
         );
         val rawResponse = request.execute().parseAsString()
         println(rawResponse)

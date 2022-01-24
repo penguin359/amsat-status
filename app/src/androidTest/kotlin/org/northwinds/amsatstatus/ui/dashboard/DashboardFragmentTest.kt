@@ -79,9 +79,10 @@ class DashboardFragmentTest {
     }
     */
     fun withItemSubjectInViewHolder(itemSubject: String): Matcher<RecyclerView.ViewHolder> {
-        return object : BoundedMatcher<RecyclerView.ViewHolder, MyReportRecyclerViewAdapter.ViewHolder>(
-            MyReportRecyclerViewAdapter.ViewHolder::class.java
-        ) {
+        return object :
+            BoundedMatcher<RecyclerView.ViewHolder, MyReportRecyclerViewAdapter.ViewHolder>(
+                MyReportRecyclerViewAdapter.ViewHolder::class.java
+            ) {
             override fun matchesSafely(holder: MyReportRecyclerViewAdapter.ViewHolder): Boolean {
                 var isMatches = false
                 if (holder.nameView != null) {
@@ -131,7 +132,8 @@ class DashboardMultiFragmentTest {
     @get:Rule
     val hiltRule = HiltAndroidRule(this)
 
-    @Inject lateinit var idlingThreadPoolExecutor: IdlingThreadPoolExecutor
+    @Inject
+    lateinit var idlingThreadPoolExecutor: IdlingThreadPoolExecutor
 
     @Before
     fun setUp() {
@@ -153,7 +155,7 @@ class DashboardMultiFragmentTest {
 
         onView(withId(R.id.reports))
             .check { view, noViewFoundException ->
-                if(view == null)
+                if (view == null)
                     throw noViewFoundException
                 val listView = view as ExpandableListView
                 assertEquals(6, listView.adapter.count)
@@ -263,7 +265,7 @@ class DashboardMultiFragmentTest {
 
         onView(withId(R.id.reports))
             .check { view, noViewFoundException ->
-                if(view == null)
+                if (view == null)
                     throw noViewFoundException
                 val listView = view as ExpandableListView
                 assertEquals(0, listView.adapter.count)
@@ -307,7 +309,7 @@ class DashboardMultiFragmentTest {
             .check(matches(withSpinnerText(containsString("DEMO"))))
         onView(withId(R.id.reports))
             .check { view, noViewFoundException ->
-                if(view == null)
+                if (view == null)
                     throw noViewFoundException
                 val listView = view as ExpandableListView
                 assertEquals(6, listView.adapter.count)
@@ -326,7 +328,7 @@ class DashboardMultiFragmentTest {
             .check(matches(withSpinnerText(containsString("MAYA-1"))))
         onView(withId(R.id.reports))
             .check { view, noViewFoundException ->
-                if(view == null)
+                if (view == null)
                     throw noViewFoundException
                 val listView = view as ExpandableListView
                 assertEquals(0, listView.adapter.count)
@@ -340,7 +342,7 @@ class DashboardMultiFragmentTest {
             .check(matches(withSpinnerText(containsString("DEMO 1"))))
         onView(withId(R.id.reports))
             .check { view, noViewFoundException ->
-                if(view == null)
+                if (view == null)
                     throw noViewFoundException
                 val listView = view as ExpandableListView
                 assertEquals(6, listView.adapter.count)
@@ -358,7 +360,7 @@ class DashboardMultiFragmentTest {
         val frag = launchFragmentInHiltContainer<DashboardFragment>()
         onView(withId(R.id.reports))
             .check { view, noViewFoundException ->
-                if(view == null)
+                if (view == null)
                     throw noViewFoundException
                 val listView = view as ExpandableListView
                 assertThat(listView.adapter.count, `is`(equalTo(6)))
@@ -368,11 +370,11 @@ class DashboardMultiFragmentTest {
             .atPosition(0)
             .onChildView(withId(R.id.multi_group_cell))
             .check { view, noViewFoundException ->
-                if(view == null)
+                if (view == null)
                     throw noViewFoundException
                 assertThat(view.background, describedAs("has a solid background",
                     instanceOf(ColorDrawable::class.java),
-                "color drawable"))
+                    "color drawable"))
                 assertEquals(appContext.resources.getColor(R.color.heard),
                     (view.background as ColorDrawable).color)
             }
@@ -381,7 +383,7 @@ class DashboardMultiFragmentTest {
             .atPosition(1)
             .onChildView(withId(R.id.multi_group_cell))
             .check { view, noViewFoundException ->
-                if(view == null)
+                if (view == null)
                     throw noViewFoundException
                 assertThat(view.background, describedAs("has a solid background",
                     instanceOf(ColorDrawable::class.java),
@@ -394,7 +396,7 @@ class DashboardMultiFragmentTest {
             .atPosition(2)
             .onChildView(withId(R.id.multi_group_cell))
             .check { view, noViewFoundException ->
-                if(view == null)
+                if (view == null)
                     throw noViewFoundException
                 assertThat(view.background, describedAs("has a solid background",
                     instanceOf(ColorDrawable::class.java),
@@ -407,7 +409,7 @@ class DashboardMultiFragmentTest {
             .atPosition(3)
             .onChildView(withId(R.id.multi_group_cell))
             .check { view, noViewFoundException ->
-                if(view == null)
+                if (view == null)
                     throw noViewFoundException
                 assertThat(view.background, describedAs("has a solid background",
                     instanceOf(ColorDrawable::class.java),
@@ -420,7 +422,7 @@ class DashboardMultiFragmentTest {
             .atPosition(5)
             .onChildView(withId(R.id.multi_group_cell))
             .check { view, noViewFoundException ->
-                if(view == null)
+                if (view == null)
                     throw noViewFoundException
                 assertThat(view.background, describedAs("has a solid background",
                     instanceOf(ColorDrawable::class.java),
@@ -438,7 +440,7 @@ class DashboardMultiFragmentTest {
             .atPosition(6)
             .onChildView(withId(R.id.multi_cell))
             .check { view, noViewFoundException ->
-                if(view == null)
+                if (view == null)
                     throw noViewFoundException
                 assertThat(view.background, describedAs("has a solid background",
                     instanceOf(ColorDrawable::class.java),
@@ -451,7 +453,7 @@ class DashboardMultiFragmentTest {
             .atPosition(7)
             .onChildView(withId(R.id.multi_cell))
             .check { view, noViewFoundException ->
-                if(view == null)
+                if (view == null)
                     throw noViewFoundException
                 assertThat(view.background, describedAs("has a solid background",
                     instanceOf(ColorDrawable::class.java),

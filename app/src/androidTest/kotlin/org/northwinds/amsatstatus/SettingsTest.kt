@@ -62,7 +62,7 @@ class SettingsSimpleTest {
 //    @Test
     fun settingsBackButtonExitTest() {
 //        try {
-            pressBack()
+        pressBack()
 //        } catch(ex: NoActivityResumedException) {
 //        }
 //        assertEquals(Lifecycle.State.DESTROYED, mActivityTestRule.scenario.state)
@@ -93,7 +93,7 @@ class SettingsSimpleTest {
     }
 
     private fun childAtPosition(
-        parentMatcher: Matcher<View>, position: Int
+        parentMatcher: Matcher<View>, position: Int,
     ): Matcher<View> {
 
         return object : TypeSafeMatcher<View>() {
@@ -302,7 +302,7 @@ class SettingsTest {
     }
 
     private fun childAtPosition(
-        parentMatcher: Matcher<View>, position: Int
+        parentMatcher: Matcher<View>, position: Int,
     ): Matcher<View> {
 
         return object : TypeSafeMatcher<View>() {

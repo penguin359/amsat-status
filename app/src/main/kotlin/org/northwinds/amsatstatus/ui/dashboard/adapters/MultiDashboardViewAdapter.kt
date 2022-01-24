@@ -32,7 +32,7 @@ import org.northwinds.amsatstatus.SatReportSlot
 
 class MultiDashboardViewAdapter(
     private val context: Context,
-    val reportSlots: List<SatReportSlot>
+    val reportSlots: List<SatReportSlot>,
 ) : SimpleExpandableListAdapter(
     context,
     reportSlots.map { slot ->
@@ -58,7 +58,7 @@ class MultiDashboardViewAdapter(
         groupPosition: Int,
         isExpanded: Boolean,
         convertView: View?,
-        parent: ViewGroup?
+        parent: ViewGroup?,
     ): View {
         val view = super.getGroupView(groupPosition, isExpanded, convertView, parent)
         val color = when (reportSlots[groupPosition].report) {
@@ -68,7 +68,8 @@ class MultiDashboardViewAdapter(
             Report.CREW_ACTIVE -> R.color.crewActive
             Report.CONFLICTED -> R.color.conflict
         }
-        view.findViewById<View>(R.id.multi_group_cell).setBackgroundColor(context.resources.getColor(color))
+        view.findViewById<View>(R.id.multi_group_cell)
+            .setBackgroundColor(context.resources.getColor(color))
         return view
     }
 
@@ -77,7 +78,7 @@ class MultiDashboardViewAdapter(
         childPosition: Int,
         isLastChild: Boolean,
         convertView: View?,
-        parent: ViewGroup?
+        parent: ViewGroup?,
     ): View {
         val view =
             super.getChildView(groupPosition, childPosition, isLastChild, convertView, parent)
@@ -88,7 +89,8 @@ class MultiDashboardViewAdapter(
             Report.CREW_ACTIVE -> R.color.crewActive
             else -> 0
         }
-        view.findViewById<View>(R.id.multi_cell).setBackgroundColor(context.resources.getColor(color))
+        view.findViewById<View>(R.id.multi_cell)
+            .setBackgroundColor(context.resources.getColor(color))
         return view
     }
 }

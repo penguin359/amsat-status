@@ -62,14 +62,14 @@ class MainActivity : AppCompatActivity() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_maps))
+            R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_maps))
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
         val asked = prefs.getBoolean(getString(R.string.preference_asked_for_consent), false)
-        if(!asked) {
+        if (!asked) {
             val builder = AlertDialog.Builder(this)
             builder.setTitle(getString(R.string.title_analytics))
 

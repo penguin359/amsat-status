@@ -31,15 +31,16 @@ import java.util.TimeZone
 import javax.inject.Inject
 
 interface Clock {
-	val utcCalendar: Calendar get
-	val localCalendar: Calendar get
+    val utcCalendar: Calendar get
+    val localCalendar: Calendar get
 }
 
 class MyClock(val timestamp: Long) : Clock {
-	@Inject
-	constructor() : this(System.currentTimeMillis())
+    @Inject
+    constructor() : this(System.currentTimeMillis())
 
-	override val utcCalendar get() = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply { timeInMillis = timestamp }
+    override val utcCalendar
+        get() = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply { timeInMillis = timestamp }
 
-	override val localCalendar get() = Calendar.getInstance().apply { timeInMillis = timestamp }
+    override val localCalendar get() = Calendar.getInstance().apply { timeInMillis = timestamp }
 }

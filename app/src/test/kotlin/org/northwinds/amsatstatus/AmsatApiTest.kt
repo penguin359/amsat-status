@@ -35,11 +35,13 @@ import com.google.api.client.http.apache.v2.ApacheHttpTransport
 import com.github.paweladamski.httpclientmock.HttpClientMock
 
 class AmsatApiTest {
-    @Test fun `instantiate the AMSAT API`() {
+    @Test
+    fun `instantiate the AMSAT API`() {
         val api = AmsatApi()
     }
 
-    @Test fun `makes the correct URL request to retrieve satellite`() {
+    @Test
+    fun `makes the correct URL request to retrieve satellite`() {
         val url = "https://amsat.org/status/api/v1/sat_info.php"
         val httpClientMock = HttpClientMock()
         httpClientMock.onGet().doReturn("[]")
@@ -48,12 +50,13 @@ class AmsatApiTest {
         val api = AmsatApi(transport)
         api.getReport("AO-91", 24)
         httpClientMock.verify().get(url)
-        .withParameter("name", "AO-91")
-        .withParameter("hours", "24")
-        .called()
+            .withParameter("name", "AO-91")
+            .withParameter("hours", "24")
+            .called()
     }
 
-    @Test fun `makes the correct URL request to retrieve alternate satellite`() {
+    @Test
+    fun `makes the correct URL request to retrieve alternate satellite`() {
         val url = "https://amsat.org/status/api/v1/sat_info.php"
         val httpClientMock = HttpClientMock()
         httpClientMock.onGet().doReturn("[]")
@@ -62,12 +65,13 @@ class AmsatApiTest {
         val api = AmsatApi(transport)
         api.getReport("FO-29", 6)
         httpClientMock.verify().get(url)
-        .withParameter("name", "FO-29")
-        .withParameter("hours", "6")
-        .called()
+            .withParameter("name", "FO-29")
+            .withParameter("hours", "6")
+            .called()
     }
 
-    @Test fun `can instantiate a satellite report`() {
+    @Test
+    fun `can instantiate a satellite report`() {
         val timeStr = "2018-02-27T02:00:00Z"
         val time = makeReportTimeFromString(timeStr)
         val report = SatReport("NO-84", Report.HEARD, time, "AB1CD", "CN85")
@@ -78,7 +82,8 @@ class AmsatApiTest {
         assertEquals("CN85", report.gridSquare)
     }
 
-    @Test fun `can instantiate a satellite report without a grid`() {
+    @Test
+    fun `can instantiate a satellite report without a grid`() {
         val timeStr = "2022-12-01T08:45:00Z"
         val time = makeReportTimeFromString(timeStr)
         val report = SatReport("PICSat-1", Report.CREW_ACTIVE, time, "X1YZ")
@@ -89,18 +94,21 @@ class AmsatApiTest {
         assertEquals("", report.gridSquare)
     }
 
-    @Test fun `can get report enum from string`() {
+    @Test
+    fun `can get report enum from string`() {
         assertEquals(Report.HEARD, reportFromString("Heard"))
         assertEquals(Report.NOT_HEARD, reportFromString("not heard"))
         assertEquals(Report.CREW_ACTIVE, reportFromString("CREW ACTIVE"))
         assertEquals(Report.TELEMETRY_ONLY, reportFromString("TeLeMeTrY OnLy"))
     }
 
-    @Test fun `will return not heard report enum from unknown string`() {
+    @Test
+    fun `will return not heard report enum from unknown string`() {
         assertEquals(Report.NOT_HEARD, reportFromString("invalid string"))
     }
 
-    @Test fun `can get string from report enum`() {
+    @Test
+    fun `can get string from report enum`() {
         /* These are the exact strings as used in the AMSAT API */
         assertEquals("Heard", Report.HEARD.value)
         assertEquals("Not Heard", Report.NOT_HEARD.value)
@@ -108,39 +116,42 @@ class AmsatApiTest {
         assertEquals("Telemetry Only", Report.TELEMETRY_ONLY.value)
     }
 
-    @Test fun `can create ReportTime from Calendar`() {
+    @Test
+    fun `can create ReportTime from Calendar`() {
         val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
         val time = ReportTime(calendar)
 
-        assertEquals(calendar.get(Calendar.YEAR),         time.year,    "Bad Year")
-        assertEquals(calendar.get(Calendar.MONTH)+1,      time.month+1, "Bad Month")
-        assertEquals(calendar.get(Calendar.DAY_OF_MONTH), time.day,     "Bad Day")
-        assertEquals(calendar.get(Calendar.HOUR_OF_DAY),  time.hour,    "Bad Hour")
-        assertEquals(calendar.get(Calendar.MINUTE),       time.minute,  "Bad Minute")
-        assertEquals(calendar.get(Calendar.MINUTE) / 15,  time.quarter, "Bad Quarter")
+        assertEquals(calendar.get(Calendar.YEAR), time.year, "Bad Year")
+        assertEquals(calendar.get(Calendar.MONTH) + 1, time.month + 1, "Bad Month")
+        assertEquals(calendar.get(Calendar.DAY_OF_MONTH), time.day, "Bad Day")
+        assertEquals(calendar.get(Calendar.HOUR_OF_DAY), time.hour, "Bad Hour")
+        assertEquals(calendar.get(Calendar.MINUTE), time.minute, "Bad Minute")
+        assertEquals(calendar.get(Calendar.MINUTE) / 15, time.quarter, "Bad Quarter")
     }
 
-    @Test fun `can create ReportTime from UNIX timestamp`() {
+    @Test
+    fun `can create ReportTime from UNIX timestamp`() {
         // Make sure test is not affected by local time zone
         TimeZone.setDefault(TimeZone.getTimeZone("MST"))
 
         // September 18, 2020 5:24:10 AM (UTC)
         // 2020-09-18T05:24:10Z
-        val test_time = 1600406650*1000L
+        val test_time = 1600406650 * 1000L
         val time = ReportTime(test_time)
 
-        assertEquals(2020,    time.year,    "Bad Year")
-        assertEquals(9,       time.month+1, "Bad Month")
-        assertEquals(18,      time.day,     "Bad Day")
-        assertEquals(5,       time.hour,    "Bad Hour")
-        assertEquals(24,      time.minute,  "Bad Minute")
+        assertEquals(2020, time.year, "Bad Year")
+        assertEquals(9, time.month + 1, "Bad Month")
+        assertEquals(18, time.day, "Bad Day")
+        assertEquals(5, time.hour, "Bad Hour")
+        assertEquals(24, time.minute, "Bad Minute")
         assertEquals(24 / 15, time.quarter, "Bad Quarter")
     }
 
-    @Test fun `can create UTC-based ReportTime from local calendar`() {
+    @Test
+    fun `can create UTC-based ReportTime from local calendar`() {
         // UTC:   2019-01-01T05:23:45Z
         // Local: 2018-12-31T21:23:45-08:00
-        val ref_time = 1546320225*1000L
+        val ref_time = 1546320225 * 1000L
         val ref_timezone = "America/Los_Angeles"
 
         // Make sure test is not affected by local time zone
@@ -149,22 +160,23 @@ class AmsatApiTest {
         val cal = Calendar.getInstance(timezone)
         // Local: 2018-12-31T21:23:45-08:00
         cal.set(Calendar.YEAR, 2018)
-        cal.set(Calendar.MONTH, 12-1)
+        cal.set(Calendar.MONTH, 12 - 1)
         cal.set(Calendar.DAY_OF_MONTH, 31)
         cal.set(Calendar.HOUR_OF_DAY, 21)
         cal.set(Calendar.MINUTE, 23)
 
         val time = ReportTime(cal)
 
-        assertEquals(2019,    time.year,    "Bad Year")
-        assertEquals(1,       time.month+1, "Bad Month")
-        assertEquals(1,       time.day,     "Bad Day")
-        assertEquals(5,       time.hour,    "Bad Hour")
-        assertEquals(23,      time.minute,  "Bad Minute")
+        assertEquals(2019, time.year, "Bad Year")
+        assertEquals(1, time.month + 1, "Bad Month")
+        assertEquals(1, time.day, "Bad Day")
+        assertEquals(5, time.hour, "Bad Hour")
+        assertEquals(23, time.minute, "Bad Minute")
         assertEquals(23 / 15, time.quarter, "Bad Quarter")
     }
 
-    @Test fun `can create ReportTime from components`() {
+    @Test
+    fun `can create ReportTime from components`() {
         val time = makeReportTimeFromComponents(
             year = 2020,
             month = 6,
@@ -173,29 +185,31 @@ class AmsatApiTest {
             quarter = 3)
 
         assertEquals(2020, time.year)
-        assertEquals(6+1, time.month+1)
+        assertEquals(6 + 1, time.month + 1)
         assertEquals(12, time.day)
         assertEquals(17, time.hour)
         assertEquals(45, time.minute)
         assertEquals(3, time.quarter)
     }
 
-    @Test fun `can create ReportTime from string`() {
+    @Test
+    fun `can create ReportTime from string`() {
         val dateStr = "2019-10-05T21:15:00Z"
         val time = makeReportTimeFromString(dateStr)
 
         assertEquals(2019, time.year)
-        assertEquals(10, time.month+1)
+        assertEquals(10, time.month + 1)
         assertEquals(5, time.day)
         assertEquals(21, time.hour)
         assertEquals(15, time.minute)
         assertEquals(1, time.quarter)
     }
 
-    @Test fun `can convert ReportTime to text`() {
+    @Test
+    fun `can convert ReportTime to text`() {
         val time = makeReportTimeFromComponents(
             year = 2021,
-            month = 3-1,
+            month = 3 - 1,
             day = 29,
             hour = 23,
             quarter = 2)
@@ -203,14 +217,15 @@ class AmsatApiTest {
         assertEquals("2021-03-29T23:30:00Z", time.toString())
     }
 
-    @Test fun `returns details on AO-91 satellite`() {
+    @Test
+    fun `returns details on AO-91 satellite`() {
         val json = "[{" +
-                        "\"name\":\"AO-91\"," +
-                        "\"reported_time\":\"2020-08-20T06:30:00Z\"," +
-                        "\"callsign\":\"W6WW\"," +
-                        "\"report\":\"Heard\"," + 
-                        "\"grid_square\":\"DM14\"" +
-                   "}]"
+                "\"name\":\"AO-91\"," +
+                "\"reported_time\":\"2020-08-20T06:30:00Z\"," +
+                "\"callsign\":\"W6WW\"," +
+                "\"report\":\"Heard\"," +
+                "\"grid_square\":\"DM14\"" +
+                "}]"
 
         val httpClientMock = HttpClientMock()
         httpClientMock.onGet().doReturn(json)
@@ -229,7 +244,8 @@ class AmsatApiTest {
         assertEquals(Report.HEARD, entry.report)
     }
 
-    @Test fun `returns details on multiple satellites`() {
+    @Test
+    fun `returns details on multiple satellites`() {
         val json = """[
             {
                 "name": "AO-91",
@@ -315,14 +331,15 @@ class AmsatApiTest {
         assertEquals("JN47", reports.get(6).gridSquare)
     }
 
-    @Test fun `returns details across multiple requests`() {
+    @Test
+    fun `returns details across multiple requests`() {
         val json = "[{" +
-                        "\"name\":\"AO-91\"," +
-                        "\"reported_time\":\"2020-08-20T06:30:00Z\"," +
-                        "\"callsign\":\"W6WW\"," +
-                        "\"report\":\"Heard\"," + 
-                        "\"grid_square\":\"DM14\"" +
-                   "}]"
+                "\"name\":\"AO-91\"," +
+                "\"reported_time\":\"2020-08-20T06:30:00Z\"," +
+                "\"callsign\":\"W6WW\"," +
+                "\"report\":\"Heard\"," +
+                "\"grid_square\":\"DM14\"" +
+                "}]"
 
         val httpClientMock = HttpClientMock()
         httpClientMock.onGet().doReturn(json)
@@ -338,7 +355,8 @@ class AmsatApiTest {
     }
 
     @Ignore("Google HTTP client does not implement getContent for Apache")
-    @Test fun `can send report on a satellite`() {
+    @Test
+    fun `can send report on a satellite`() {
         val httpClientMock = HttpClientMock()
         httpClientMock.onPost().doReturn("Success")
 
@@ -351,22 +369,23 @@ class AmsatApiTest {
 
         var url = "https://amsat.org/status/submit.php"
         httpClientMock.verify().post(url)
-        .withFormParameter("SatName", "NO-84")
-        .withFormParameter("SatReport", "Telemetry Only")
-        .withFormParameter("SatYear", "2018")
-        .withFormParameter("SatMonth", "02")
-        .withFormParameter("SatDay", "27")
-        .withFormParameter("SatHour", "2")
-        .withFormParameter("SatPeriod", "1")
-        .withFormParameter("SatCall", "AB1CD")
-        .withFormParameter("SatGridSquare", "CN85")
-        .withFormParameter("SatSubmit", "yes")
-        .withFormParameter("Confirm", "yes")
-        .called()
+            .withFormParameter("SatName", "NO-84")
+            .withFormParameter("SatReport", "Telemetry Only")
+            .withFormParameter("SatYear", "2018")
+            .withFormParameter("SatMonth", "02")
+            .withFormParameter("SatDay", "27")
+            .withFormParameter("SatHour", "2")
+            .withFormParameter("SatPeriod", "1")
+            .withFormParameter("SatCall", "AB1CD")
+            .withFormParameter("SatGridSquare", "CN85")
+            .withFormParameter("SatSubmit", "yes")
+            .withFormParameter("Confirm", "yes")
+            .called()
         // /status/submit.php?SatSubmit=yes&Confirm=yes&SatName=CubeBel-1&SatYear=2020&SatMonth=08&SatDay=23&SatHour=11&SatPeriod=0&SatCall=K7IW&SatReport=Not+Heard&SatGridSquare=CN85nu
     }
 
-    @Test fun `sends correct user agent when requesting details`() {
+    @Test
+    fun `sends correct user agent when requesting details`() {
         val httpClientMock = HttpClientMock()
         httpClientMock.onGet().doReturn("[]")
 
@@ -374,11 +393,13 @@ class AmsatApiTest {
         val api = AmsatApi(transport)
 
         api.getReport("AO-91", 24)
-        httpClientMock.verify().get().withHeader("User-Agent", StringContains("AMSATStatus/1.0")).called()
+        httpClientMock.verify().get().withHeader("User-Agent", StringContains("AMSATStatus/1.0"))
+            .called()
     }
 
     @Ignore("Google HTTP client does not implement getContent for Apache")
-    @Test fun `sends correct user agent on report submission`() {
+    @Test
+    fun `sends correct user agent on report submission`() {
         val httpClientMock = HttpClientMock()
         httpClientMock.onPost().doReturn("Success")
 
@@ -389,10 +410,12 @@ class AmsatApiTest {
         val time = makeReportTimeFromString(timeStr)
         val report = SatReport("NO-84", Report.TELEMETRY_ONLY, time, "AB1CD", "CN85")
         api.sendReport(report)
-        httpClientMock.verify().post().withHeader("User-Agent", StringContains("AMSATStatus/1.0")).called()
+        httpClientMock.verify().post().withHeader("User-Agent", StringContains("AMSATStatus/1.0"))
+            .called()
     }
 
-    @Test fun `get reports group by each time slot`() {
+    @Test
+    fun `get reports group by each time slot`() {
         val json = """[
             {
                 "name": "NO-84_PSK",
@@ -546,7 +569,8 @@ class AmsatApiTest {
         }
     }
 
-    @Test fun `can get demo satellite with default implementation`() {
+    @Test
+    fun `can get demo satellite with default implementation`() {
         val api = AmsatApi()
         val reports = api.getReport("DEMO-1", 24)
         assertEquals(7, reports.size)

@@ -56,9 +56,9 @@ class DashboardFragment : Fragment() {
     private lateinit var mFirebaseAnalytics: FirebaseAnalytics
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View? {
         mFirebaseAnalytics = Firebase.analytics
         val params = Bundle().apply {
@@ -68,7 +68,7 @@ class DashboardFragment : Fragment() {
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, params)
 
         dashboardViewModel =
-                ViewModelProvider(this).get(DashboardViewModel::class.java)
+            ViewModelProvider(this).get(DashboardViewModel::class.java)
 //        val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
         val root = inflater.inflate(R.layout.fragment_dashboard_multi, container, false)
         val listView = root.findViewById<ExpandableListView>(R.id.reports)
@@ -79,7 +79,12 @@ class DashboardFragment : Fragment() {
                 dashboardViewModel.emptySlots()
             }
 
-            override fun onItemSelected(p0: AdapterView<*>?, view: View?, position: Int, _id: Long) {
+            override fun onItemSelected(
+                p0: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                _id: Long,
+            ) {
                 val id = position
                 val satellite_ids =
                     resources.getStringArray(R.array.satellite_ids)
@@ -114,9 +119,10 @@ class DashboardFragment : Fragment() {
         })
 
         val prefs = PreferenceManager(context).sharedPreferences
-        val satHeard = prefs.getString(requireContext().getString(R.string.preference_satellite), "")
+        val satHeard =
+            prefs.getString(requireContext().getString(R.string.preference_satellite), "")
         val idx = requireContext().resources.getStringArray(R.array.satellite_ids).indexOf(satHeard)
-        if(idx >= 0)
+        if (idx >= 0)
             nameView.setSelection(idx)
         else
             nameView.setSelection(0)

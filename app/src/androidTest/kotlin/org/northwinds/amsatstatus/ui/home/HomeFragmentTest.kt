@@ -93,13 +93,13 @@ class HomeFragmentTest {
             hour = time_widget.currentHour
             minute = time_widget.currentMinute
             assertEquals("Year", utc_time.get(Calendar.YEAR), date_widget.year)
-            assertEquals("Month", utc_time.get(Calendar.MONTH)+1, date_widget.month+1)
+            assertEquals("Month", utc_time.get(Calendar.MONTH) + 1, date_widget.month + 1)
             assertEquals("Day", utc_time.get(Calendar.DAY_OF_MONTH), date_widget.dayOfMonth)
             assertEquals("Hour", utc_time.get(Calendar.HOUR_OF_DAY), time_widget.currentHour)
             assertEquals("Minute", utc_time.get(Calendar.MINUTE) / 15, time_widget.currentMinute)
         }
         assertEquals("Year", utc_time.get(Calendar.YEAR), year)
-        assertEquals("Month", utc_time.get(Calendar.MONTH)+1, month+1)
+        assertEquals("Month", utc_time.get(Calendar.MONTH) + 1, month + 1)
         assertEquals("Day", utc_time.get(Calendar.DAY_OF_MONTH), day)
         assertEquals("Hour", utc_time.get(Calendar.HOUR_OF_DAY), hour)
         assertEquals("Minute", utc_time.get(Calendar.MINUTE) / 15, minute)
@@ -121,7 +121,7 @@ class HomeFragmentTest {
             val date_widget = it.view!!.findViewById(R.id.date_fixture) as DatePicker
             val time_widget = it.view!!.findViewById<TimePicker>(R.id.time_fixture)
             assertEquals("Year", local_time.get(Calendar.YEAR), date_widget.year)
-            assertEquals("Month", local_time.get(Calendar.MONTH)+1, date_widget.month+1)
+            assertEquals("Month", local_time.get(Calendar.MONTH) + 1, date_widget.month + 1)
             assertEquals("Day", local_time.get(Calendar.DAY_OF_MONTH), date_widget.dayOfMonth)
             assertEquals("Hour", local_time.get(Calendar.HOUR_OF_DAY), time_widget.currentHour)
             assertEquals("Minute", local_time.get(Calendar.MINUTE) / 15, time_widget.currentMinute)
@@ -171,13 +171,13 @@ class HomeFragmentTest {
             hour = time_widget.currentHour
             minute = time_widget.currentMinute
             assertEquals("Year", utc_time.get(Calendar.YEAR), date_widget.year)
-            assertEquals("Month", utc_time.get(Calendar.MONTH)+1, date_widget.month+1)
+            assertEquals("Month", utc_time.get(Calendar.MONTH) + 1, date_widget.month + 1)
             assertEquals("Day", utc_time.get(Calendar.DAY_OF_MONTH), date_widget.dayOfMonth)
             assertEquals("Hour", utc_time.get(Calendar.HOUR_OF_DAY), time_widget.currentHour)
             assertEquals("Minute", utc_time.get(Calendar.MINUTE) / 15, time_widget.currentMinute)
         }
         assertEquals("Year", utc_time.get(Calendar.YEAR), year)
-        assertEquals("Month", utc_time.get(Calendar.MONTH)+1, month+1)
+        assertEquals("Month", utc_time.get(Calendar.MONTH) + 1, month + 1)
         assertEquals("Day", utc_time.get(Calendar.DAY_OF_MONTH), day)
         assertEquals("Hour", utc_time.get(Calendar.HOUR_OF_DAY), hour)
         assertEquals("Minute", utc_time.get(Calendar.MINUTE) / 15, minute)
@@ -188,11 +188,17 @@ class HomeFragmentTest {
         val frag = launchFragmentInHiltContainer<HomeFragment>()
 
         onView(allOf(
-            isDescendantOfA(withId(R.id.time_fixture))/*, instanceOf<NumberPicker>()*/, `is`(
-                instanceOf(NumberPicker::class.java)), hasDescendant(withContentDescription(containsString("minute"))))).check { view, exception ->
-            if(view == null)
+            isDescendantOfA(withId(R.id.time_fixture))/*, instanceOf<NumberPicker>()*/,
+            `is`(
+                instanceOf(NumberPicker::class.java)),
+            hasDescendant(withContentDescription(containsString("minute"))))).check { view, exception ->
+            if (view == null)
                 throw exception
-            val picker = try { view as NumberPicker } catch(ex: ClassCastException) { return@check }
+            val picker = try {
+                view as NumberPicker
+            } catch (ex: ClassCastException) {
+                return@check
+            }
             assertEquals(0, picker.minValue)
             assertEquals(3, picker.maxValue)
             val choices = picker.displayedValues
@@ -224,7 +230,8 @@ class HomeFragmentTest {
     }
 
     @get:Rule
-    val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION)
+    val permissionRule: GrantPermissionRule =
+        GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION)
 
     @Test
     fun find_my_location() {
@@ -258,7 +265,7 @@ class HomeFragmentMocksTest {
 
     // UTC:   2019-01-01T05:23:45Z
     // Local: 2018-12-31T21:23:45-08:00
-    val ref_time = 1546320225*1000L
+    val ref_time = 1546320225 * 1000L
     val ref_timezone = "America/Los_Angeles"
 
     @BindValue
@@ -277,10 +284,10 @@ class HomeFragmentMocksTest {
             val date_widget = it.view!!.findViewById(R.id.date_fixture) as DatePicker
             val time_widget = it.view!!.findViewById<TimePicker>(R.id.time_fixture)
             // UTC:   2019-01-01T05:23:45Z
-            assertEquals("Bad Year",   2019,    date_widget.year)
-            assertEquals("Bad Month",  1,       date_widget.month+1)
-            assertEquals("Bad Day",    1,       date_widget.dayOfMonth)
-            assertEquals("Bad Hour",   5,       time_widget.currentHour)
+            assertEquals("Bad Year", 2019, date_widget.year)
+            assertEquals("Bad Month", 1, date_widget.month + 1)
+            assertEquals("Bad Day", 1, date_widget.dayOfMonth)
+            assertEquals("Bad Hour", 5, time_widget.currentHour)
             assertEquals("Bad Minute", 23 / 15, time_widget.currentMinute)
         }
 
@@ -301,10 +308,10 @@ class HomeFragmentMocksTest {
             val date_widget = it.view!!.findViewById(R.id.date_fixture) as DatePicker
             val time_widget = it.view!!.findViewById<TimePicker>(R.id.time_fixture)
             // Local: 2018-12-31T21:23:45-08:00
-            assertEquals("Bad Year",   2018,    date_widget.year)
-            assertEquals("Bad Month",  12,      date_widget.month+1)
-            assertEquals("Bad Day",    31,      date_widget.dayOfMonth)
-            assertEquals("Bad Hour",   21,      time_widget.currentHour)
+            assertEquals("Bad Year", 2018, date_widget.year)
+            assertEquals("Bad Month", 12, date_widget.month + 1)
+            assertEquals("Bad Day", 31, date_widget.dayOfMonth)
+            assertEquals("Bad Hour", 21, time_widget.currentHour)
             assertEquals("Bad Minute", 23 / 15, time_widget.currentMinute)
         }
 
@@ -340,11 +347,11 @@ class HomeFragmentMocksTest {
         assertEquals(expectedGridsquare, arg.firstValue.gridSquare)
         assertEquals(Report.CREW_ACTIVE, arg.firstValue.report)
         assertEquals("[B]_AO-7", arg.firstValue.name)
-        val time =  arg.firstValue.time
+        val time = arg.firstValue.time
         // UTC:   2019-01-01T05:23:45Z
         assertEquals("Bad year", 2019, time.year)
-        assertEquals("Bad month", 1, time.month+1)
-        assertEquals("Bad day",1, time.day)
+        assertEquals("Bad month", 1, time.month + 1)
+        assertEquals("Bad day", 1, time.day)
         assertEquals("Bad hour", 5, time.hour)
         assertEquals("Bad minute", 15, time.minute)
         assertEquals("Bad quarter", 1, time.quarter)
@@ -376,11 +383,11 @@ class HomeFragmentMocksTest {
         assertEquals(expectedGridsquare, arg.firstValue.gridSquare)
         assertEquals(Report.TELEMETRY_ONLY, arg.firstValue.report)
         assertEquals("ISS-SSTV", arg.firstValue.name)
-        val time =  arg.firstValue.time
+        val time = arg.firstValue.time
         // UTC:   2019-01-01T05:23:45Z
         assertEquals("Bad year", 2019, time.year)
-        assertEquals("Bad month", 1, time.month+1)
-        assertEquals("Bad day",1, time.day)
+        assertEquals("Bad month", 1, time.month + 1)
+        assertEquals("Bad day", 1, time.day)
         assertEquals("Bad hour", 5, time.hour)
         assertEquals("Bad minute", 15, time.minute)
         assertEquals("Bad quarter", 1, time.quarter)
@@ -413,10 +420,10 @@ class HomeFragmentMocksTest {
         assertEquals(expectedGridsquare, arg.firstValue.gridSquare)
         assertEquals(Report.TELEMETRY_ONLY, arg.firstValue.report)
         assertEquals("ISS-SSTV", arg.firstValue.name)
-        val time =  arg.firstValue.time
+        val time = arg.firstValue.time
         assertEquals("Bad year", 2021, time.year)
-        assertEquals("Bad month", 6, time.month+1)
-        assertEquals("Bad day",17, time.day)
+        assertEquals("Bad month", 6, time.month + 1)
+        assertEquals("Bad day", 17, time.day)
         assertEquals("Bad hour", 18, time.hour)
         assertEquals("Bad minute", 45, time.minute)
         assertEquals("Bad quarter", 3, time.quarter)
@@ -437,7 +444,8 @@ class HomeFragmentMocksTest {
 
         onView(withId(R.id.crewActiveRadio)).perform(scrollTo(), click())
         onView(withId(R.id.satHeard)).perform(scrollTo(), click())
-        onData(allOf(`is`(instanceOf(String::class.java)), `is`("Delfi-C3 (DO-64)"))).perform(click())
+        onData(allOf(`is`(instanceOf(String::class.java)),
+            `is`("Delfi-C3 (DO-64)"))).perform(click())
         onView(withId(R.id.satHeard)).check(matches(withSpinnerText(containsString("Delfi-C3 (DO-64)"))))
         onView(withId(R.id.date_fixture)).perform(PickerActions.setDate(2022, 4, 28))
         onView(withId(R.id.time_fixture)).perform(PickerActions.setTime(23, 2))
@@ -449,10 +457,10 @@ class HomeFragmentMocksTest {
         assertEquals(expectedGridsquare, arg.firstValue.gridSquare)
         assertEquals(Report.CREW_ACTIVE, arg.firstValue.report)
         assertEquals("Delfi-C3", arg.firstValue.name)
-        val time =  arg.firstValue.time
+        val time = arg.firstValue.time
         assertEquals("Bad year", 2022, time.year)
-        assertEquals("Bad month", 4, time.month+1)
-        assertEquals("Bad day",29, time.day)
+        assertEquals("Bad month", 4, time.month + 1)
+        assertEquals("Bad day", 29, time.day)
         assertEquals("Bad hour", 6, time.hour)
         assertEquals("Bad minute", 30, time.minute)
         assertEquals("Bad quarter", 2, time.quarter)
@@ -473,7 +481,8 @@ class HomeFragmentMocksTest {
 
         onView(withId(R.id.notHeardRadio)).perform(scrollTo(), click())
         onView(withId(R.id.satHeard)).perform(scrollTo(), click())
-        onData(allOf(`is`(instanceOf(String::class.java)), `is`("Delfi-C3 (DO-64)"))).perform(click())
+        onData(allOf(`is`(instanceOf(String::class.java)),
+            `is`("Delfi-C3 (DO-64)"))).perform(click())
         onView(withId(R.id.satHeard)).check(matches(withSpinnerText(containsString("Delfi-C3 (DO-64)"))))
         onView(withId(R.id.date_fixture)).perform(PickerActions.setDate(2022, 12, 31))
         onView(withId(R.id.time_fixture)).perform(PickerActions.setTime(20, 1))
@@ -485,10 +494,10 @@ class HomeFragmentMocksTest {
         assertEquals(expectedGridsquare, arg.firstValue.gridSquare)
         assertEquals(Report.NOT_HEARD, arg.firstValue.report)
         assertEquals("Delfi-C3", arg.firstValue.name)
-        val time =  arg.firstValue.time
+        val time = arg.firstValue.time
         assertEquals("Bad year", 2023, time.year)
-        assertEquals("Bad month", 1, time.month+1)
-        assertEquals("Bad day",1, time.day)
+        assertEquals("Bad month", 1, time.month + 1)
+        assertEquals("Bad day", 1, time.day)
         assertEquals("Bad hour", 4, time.hour)
         assertEquals("Bad minute", 15, time.minute)
         assertEquals("Bad quarter", 1, time.quarter)

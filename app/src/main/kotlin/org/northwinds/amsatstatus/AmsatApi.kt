@@ -97,13 +97,13 @@ private const val DEMO_SAT_REPORT = """[
 open class AmsatApi(private val client: HttpTransport) {
     constructor() : this(NetHttpTransport())
 
-    fun getReport(name: String, hours: Int) : List<SatReport> {
+    fun getReport(name: String, hours: Int): List<SatReport> {
         Log.v(TAG, "Requesting report for " + name)
         val uri = GenericUrl(AMSAT_API_URL)
         uri.`set`("name", name)
         uri.`set`("hours", hours)
         Log.d(TAG, "To build")
-        val rawResponse = if(name == "DEMO-1") {
+        val rawResponse = if (name == "DEMO-1") {
             DEMO_SAT_REPORT
         } else {
             val httpGet = client.createRequestFactory().buildGetRequest(uri)
@@ -123,47 +123,47 @@ open class AmsatApi(private val client: HttpTransport) {
         Log.d(TAG, rawResponse)
 
         val list = ArrayList<SatReport>()
-            val jsonList = JSONTokener(rawResponse).nextValue() as JSONArray
+        val jsonList = JSONTokener(rawResponse).nextValue() as JSONArray
 
-            for(idx in 0..jsonList.length()-1) {
-                val entry = jsonList.get(idx) as JSONObject
-                val satName = entry.getString("name")
-                val callsign = entry.getString("callsign")
-                val grid = entry.getString("grid_square")
-                val timeStr = entry.getString("reported_time")
-                val time = makeReportTimeFromString(timeStr)
-                val reportStr = entry.getString("report")
-                var report = reportFromString(reportStr)
-                val reportObj = SatReport(satName, report, time, callsign, grid)
-                list.add(reportObj)
-            }
+        for (idx in 0..jsonList.length() - 1) {
+            val entry = jsonList.get(idx) as JSONObject
+            val satName = entry.getString("name")
+            val callsign = entry.getString("callsign")
+            val grid = entry.getString("grid_square")
+            val timeStr = entry.getString("reported_time")
+            val time = makeReportTimeFromString(timeStr)
+            val reportStr = entry.getString("report")
+            var report = reportFromString(reportStr)
+            val reportObj = SatReport(satName, report, time, callsign, grid)
+            list.add(reportObj)
+        }
 
         return list
     }
 
-    fun getReportsBySlot(name: String, hours: Int) : List<SatReportSlot> {
+    fun getReportsBySlot(name: String, hours: Int): List<SatReportSlot> {
         val groups = ArrayList<SatReportSlot>()
         val all_reports = getReport(name, hours)
-        if(all_reports.size == 0)
+        if (all_reports.size == 0)
             return groups
         var reports = ArrayList<SatReport>()
         var group_report = all_reports[0].report
         var group_time = all_reports[0].time
-        for(report in all_reports) {
-                if(report.time == group_time) {
-                    if(report.report != group_report) {
-                        group_report = Report.CONFLICTED
-                    }
-                } else {
-                    val group = SatReportSlot(name, group_report, group_time, reports)
-                    groups.add(group)
-                    reports = ArrayList<SatReport>()
-                    group_report = report.report
-                    group_time = report.time
+        for (report in all_reports) {
+            if (report.time == group_time) {
+                if (report.report != group_report) {
+                    group_report = Report.CONFLICTED
                 }
-                reports.add(report)
+            } else {
+                val group = SatReportSlot(name, group_report, group_time, reports)
+                groups.add(group)
+                reports = ArrayList<SatReport>()
+                group_report = report.report
+                group_time = report.time
+            }
+            reports.add(report)
         }
-        if(reports.size > 0) {
+        if (reports.size > 0) {
             val group = SatReportSlot(name, group_report, group_time, reports)
             groups.add(group)
         }
@@ -177,7 +177,7 @@ open class AmsatApi(private val client: HttpTransport) {
         params["SatName"] = report.name
         params["SatReport"] = report.report.value
         params["SatYear"] = report.time.year.toString()
-        params["SatMonth"] = (report.time.month+1).toString()
+        params["SatMonth"] = (report.time.month + 1).toString()
         params["SatDay"] = report.time.day.toString()
         params["SatHour"] = report.time.hour.toString()
         params["SatPeriod"] = report.time.quarter.toString()

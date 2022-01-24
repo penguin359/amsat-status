@@ -56,7 +56,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
-    @Inject lateinit var clock: Clock
+    @Inject
+    lateinit var clock: Clock
 
     //private ArrayAdapter<CharSequence>  mSatelliteAdapter;
 
@@ -68,23 +69,28 @@ class HomeFragment : Fragment() {
     lateinit var gridsquare: EditText
     lateinit var timeMode: TextView
 
-    lateinit var prefs : SharedPreferences
+    lateinit var prefs: SharedPreferences
+
     inner class Changer : SharedPreferences.OnSharedPreferenceChangeListener {
         fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
         override fun onSharedPreferenceChanged(prefs: SharedPreferences?, key: String?) {
             if (key!!.equals(context!!.getString(R.string.preference_local_time))) {
-                if(prefs!!.getBoolean(context!!.getString(R.string.preference_local_time), false)) {
+                if (prefs!!.getBoolean(context!!.getString(R.string.preference_local_time),
+                        false)
+                ) {
                     timeMode.setText(R.string.local_time)
                 } else {
                     timeMode.setText(R.string.utc_time)
                 }
             }
-            if(key!! == getString(R.string.preference_callsign)) {
-                callsign.text = prefs!!.getString(getString(R.string.preference_callsign), "")?.toEditable()
+            if (key!! == getString(R.string.preference_callsign)) {
+                callsign.text =
+                    prefs!!.getString(getString(R.string.preference_callsign), "")?.toEditable()
             }
-            if(key!! == getString(R.string.preference_default_grid)) {
-                gridsquare.text = prefs!!.getString(getString(R.string.preference_default_grid), "")?.toEditable()
+            if (key!! == getString(R.string.preference_default_grid)) {
+                gridsquare.text =
+                    prefs!!.getString(getString(R.string.preference_default_grid), "")?.toEditable()
             }
         }
     }
@@ -92,9 +98,9 @@ class HomeFragment : Fragment() {
     val changer = Changer()
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View? {
         mFirebaseAnalytics = Firebase.analytics
         val params = Bundle().apply {
@@ -104,7 +110,7 @@ class HomeFragment : Fragment() {
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, params)
 
         homeViewModel =
-                ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
+            ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
 
         /*
@@ -133,19 +139,22 @@ class HomeFragment : Fragment() {
         var date_picker = root.findViewById(R.id.date_fixture) as DatePicker
         prefs = PreferenceManager(context).sharedPreferences
         timeMode = root.findViewById(R.id.time_mode) as TextView
-        val picker_time = if(prefs.getBoolean(requireContext().getString(R.string.preference_local_time), false)) {
-            timeMode.setText(R.string.local_time)
-            clock.localCalendar
-        } else {
-            timeMode.setText(R.string.utc_time)
-            clock.utcCalendar
-        }
+        val picker_time =
+            if (prefs.getBoolean(requireContext().getString(R.string.preference_local_time),
+                    false)
+            ) {
+                timeMode.setText(R.string.local_time)
+                clock.localCalendar
+            } else {
+                timeMode.setText(R.string.utc_time)
+                clock.utcCalendar
+            }
         prefs.registerOnSharedPreferenceChangeListener(changer)
         date_picker.updateDate(
-                picker_time.get(Calendar.YEAR),
-                picker_time.get(Calendar.MONTH),
-                picker_time.get(Calendar.DAY_OF_MONTH))
-        if(Build.VERSION.SDK_INT < 23) {
+            picker_time.get(Calendar.YEAR),
+            picker_time.get(Calendar.MONTH),
+            picker_time.get(Calendar.DAY_OF_MONTH))
+        if (Build.VERSION.SDK_INT < 23) {
             timePicker.currentHour = picker_time.get(Calendar.HOUR_OF_DAY)
             timePicker.currentMinute = picker_time.get(Calendar.MINUTE) / 15
         } else {
@@ -153,39 +162,54 @@ class HomeFragment : Fragment() {
             timePicker.minute = picker_time.get(Calendar.MINUTE) / 15
         }
         callsign = root.findViewById(R.id.callsign) as EditText
-        callsign?.setText(prefs.getString(requireContext().getString(R.string.preference_callsign), ""))
+        callsign?.setText(prefs.getString(requireContext().getString(R.string.preference_callsign),
+            ""))
         gridsquare = root.findViewById(R.id.gridsquare) as EditText
-        gridsquare?.setText(prefs.getString(requireContext().getString(R.string.preference_default_grid), ""))
+        gridsquare?.setText(prefs.getString(requireContext().getString(R.string.preference_default_grid),
+            ""))
 
         val satelliteSpinner = root.findViewById<Spinner>(R.id.satHeard)
-        val satHeard = prefs.getString(requireContext().getString(R.string.preference_satellite), "")
+        val satHeard =
+            prefs.getString(requireContext().getString(R.string.preference_satellite), "")
         val idx = requireContext().resources.getStringArray(R.array.satellite_ids).indexOf(satHeard)
-        if(idx >= 0)
+        if (idx >= 0)
             satelliteSpinner.setSelection(idx)
 
         val location_btn =
             root.findViewById<View>(R.id.location_button) as ImageButton
         location_btn.setOnClickListener {
-            val service = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            val service =
+                requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
             try {
-                if(!checkPermissionForLocation(requireContext()))
+                if (!checkPermissionForLocation(requireContext()))
                     return@setOnClickListener
                 val location = service.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-                service.requestSingleUpdate(LocationManager.GPS_PROVIDER, object : LocationListener {
-                    override fun onLocationChanged(location: Location) {
+                service.requestSingleUpdate(LocationManager.GPS_PROVIDER,
+                    object : LocationListener {
+                        override fun onLocationChanged(location: Location) {
 //                        gridsquare.setText("" + location.longitude + ":" + location.latitude)
-                        gridsquare.setText(Locator.coord_to_grid(location.latitude, location.longitude).subSequence(0, 6))
-                    }
-                    override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
-                    override fun onProviderEnabled(provider: String) {}
-                    override fun onProviderDisabled(provider: String) {}
-                }, Looper.getMainLooper())
+                            gridsquare.setText(Locator.coord_to_grid(location.latitude,
+                                location.longitude).subSequence(0, 6))
+                        }
+
+                        override fun onStatusChanged(
+                            provider: String,
+                            status: Int,
+                            extras: Bundle,
+                        ) {
+                        }
+
+                        override fun onProviderEnabled(provider: String) {}
+                        override fun onProviderDisabled(provider: String) {}
+                    },
+                    Looper.getMainLooper())
 //                service.getCurrentLocation(LocationManager.NETWORK_PROVIDER, null, requireContext().mainExecutor,
 //                    Consumer { location ->
 //                        gridsquare.setText(location.latitude.toString())
 //                    })
-                if(location != null) {
-                    gridsquare.setText(Locator.coord_to_grid(location.latitude, location.longitude).subSequence(0, 6))
+                if (location != null) {
+                    gridsquare.setText(Locator.coord_to_grid(location.latitude, location.longitude)
+                        .subSequence(0, 6))
                 }
             } catch (ex: SecurityException) {
                 return@setOnClickListener
@@ -224,7 +248,7 @@ class HomeFragment : Fragment() {
                 root.findViewById<View>(R.id.time_fixture) as TimePicker
             var hour: String
             var period: String
-            if(Build.VERSION.SDK_INT < 23) {
+            if (Build.VERSION.SDK_INT < 23) {
                 hour = time_picker.currentHour.toString()
                 period = time_picker.currentMinute.toString()
             } else {
@@ -236,19 +260,31 @@ class HomeFragment : Fragment() {
             val callsign = callsign_w.text
             val grid_w = root.findViewById(R.id.gridsquare) as EditText
             val grid = grid_w.text
-            val calendar = if(prefs.getBoolean(requireContext().getString(R.string.preference_local_time), false)) {
-                Calendar.getInstance()
-            } else {
-                Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-            }
+            val calendar =
+                if (prefs.getBoolean(requireContext().getString(R.string.preference_local_time),
+                        false)
+                ) {
+                    Calendar.getInstance()
+                } else {
+                    Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+                }
             calendar.set(Calendar.YEAR, date_picker.year)
             calendar.set(Calendar.MONTH, date_picker.month)
             calendar.set(Calendar.DAY_OF_MONTH, date_picker.dayOfMonth)
-            calendar.set(Calendar.HOUR_OF_DAY, if(Build.VERSION.SDK_INT < 23) { time_picker.currentHour } else { time_picker.hour })
-            calendar.set(Calendar.MINUTE, if(Build.VERSION.SDK_INT < 23) { time_picker.currentMinute } else { time_picker.minute } * 15)
+            calendar.set(Calendar.HOUR_OF_DAY, if (Build.VERSION.SDK_INT < 23) {
+                time_picker.currentHour
+            } else {
+                time_picker.hour
+            })
+            calendar.set(Calendar.MINUTE, if (Build.VERSION.SDK_INT < 23) {
+                time_picker.currentMinute
+            } else {
+                time_picker.minute
+            } * 15)
             calendar.set(Calendar.SECOND, 0)
             val time = ReportTime(calendar)
-            val satReport = SatReport(satellite_ids[id], reportType, time, callsign.toString(), grid.toString())
+            val satReport =
+                SatReport(satellite_ids[id], reportType, time, callsign.toString(), grid.toString())
             Toast.makeText(
                 requireActivity().applicationContext,
                 "Submit SatName: " + satellite_ids[id] + ", SatReport: " + value + ", Period: " + period + ", SatHour: " + hour + ", SatDay: " + day + ", SatMonth: " + month + ", SatYear: " + year + ", SatCall: " + callsign + ", SatGridSquare: " + grid,
@@ -260,7 +296,7 @@ class HomeFragment : Fragment() {
                 Toast.LENGTH_LONG
             ).show()
             val params = Bundle().apply {
-                val statusId = when(reportType) {
+                val statusId = when (reportType) {
                     Report.NOT_HEARD -> 0L
                     Report.TELEMETRY_ONLY -> 1
                     Report.HEARD -> 2
@@ -268,7 +304,7 @@ class HomeFragment : Fragment() {
                     Report.CONFLICTED -> 4
                 }
                 putLong(FirebaseAnalytics.Param.SCORE, statusId)
-                putLong(FirebaseAnalytics.Param.LEVEL, date_picker.month+1L)
+                putLong(FirebaseAnalytics.Param.LEVEL, date_picker.month + 1L)
                 putString(FirebaseAnalytics.Param.CHARACTER, satellite_ids[id])
                 putString("satellite_report", reportType.value)
             }
@@ -276,7 +312,7 @@ class HomeFragment : Fragment() {
             //thread() {
             //    api.sendreport(satreport)
             //}
-            class R: Runnable {
+            class R : Runnable {
                 public override fun run() {
                     homeViewModel.mApi.sendReport(satReport)
                 }
@@ -339,11 +375,11 @@ class HomeFragment : Fragment() {
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
-        grantResults: IntArray
+        grantResults: IntArray,
     ) {
         if (requestCode == REQUEST_PERMISSION_LOCATION) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(context,"Permission granted",Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Permission granted", Toast.LENGTH_SHORT).show()
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -353,11 +389,13 @@ class HomeFragment : Fragment() {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
             if (context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) ==
-                PackageManager.PERMISSION_GRANTED){
+                PackageManager.PERMISSION_GRANTED
+            ) {
                 true
-            }else{
+            } else {
                 // Show the permission request
-                ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                ActivityCompat.requestPermissions(requireActivity(),
+                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
                     REQUEST_PERMISSION_LOCATION)
                 false
             }

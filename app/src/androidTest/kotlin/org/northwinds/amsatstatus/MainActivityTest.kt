@@ -58,17 +58,21 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.*
 
-class MainActivityTestRule(private val showDialog: Boolean = false, private val callsign: String = "", private val grid: String = "") :
-  ActivityTestRule<MainActivity>(MainActivity::class.java) {
+class MainActivityTestRule(
+    private val showDialog: Boolean = false,
+    private val callsign: String = "",
+    private val grid: String = "",
+) :
+    ActivityTestRule<MainActivity>(MainActivity::class.java) {
     override fun beforeActivityLaunched() {
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         PreferenceManager.getDefaultSharedPreferences(appContext).edit {
             clear()
-            if(!showDialog) {
+            if (!showDialog) {
                 putBoolean(appContext.getString(R.string.preference_asked_for_consent), true)
             }
 //            if(!callsign.?nil) {
-                putString("callsign", callsign)
+            putString("callsign", callsign)
 //            }
             putString("default_grid", grid)
         }
@@ -92,7 +96,7 @@ class MainActivityCustomTest {
             val editView = view as AppCompatEditText
             assertEquals("AB1CDE", editView.text.toString())
         }
-            //.check(containsString("AB1CD"))
+        //.check(containsString("AB1CD"))
 
         val gridsquareEditText = onView(withId(R.id.gridsquare))
         gridsquareEditText.check { view, noViewFoundException ->
@@ -149,7 +153,7 @@ class MainActivityTest {
             allOf(
                 withId(R.id.title), withText("Settings"),
                 childAtPosition(
-                    childAtPosition(withId(R.id.content),0),
+                    childAtPosition(withId(R.id.content), 0),
                     0
                 ),
                 isDisplayed()
@@ -359,7 +363,7 @@ class MainActivityTest {
     }
 
     private fun childAtPosition(
-        parentMatcher: Matcher<View>, position: Int
+        parentMatcher: Matcher<View>, position: Int,
     ): Matcher<View> {
 
         return object : TypeSafeMatcher<View>() {

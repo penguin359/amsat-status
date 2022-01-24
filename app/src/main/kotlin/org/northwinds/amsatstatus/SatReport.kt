@@ -37,9 +37,9 @@ enum class Report(val value: String) {
     CONFLICTED("Conflicted");
 }
 
-fun reportFromString(str: String) : Report {
-    for(item in Report.values()) {
-        if(item.value.equals(str, true)) {
+fun reportFromString(str: String): Report {
+    for (item in Report.values()) {
+        if (item.value.equals(str, true)) {
             return item
         }
     }
@@ -60,16 +60,15 @@ class ReportTime(timestamp: Long) {
     val minute get() = this.time.get(Calendar.MINUTE)
     val quarter get() = this.time.get(Calendar.MINUTE) / 15
 
-    override fun equals(other: Any?): Boolean
-        = (other is ReportTime) && time == other.time
+    override fun equals(other: Any?): Boolean = (other is ReportTime) && time == other.time
 
-    override fun toString() : String {
+    override fun toString(): String {
         //val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
         //println(this.time.get(Calendar.HOUR_OF_DAY))
         //println(this.time.time.hours)
         //return format.format(this.time.time).toString()
         return String.format("%04d-%02d-%02dT%02d:%02d:00Z",
-            this.year, this.month+1, this.day, this.hour, this.minute)
+            this.year, this.month + 1, this.day, this.hour, this.minute)
     }
 }
 
@@ -78,8 +77,8 @@ fun makeReportTimeFromComponents(
     month: Int,
     day: Int,
     hour: Int,
-    quarter: Int
-) : ReportTime {
+    quarter: Int,
+): ReportTime {
     val calendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"))
 
     calendar.set(Calendar.YEAR, year)
@@ -92,7 +91,7 @@ fun makeReportTimeFromComponents(
     return ReportTime(calendar)
 }
 
-fun makeReportTimeFromString(dateStr: String) : ReportTime {
+fun makeReportTimeFromString(dateStr: String): ReportTime {
     val calendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"))
     var s = dateStr.replace("Z", "+00:00")
     try {
@@ -101,7 +100,7 @@ fun makeReportTimeFromString(dateStr: String) : ReportTime {
         throw ParseException("Invalid length", 0)
     }
     val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(s)
-    if(date == null)
+    if (date == null)
         throw FormatException()
     calendar.time = date
 
@@ -113,7 +112,8 @@ data class SatReport(
     val report: Report,
     val time: ReportTime,
     val callsign: String,
-    val gridSquare: String = "")
+    val gridSquare: String = "",
+)
 
 data class SatReportSlot(
     val name: String,

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package org.northwinds.amsatstatus.testing
+
 import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Intent
@@ -35,6 +36,7 @@ import androidx.test.core.app.ApplicationProvider
 import dagger.hilt.android.AndroidEntryPoint
 import org.northwinds.amsatstatus.R
 import java.io.Closeable
+
 /**
  * Launches a Fragment in the Activity's root view container `android.R.id.content`, with
  * given arguments hosted by an empty [FragmentActivity] and waits for it to reach [initialState].
@@ -51,11 +53,12 @@ public inline fun <reified F : Fragment> launchFragmentInHiltContainer(
     fragmentArgs: Bundle? = null,
     @StyleRes themeResId: Int = R.style.FragmentScenarioEmptyFragmentActivityTheme,
     initialState: Lifecycle.State = Lifecycle.State.RESUMED,
-    factory: FragmentFactory? = null
+    factory: FragmentFactory? = null,
 ): HiltFragmentScenario<F> = HiltFragmentScenario.launchInHiltContainer(
     F::class.java, fragmentArgs, themeResId, initialState,
     factory
 )
+
 /**
  * Launches a Fragment in the Activity's root view container `android.R.id.content`, with
  * given arguments hosted by an empty [FragmentActivity] using
@@ -75,19 +78,20 @@ public inline fun <reified F : Fragment> launchFragmentInHiltContainer(
     fragmentArgs: Bundle? = null,
     @StyleRes themeResId: Int = R.style.FragmentScenarioEmptyFragmentActivityTheme,
     initialState: Lifecycle.State = Lifecycle.State.RESUMED,
-    crossinline instantiate: () -> F
+    crossinline instantiate: () -> F,
 ): HiltFragmentScenario<F> = HiltFragmentScenario.launchInHiltContainer(
     F::class.java, fragmentArgs, themeResId, initialState,
     object : FragmentFactory() {
         override fun instantiate(
             classLoader: ClassLoader,
-            className: String
+            className: String,
         ) = when (className) {
             F::class.java.name -> instantiate()
             else -> super.instantiate(classLoader, className)
         }
     }
 )
+
 /**
  * Run [block] using [FragmentScenario.onFragment], returning the result of the [block].
  *
@@ -95,7 +99,7 @@ public inline fun <reified F : Fragment> launchFragmentInHiltContainer(
  */
 @SuppressWarnings("DocumentExceptions")
 public inline fun <reified F : Fragment, T : Any> FragmentScenario<F>.withFragment(
-    crossinline block: F.() -> T
+    crossinline block: F.() -> T,
 ): T {
     lateinit var value: T
     var err: Throwable? = null
@@ -109,6 +113,7 @@ public inline fun <reified F : Fragment, T : Any> FragmentScenario<F>.withFragme
     err?.let { throw it }
     return value
 }
+
 /**
  * FragmentScenario provides API to start and drive a Fragment's lifecycle state for testing. It
  * works with arbitrary fragments and works consistently across different versions of the Android
@@ -129,7 +134,7 @@ public inline fun <reified F : Fragment, T : Any> FragmentScenario<F>.withFragme
 public class HiltFragmentScenario<F : Fragment> private constructor(
     @Suppress("MemberVisibilityCanBePrivate") /* synthetic access */
     internal val fragmentClass: Class<F>,
-    private val activityScenario: ActivityScenario<HiltEmptyFragmentActivity>
+    private val activityScenario: ActivityScenario<HiltEmptyFragmentActivity>,
 ) : Closeable {
     /**
      * An empty activity inheriting FragmentActivity. This Activity is used to host Fragment in
@@ -158,11 +163,13 @@ public class HiltFragmentScenario<F : Fragment> private constructor(
             // default constructor.
             super.onCreate(savedInstanceState)
         }
+
         companion object {
             const val THEME_EXTRAS_BUNDLE_KEY = "androidx.fragment.app.testing.FragmentScenario" +
-                ".EmptyFragmentActivity.THEME_EXTRAS_BUNDLE_KEY"
+                    ".EmptyFragmentActivity.THEME_EXTRAS_BUNDLE_KEY"
         }
     }
+
     /**
      * A view-model to hold a fragment factory.
      *
@@ -175,6 +182,7 @@ public class HiltFragmentScenario<F : Fragment> private constructor(
             super.onCleared()
             fragmentFactory = null
         }
+
         companion object {
             @Suppress("MemberVisibilityCanBePrivate")
             internal val FACTORY: ViewModelProvider.Factory =
@@ -186,12 +194,14 @@ public class HiltFragmentScenario<F : Fragment> private constructor(
                         return viewModel as T
                     }
                 }
+
             fun getInstance(activity: FragmentActivity): FragmentFactoryHolderViewModel {
                 val viewModel: FragmentFactoryHolderViewModel by activity.viewModels { FACTORY }
                 return viewModel
             }
         }
     }
+
     /**
      * Runs a given [action] on the current Activity's main thread.
      *
@@ -215,6 +225,7 @@ public class HiltFragmentScenario<F : Fragment> private constructor(
         }
         return this
     }
+
     /**
      * Finishes the managed fragments and cleans up device's state. This method blocks execution
      * until the host activity becomes [Lifecycle.State.DESTROYED].
@@ -222,8 +233,10 @@ public class HiltFragmentScenario<F : Fragment> private constructor(
     public override fun close() {
         activityScenario.close()
     }
+
     public companion object {
         private const val FRAGMENT_TAG = "FragmentScenario_Fragment_Tag"
+
         /**
          * Launches a Fragment in the Activity's root view container `android.R.id.content`, with
          * given arguments hosted by an empty [FragmentActivity] themed by [themeResId],
@@ -246,7 +259,7 @@ public class HiltFragmentScenario<F : Fragment> private constructor(
             fragmentArgs: Bundle? = null,
             @StyleRes themeResId: Int = R.style.FragmentScenarioEmptyFragmentActivityTheme,
             initialState: Lifecycle.State = Lifecycle.State.RESUMED,
-            factory: FragmentFactory? = null
+            factory: FragmentFactory? = null,
         ): HiltFragmentScenario<F> = internalLaunch(
             fragmentClass,
             fragmentArgs,
@@ -255,6 +268,7 @@ public class HiltFragmentScenario<F : Fragment> private constructor(
             factory,
             android.R.id.content
         )
+
         @SuppressLint("RestrictedApi")
         internal fun <F : Fragment> internalLaunch(
             fragmentClass: Class<F>,
@@ -262,7 +276,7 @@ public class HiltFragmentScenario<F : Fragment> private constructor(
             @StyleRes themeResId: Int,
             initialState: Lifecycle.State,
             factory: FragmentFactory?,
-            @IdRes containerViewId: Int
+            @IdRes containerViewId: Int,
         ): HiltFragmentScenario<F> {
             require(initialState != Lifecycle.State.DESTROYED) {
                 "Cannot set initial Lifecycle state to $initialState for FragmentScenario"

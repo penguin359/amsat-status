@@ -36,7 +36,7 @@ import org.northwinds.amsatstatus.Report
  * [RecyclerView.Adapter] that can display a [SatReport].
  */
 class MyReportRecyclerViewAdapter(
-    private val values: List<SatReport>
+    private val values: List<SatReport>,
 ) : RecyclerView.Adapter<MyReportRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

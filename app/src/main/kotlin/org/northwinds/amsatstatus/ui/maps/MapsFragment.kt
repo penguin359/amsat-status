@@ -76,7 +76,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         dashboardViewModel =
             ViewModelProviders.of(this).get(DashboardViewModel::class.java)
@@ -84,7 +84,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = childFragmentManager
-                ?.findFragmentById(R.id.map) as SupportMapFragment
+            ?.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
         val nameView: Spinner = binding.root.findViewById(R.id.name)
@@ -93,7 +93,12 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 dashboardViewModel.empty()
             }
 
-            override fun onItemSelected(p0: AdapterView<*>?, view: View?, position: Int, _id: Long) {
+            override fun onItemSelected(
+                p0: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                _id: Long,
+            ) {
                 //val spinner = view as Spinner
                 //val id = spinner.selectedItemPosition
                 val id = position
@@ -117,9 +122,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 //        })
 
         val prefs = PreferenceManager(context).sharedPreferences
-        val satHeard = prefs.getString(requireContext().getString(R.string.preference_satellite), "")
+        val satHeard =
+            prefs.getString(requireContext().getString(R.string.preference_satellite), "")
         val idx = requireContext().resources.getStringArray(R.array.satellite_ids).indexOf(satHeard)
-        if(idx >= 0)
+        if (idx >= 0)
             nameView.setSelection(idx)
 
         return binding.root
@@ -156,28 +162,29 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             val bounds = LatLngBounds.builder()
             var count = 0
             mMap.clear()
-            for(item in it) {
+            for (item in it) {
                 try {
-                val pos = Locator.grid_to_coord(item.gridSquare)
-                val hue = when(item.report) {
-                    Report.HEARD -> HUE_CYAN
-                    Report.TELEMETRY_ONLY -> HUE_YELLOW
-                    Report.CREW_ACTIVE -> HUE_VIOLET
-                    Report.NOT_HEARD -> HUE_RED
-                    Report.CONFLICTED -> 0.0f
-                }
+                    val pos = Locator.grid_to_coord(item.gridSquare)
+                    val hue = when (item.report) {
+                        Report.HEARD -> HUE_CYAN
+                        Report.TELEMETRY_ONLY -> HUE_YELLOW
+                        Report.CREW_ACTIVE -> HUE_VIOLET
+                        Report.NOT_HEARD -> HUE_RED
+                        Report.CONFLICTED -> 0.0f
+                    }
                     mMap.addMarker(
                         MarkerOptions().position(LatLng(pos.latitude, pos.longitude))
                             .icon(BitmapDescriptorFactory.defaultMarker(hue)).title(item.callsign)
                     )
                     bounds.include(LatLng(pos.latitude, pos.longitude))
                     count++
-                } catch(ex: RuntimeException) {}
+                } catch (ex: RuntimeException) {
+                }
             }
             //center the map to a specific spot (city)
 //            mMap.
 //            mMap.setCenter(LatLng(0.0, 0.0))
-            if(count < 1)
+            if (count < 1)
                 return@Observer
             val bounded = bounds.build()
             //center the map to the geometric center of all markers
