@@ -1,4 +1,26 @@
 /**********************************************************************************
+ * Copyright (c) 2022 Loren M. Lang                                               *
+ *                                                                                *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy   *
+ * of this software and associated documentation files (the "Software"), to deal  *
+ * in the Software without restriction, including without limitation the rights   *
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell      *
+ * copies of the Software, and to permit persons to whom the Software is          *
+ * furnished to do so, subject to the following conditions:                       *
+ *                                                                                *
+ * The above copyright notice and this permission notice shall be included in all *
+ * copies or substantial portions of the Software.                                *
+ *                                                                                *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR     *
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,       *
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE    *
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER         *
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,  *
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE  *
+ * SOFTWARE.                                                                      *
+ **********************************************************************************/
+
+/**********************************************************************************
  * Copyright (c) 2020 Loren M. Lang                                               *
  *                                                                                *
  * Permission is hereby granted, free of charge, to any person obtaining a copy   *
@@ -96,7 +118,7 @@ open class AmsatApi(private val client: HttpTransport) {
     constructor() : this(NetHttpTransport())
 
     fun getReport(name: String, hours: Int): List<SatReport> {
-        Log.v(TAG, "Requesting report for " + name)
+        Log.v(TAG, "Requesting report for $name")
         val uri = GenericUrl(AMSAT_API_URL)
         uri.`set`("name", name)
         uri.`set`("hours", hours)
@@ -113,7 +135,7 @@ open class AmsatApi(private val client: HttpTransport) {
                 Log.d(TAG, "Have a response")
                 response.parseAsString()
             } catch (ex: Exception) {
-                Log.d(TAG, "Died on ex" + ex)
+                Log.d(TAG, "Died on exception: $ex")
                 "[]"
             }
         }
@@ -123,7 +145,7 @@ open class AmsatApi(private val client: HttpTransport) {
         val list = ArrayList<SatReport>()
         val jsonList = JSONTokener(rawResponse).nextValue() as JSONArray
 
-        for (idx in 0..jsonList.length() - 1) {
+        for (idx in 0 until jsonList.length()) {
             val entry = jsonList.get(idx) as JSONObject
             val satName = entry.getString("name")
             val callsign = entry.getString("callsign")
@@ -141,28 +163,28 @@ open class AmsatApi(private val client: HttpTransport) {
 
     fun getReportsBySlot(name: String, hours: Int): List<SatReportSlot> {
         val groups = ArrayList<SatReportSlot>()
-        val all_reports = getReport(name, hours)
-        if (all_reports.size == 0)
+        val allReports = getReport(name, hours)
+        if (allReports.isEmpty())
             return groups
         var reports = ArrayList<SatReport>()
-        var group_report = all_reports[0].report
-        var group_time = all_reports[0].time
-        for (report in all_reports) {
-            if (report.time == group_time) {
-                if (report.report != group_report) {
-                    group_report = Report.CONFLICTED
+        var groupReport = allReports[0].report
+        var groupTime = allReports[0].time
+        for (report in allReports) {
+            if (report.time == groupTime) {
+                if (report.report != groupReport) {
+                    groupReport = Report.CONFLICTED
                 }
             } else {
-                val group = SatReportSlot(name, group_report, group_time, reports)
+                val group = SatReportSlot(name, groupReport, groupTime, reports)
                 groups.add(group)
-                reports = ArrayList<SatReport>()
-                group_report = report.report
-                group_time = report.time
+                reports = ArrayList()
+                groupReport = report.report
+                groupTime = report.time
             }
             reports.add(report)
         }
         if (reports.size > 0) {
-            val group = SatReportSlot(name, group_report, group_time, reports)
+            val group = SatReportSlot(name, groupReport, groupTime, reports)
             groups.add(group)
         }
         return groups

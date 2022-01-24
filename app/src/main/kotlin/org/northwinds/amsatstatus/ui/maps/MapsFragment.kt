@@ -1,4 +1,26 @@
 /**********************************************************************************
+ * Copyright (c) 2022 Loren M. Lang                                               *
+ *                                                                                *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy   *
+ * of this software and associated documentation files (the "Software"), to deal  *
+ * in the Software without restriction, including without limitation the rights   *
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell      *
+ * copies of the Software, and to permit persons to whom the Software is          *
+ * furnished to do so, subject to the following conditions:                       *
+ *                                                                                *
+ * The above copyright notice and this permission notice shall be included in all *
+ * copies or substantial portions of the Software.                                *
+ *                                                                                *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR     *
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,       *
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE    *
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER         *
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,  *
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE  *
+ * SOFTWARE.                                                                      *
+ **********************************************************************************/
+
+/**********************************************************************************
  * Copyright (c) 2021 Loren M. Lang                                               *
  *                                                                                *
  * Permission is hereby granted, free of charge, to any person obtaining a copy   *
@@ -49,14 +71,13 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: FragmentMapsBinding
-    private val ALICE_SPRINGS = LatLng(-24.6980, 133.8807)
     private lateinit var dashboardViewModel: DashboardViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         dashboardViewModel =
             ViewModelProviders.of(this).get(DashboardViewModel::class.java)
         binding = FragmentMapsBinding.inflate(layoutInflater)
@@ -78,23 +99,13 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 position: Int,
                 _id: Long,
             ) {
-                //val spinner = view as Spinner
-                //val id = spinner.selectedItemPosition
-                val id = position
                 val satellite_ids =
                     resources.getStringArray(R.array.satellite_ids)
-                /*
-                Toast.makeText(
-                    activity!!.applicationContext,
-                    "Sat Item " + position.toString() + " (" + satellite_ids[id] + ")",
-                    Toast.LENGTH_LONG
-                ).show()
-                */
-                dashboardViewModel.update(satellite_ids[id])
+                dashboardViewModel.update(satellite_ids[position])
             }
         }
 //        val reportView: RecyclerView = root.findViewById(R.id.reports)
-//        dashboardViewModel.reports.observe(viewLifecycleOwner, Observer {
+//        dashboardViewModel.reports.observe(viewLifecycleOwner, {
 //            with(reportView) {
 //                adapter = MyReportRecyclerViewAdapter(it)
 //            }
@@ -143,7 +154,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             mMap.clear()
             for (item in it) {
                 try {
-                    val pos = Locator.grid_to_coord(item.gridSquare)
+                    val pos = Locator.gridToCoord(item.gridSquare)
                     val hue = when (item.report) {
                         Report.HEARD -> HUE_CYAN
                         Report.TELEMETRY_ONLY -> HUE_YELLOW
@@ -153,7 +164,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                     }
                     mMap.addMarker(
                         MarkerOptions().position(LatLng(pos.latitude, pos.longitude))
-                            .icon(BitmapDescriptorFactory.defaultMarker(hue)).title(item.callsign)
+                            .icon(defaultMarker(hue)).title(item.callsign)
                     )
                     bounds.include(LatLng(pos.latitude, pos.longitude))
                     count++

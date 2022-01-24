@@ -1,4 +1,26 @@
 /**********************************************************************************
+ * Copyright (c) 2022 Loren M. Lang                                               *
+ *                                                                                *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy   *
+ * of this software and associated documentation files (the "Software"), to deal  *
+ * in the Software without restriction, including without limitation the rights   *
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell      *
+ * copies of the Software, and to permit persons to whom the Software is          *
+ * furnished to do so, subject to the following conditions:                       *
+ *                                                                                *
+ * The above copyright notice and this permission notice shall be included in all *
+ * copies or substantial portions of the Software.                                *
+ *                                                                                *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR     *
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,       *
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE    *
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER         *
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,  *
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE  *
+ * SOFTWARE.                                                                      *
+ **********************************************************************************/
+
+/**********************************************************************************
  * Copyright (c) 2021 Loren M. Lang                                               *
  *                                                                                *
  * Permission is hereby granted, free of charge, to any person obtaining a copy   *
@@ -45,17 +67,18 @@ class AmsatApplication : MultiDexApplication() {
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
-    val listener = SharedPreferences.OnSharedPreferenceChangeListener(function = { prefs, key ->
-        if (pref_enable_analytics.equals(key)) {
-            val analytics = prefs.getBoolean(pref_enable_analytics, false)
-            Log.v(TAG, "Analytics status changed: $analytics")
-            firebaseAnalytics.setAnalyticsCollectionEnabled(analytics)
-        } else if (pref_enable_crash_reports.equals(key)) {
-            val crash_reports = prefs.getBoolean(pref_enable_crash_reports, false)
-            Log.v(TAG, "Crash reports status changed: $crash_reports")
-            FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(crash_reports)
-        }
-    })
+    private val listener =
+        SharedPreferences.OnSharedPreferenceChangeListener(function = { prefs, key ->
+            if (pref_enable_analytics == key) {
+                val analytics = prefs.getBoolean(pref_enable_analytics, false)
+                Log.v(TAG, "Analytics status changed: $analytics")
+                firebaseAnalytics.setAnalyticsCollectionEnabled(analytics)
+            } else if (pref_enable_crash_reports == key) {
+                val crashReports = prefs.getBoolean(pref_enable_crash_reports, false)
+                Log.v(TAG, "Crash reports status changed: $crashReports")
+                FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(crashReports)
+            }
+        })
 
     override fun onCreate() {
         super.onCreate()
@@ -67,11 +90,11 @@ class AmsatApplication : MultiDexApplication() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         prefs.registerOnSharedPreferenceChangeListener(listener)
         val analytics = prefs.getBoolean(pref_enable_analytics, false)
-        val crash_reports = prefs.getBoolean(pref_enable_crash_reports, false)
+        val crashReports = prefs.getBoolean(pref_enable_crash_reports, false)
         Log.v(TAG, "Analytics status initial: $analytics")
-        Log.v(TAG, "Crash reports status initial: $crash_reports")
+        Log.v(TAG, "Crash reports status initial: $crashReports")
         firebaseAnalytics.setAnalyticsCollectionEnabled(analytics)
-        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(crash_reports)
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(crashReports)
 
         val default = SSLContext.getDefault()
         val params = default.defaultSSLParameters

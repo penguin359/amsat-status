@@ -1,4 +1,26 @@
 /**********************************************************************************
+ * Copyright (c) 2022 Loren M. Lang                                               *
+ *                                                                                *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy   *
+ * of this software and associated documentation files (the "Software"), to deal  *
+ * in the Software without restriction, including without limitation the rights   *
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell      *
+ * copies of the Software, and to permit persons to whom the Software is          *
+ * furnished to do so, subject to the following conditions:                       *
+ *                                                                                *
+ * The above copyright notice and this permission notice shall be included in all *
+ * copies or substantial portions of the Software.                                *
+ *                                                                                *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR     *
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,       *
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE    *
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER         *
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,  *
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE  *
+ * SOFTWARE.                                                                      *
+ **********************************************************************************/
+
+/**********************************************************************************
  * Copyright (c) 2020 Loren M. Lang                                               *
  *                                                                                *
  * Permission is hereby granted, free of charge, to any person obtaining a copy   *
@@ -106,11 +128,11 @@ class ClockTest {
     fun testClockGetsCorrectTimesDuringNewYears() {
         // UTC:   2019-01-01T05:23:45Z
         // Local: 2018-12-31T21:23:45-08:00
-        val ref_time = 1546320225 * 1000L
-        val ref_timezone = "America/Los_Angeles"
+        val refTime = 1546320225 * 1000L
+        val refTimezone = "America/Los_Angeles"
 
-        TimeZone.setDefault(TimeZone.getTimeZone(ref_timezone))
-        val clock = MyClock(ref_time)
+        TimeZone.setDefault(TimeZone.getTimeZone(refTimezone))
+        val clock = MyClock(refTime)
         val utc = clock.utcCalendar
         assertEquals(2019, utc.get(Calendar.YEAR), "Bad year")
         assertEquals(1 - 1, utc.get(Calendar.MONTH), "Bad month")

@@ -1,4 +1,26 @@
 /**********************************************************************************
+ * Copyright (c) 2022 Loren M. Lang                                               *
+ *                                                                                *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy   *
+ * of this software and associated documentation files (the "Software"), to deal  *
+ * in the Software without restriction, including without limitation the rights   *
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell      *
+ * copies of the Software, and to permit persons to whom the Software is          *
+ * furnished to do so, subject to the following conditions:                       *
+ *                                                                                *
+ * The above copyright notice and this permission notice shall be included in all *
+ * copies or substantial portions of the Software.                                *
+ *                                                                                *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR     *
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,       *
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE    *
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER         *
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,  *
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE  *
+ * SOFTWARE.                                                                      *
+ **********************************************************************************/
+
+/**********************************************************************************
  * Copyright (c) 2021 Loren M. Lang                                               *
  *                                                                                *
  * Permission is hereby granted, free of charge, to any person obtaining a copy   *
@@ -132,8 +154,8 @@ class AmsatApiTest {
 
         // September 18, 2020 5:24:10 AM (UTC)
         // 2020-09-18T05:24:10Z
-        val test_time = 1600406650 * 1000L
-        val time = ReportTime(test_time)
+        val testTime = 1600406650 * 1000L
+        val time = ReportTime(testTime)
 
         assertEquals(2020, time.year, "Bad Year")
         assertEquals(9, time.month + 1, "Bad Month")
@@ -147,11 +169,11 @@ class AmsatApiTest {
     fun `can create UTC-based ReportTime from local calendar`() {
         // UTC:   2019-01-01T05:23:45Z
         // Local: 2018-12-31T21:23:45-08:00
-        val ref_time = 1546320225 * 1000L
-        val ref_timezone = "America/Los_Angeles"
+        val refTime = 1546320225 * 1000L
+        val refTimezone = "America/Los_Angeles"
 
         // Make sure test is not affected by local time zone
-        val timezone = TimeZone.getTimeZone(ref_timezone)
+        val timezone = TimeZone.getTimeZone(refTimezone)
         TimeZone.setDefault(timezone)
         val cal = Calendar.getInstance(timezone)
         // Local: 2018-12-31T21:23:45-08:00
@@ -232,7 +254,7 @@ class AmsatApiTest {
 
         assertEquals(1, reports.size)
 
-        val entry = reports.get(0)
+        val entry = reports[0]
         assertEquals("AO-91", entry.name)
         assertEquals("W6WW", entry.callsign)
         assertEquals("DM14", entry.gridSquare)
@@ -303,28 +325,28 @@ class AmsatApiTest {
 
         assertEquals(7, reports.size)
 
-        val entry = reports.get(0)
-        assertEquals("AO-91", reports.get(0).name)
-        assertEquals("2020-08-20T06:30:00Z", reports.get(0).time.toString())
-        assertEquals("W6WW", reports.get(0).callsign)
-        assertEquals(Report.HEARD, reports.get(0).report)
-        assertEquals("DM14", reports.get(0).gridSquare)
+        val entry = reports[0]
+        assertEquals("AO-91", reports[0].name)
+        assertEquals("2020-08-20T06:30:00Z", reports[0].time.toString())
+        assertEquals("W6WW", reports[0].callsign)
+        assertEquals(Report.HEARD, reports[0].report)
+        assertEquals("DM14", reports[0].gridSquare)
 
-        assertEquals("CAS-4A", reports.get(1).name)
-        assertEquals("2020-08-20T04:30:00Z", reports.get(1).time.toString())
-        assertEquals("OI33js", reports.get(1).gridSquare)
+        assertEquals("CAS-4A", reports[1].name)
+        assertEquals("2020-08-20T04:30:00Z", reports[1].time.toString())
+        assertEquals("OI33js", reports[1].gridSquare)
 
-        assertEquals(Report.NOT_HEARD, reports.get(3).report)
+        assertEquals(Report.NOT_HEARD, reports[3].report)
 
-        assertEquals("WA5KBH", reports.get(4).callsign)
-        assertEquals(Report.CREW_ACTIVE, reports.get(4).report)
-        assertEquals("EM30", reports.get(4).gridSquare)
+        assertEquals("WA5KBH", reports[4].callsign)
+        assertEquals(Report.CREW_ACTIVE, reports[4].report)
+        assertEquals("EM30", reports[4].gridSquare)
 
-        assertEquals(Report.TELEMETRY_ONLY, reports.get(5).report)
+        assertEquals(Report.TELEMETRY_ONLY, reports[5].report)
 
-        assertEquals("2020-08-19T10:30:00Z", reports.get(6).time.toString())
-        assertEquals("OE/PE4KH", reports.get(6).callsign)
-        assertEquals("JN47", reports.get(6).gridSquare)
+        assertEquals("2020-08-19T10:30:00Z", reports[6].time.toString())
+        assertEquals("OE/PE4KH", reports[6].callsign)
+        assertEquals("JN47", reports[6].gridSquare)
     }
 
     @Test

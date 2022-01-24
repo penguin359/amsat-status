@@ -1,4 +1,26 @@
 /**********************************************************************************
+ * Copyright (c) 2022 Loren M. Lang                                               *
+ *                                                                                *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy   *
+ * of this software and associated documentation files (the "Software"), to deal  *
+ * in the Software without restriction, including without limitation the rights   *
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell      *
+ * copies of the Software, and to permit persons to whom the Software is          *
+ * furnished to do so, subject to the following conditions:                       *
+ *                                                                                *
+ * The above copyright notice and this permission notice shall be included in all *
+ * copies or substantial portions of the Software.                                *
+ *                                                                                *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR     *
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,       *
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE    *
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER         *
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,  *
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE  *
+ * SOFTWARE.                                                                      *
+ **********************************************************************************/
+
+/**********************************************************************************
  * Copyright (c) 2020 Loren M. Lang                                               *
  *                                                                                *
  * Permission is hereby granted, free of charge, to any person obtaining a copy   *
@@ -94,8 +116,6 @@ class DashboardFragmentTest {
         }
     }
 
-    val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-
     @Ignore("Currently, this is replaced by multi-level dashboard view")
     @Test
     fun dashboardShouldShowDemoSatellite() {
@@ -121,7 +141,7 @@ class DashboardFragmentTest {
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
 class DashboardMultiFragmentTest {
-    val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+    private val appContext = InstrumentationRegistry.getInstrumentation().targetContext
 
     @get:Rule
     val hiltRule = HiltAndroidRule(this)
@@ -269,16 +289,16 @@ class DashboardMultiFragmentTest {
     @Test
     fun dashboardShouldShowManyReportsOnLiveSatellite() {
         hiltRule.inject()
-        val live_satellite = "AO-91"
+        val liveSatellite = "AO-91"
         val frag = launchFragmentInHiltContainer<DashboardFragment>()
         onView(withId(R.id.name))
             .check(matches(withSpinnerText(containsString("DEMO"))))
         onView(withId(R.id.name))
             .perform(click())
-        onData(hasToString(live_satellite))
+        onData(hasToString(liveSatellite))
             .perform(click())
         onView(withId(R.id.name))
-            .check(matches(withSpinnerText(containsString(live_satellite))))
+            .check(matches(withSpinnerText(containsString(liveSatellite))))
 
         onView(withId(R.id.reports))
             .check { view, noViewFoundException ->
