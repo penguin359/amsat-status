@@ -49,7 +49,7 @@ import java.io.Closeable
  * [Lifecycle.State.CREATED], [Lifecycle.State.STARTED], or [Lifecycle.State.RESUMED].
  * @param factory a fragment factory to use or null to use default factory
  */
-public inline fun <reified F : Fragment> launchFragmentInHiltContainer(
+inline fun <reified F : Fragment> launchFragmentInHiltContainer(
     fragmentArgs: Bundle? = null,
     @StyleRes themeResId: Int = R.style.FragmentScenarioEmptyFragmentActivityTheme,
     initialState: Lifecycle.State = Lifecycle.State.RESUMED,
@@ -74,7 +74,7 @@ public inline fun <reified F : Fragment> launchFragmentInHiltContainer(
  * simplification of the [FragmentFactory] interface for cases where only a single class
  * needs a custom constructor called.
  */
-public inline fun <reified F : Fragment> launchFragmentInHiltContainer(
+inline fun <reified F : Fragment> launchFragmentInHiltContainer(
     fragmentArgs: Bundle? = null,
     @StyleRes themeResId: Int = R.style.FragmentScenarioEmptyFragmentActivityTheme,
     initialState: Lifecycle.State = Lifecycle.State.RESUMED,
@@ -98,7 +98,7 @@ public inline fun <reified F : Fragment> launchFragmentInHiltContainer(
  * If any exceptions are raised while running [block], they are rethrown.
  */
 @SuppressWarnings("DocumentExceptions")
-public inline fun <reified F : Fragment, T : Any> FragmentScenario<F>.withFragment(
+inline fun <reified F : Fragment, T : Any> FragmentScenario<F>.withFragment(
     crossinline block: F.() -> T,
 ): T {
     lateinit var value: T
@@ -131,7 +131,7 @@ public inline fun <reified F : Fragment, T : Any> FragmentScenario<F>.withFragme
  *
  * @see ActivityScenario a scenario API for Activity
  */
-public class HiltFragmentScenario<F : Fragment> private constructor(
+class HiltFragmentScenario<F : Fragment> private constructor(
     @Suppress("MemberVisibilityCanBePrivate") /* synthetic access */
     internal val fragmentClass: Class<F>,
     private val activityScenario: ActivityScenario<HiltEmptyFragmentActivity>,
@@ -213,7 +213,7 @@ public class HiltFragmentScenario<F : Fragment> private constructor(
      *
      * This method cannot be called from the main thread.
      */
-    public fun onFragment(action: FragmentScenario.FragmentAction<F>): HiltFragmentScenario<F> {
+    fun onFragment(action: FragmentScenario.FragmentAction<F>): HiltFragmentScenario<F> {
         activityScenario.onActivity { activity ->
             val fragment = requireNotNull(
                 activity.supportFragmentManager.findFragmentByTag(FRAGMENT_TAG)
@@ -230,11 +230,11 @@ public class HiltFragmentScenario<F : Fragment> private constructor(
      * Finishes the managed fragments and cleans up device's state. This method blocks execution
      * until the host activity becomes [Lifecycle.State.DESTROYED].
      */
-    public override fun close() {
+    override fun close() {
         activityScenario.close()
     }
 
-    public companion object {
+    companion object {
         private const val FRAGMENT_TAG = "FragmentScenario_Fragment_Tag"
 
         /**
@@ -254,7 +254,7 @@ public class HiltFragmentScenario<F : Fragment> private constructor(
          */
         @JvmOverloads
         @JvmStatic
-        public fun <F : Fragment> launchInHiltContainer(
+        fun <F : Fragment> launchInHiltContainer(
             fragmentClass: Class<F>,
             fragmentArgs: Bundle? = null,
             @StyleRes themeResId: Int = R.style.FragmentScenarioEmptyFragmentActivityTheme,

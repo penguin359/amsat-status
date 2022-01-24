@@ -115,7 +115,7 @@ class DashboardFragment : Fragment() {
             }
         })
 
-        val prefs = PreferenceManager(context).sharedPreferences
+        val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
         val satHeard =
             prefs.getString(requireContext().getString(R.string.preference_satellite), "")
         val idx = requireContext().resources.getStringArray(R.array.satellite_ids).indexOf(satHeard)

@@ -26,8 +26,8 @@ import java.util.*
 import javax.inject.Inject
 
 interface Clock {
-    val utcCalendar: Calendar get
-    val localCalendar: Calendar get
+    val utcCalendar: Calendar
+    val localCalendar: Calendar
 }
 
 class MyClock(val timestamp: Long) : Clock {

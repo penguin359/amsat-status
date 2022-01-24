@@ -97,7 +97,7 @@
                 android:id="@+id/time_mode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="UTC" />
+                android:text="@string/utc" />
 
             <TimePicker
                 android:id="@+id/time_fixture"
@@ -129,6 +129,7 @@
                 android:id="@+id/location_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/find_my_grid_square"
                 android:src="@android:drawable/ic_menu_mylocation" />
 
             <Button

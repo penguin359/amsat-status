@@ -63,7 +63,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = childFragmentManager
-            ?.findFragmentById(R.id.map) as SupportMapFragment
+            .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
         val nameView: Spinner = binding.root.findViewById(R.id.name)
@@ -100,7 +100,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 //            }
 //        })
 
-        val prefs = PreferenceManager(context).sharedPreferences
+        val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
         val satHeard =
             prefs.getString(requireContext().getString(R.string.preference_satellite), "")
         val idx = requireContext().resources.getStringArray(R.array.satellite_ids).indexOf(satHeard)

@@ -85,11 +85,11 @@ class HomeFragment : Fragment() {
                     timeMode.setText(R.string.utc_time)
                 }
             }
-            if (key!! == getString(R.string.preference_callsign)) {
+            if (key == getString(R.string.preference_callsign)) {
                 callsign.text =
                     prefs!!.getString(getString(R.string.preference_callsign), "")?.toEditable()
             }
-            if (key!! == getString(R.string.preference_default_grid)) {
+            if (key == getString(R.string.preference_default_grid)) {
                 gridsquare.text =
                     prefs!!.getString(getString(R.string.preference_default_grid), "")?.toEditable()
             }
@@ -138,7 +138,7 @@ class HomeFragment : Fragment() {
         timePicker.setIs24HourView(true)
 
         var date_picker = root.findViewById(R.id.date_fixture) as DatePicker
-        prefs = PreferenceManager(context).sharedPreferences
+        prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
         timeMode = root.findViewById(R.id.time_mode) as TextView
         val picker_time =
             if (prefs.getBoolean(requireContext().getString(R.string.preference_local_time),
@@ -163,10 +163,10 @@ class HomeFragment : Fragment() {
             timePicker.minute = picker_time.get(Calendar.MINUTE) / 15
         }
         callsign = root.findViewById(R.id.callsign) as EditText
-        callsign?.setText(prefs.getString(requireContext().getString(R.string.preference_callsign),
+        callsign.setText(prefs.getString(requireContext().getString(R.string.preference_callsign),
             ""))
         gridsquare = root.findViewById(R.id.gridsquare) as EditText
-        gridsquare?.setText(prefs.getString(requireContext().getString(R.string.preference_default_grid),
+        gridsquare.setText(prefs.getString(requireContext().getString(R.string.preference_default_grid),
             ""))
 
         val satelliteSpinner = root.findViewById<Spinner>(R.id.satHeard)
@@ -314,7 +314,7 @@ class HomeFragment : Fragment() {
             //    api.sendreport(satreport)
             //}
             class R : Runnable {
-                public override fun run() {
+                override fun run() {
                     homeViewModel.mApi.sendReport(satReport)
                 }
             }

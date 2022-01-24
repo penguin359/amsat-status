@@ -53,8 +53,8 @@ class AppTest {
         val httpclient = HttpClients.createDefault() //as CloseableHttpClient
         val httpGet = HttpGet("http://www.google.com/")
         httpclient.execute(httpGet).use {
-            println(it.getStatusLine())
-            val entity1 = it.getEntity()
+            println(it.statusLine)
+            val entity1 = it.entity
             // do something useful with the response body
             // and ensure it is fully consumed
             EntityUtils.consume(entity1)
@@ -66,9 +66,9 @@ class AppTest {
         val httpclient = HttpClients.createDefault()
         val httpGet = HttpGet("https://amsat.org/status/api/v1/sat_info.php?name=AO-91&hours=24")
         httpclient.execute(httpGet).use { response1 ->
-            println(response1.getStatusLine())
-            val entity1 = response1.getEntity()
-            val body = BufferedInputStream(entity1.getContent())
+            println(response1.statusLine)
+            val entity1 = response1.entity
+            val body = BufferedInputStream(entity1.content)
             val textBuilder = StringBuilder()
             BufferedReader(InputStreamReader
                 (body, Charset.forName(StandardCharsets.UTF_8.name()))).use { reader ->
@@ -146,8 +146,8 @@ class AppTest {
 
         val httpGet = HttpGet(url)
         httpClientMock.execute(httpGet).use { response1 ->
-            val entity1 = response1.getEntity()
-            val body = BufferedInputStream(entity1.getContent())
+            val entity1 = response1.entity
+            val body = BufferedInputStream(entity1.content)
             val textBuilder = StringBuilder()
             BufferedReader(InputStreamReader
                 (body, Charset.forName("UTF-8"))).use { reader ->
@@ -217,7 +217,7 @@ class AppTest {
         val transport = ApacheHttpTransport(httpclient)
         val request: HttpRequest = transport.createRequestFactory().buildGetRequest(
             GenericUrl("http://www.google.com/")
-        );
+        )
         val rawResponse = request.execute().parseAsString()
         println(rawResponse)
     }

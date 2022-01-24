@@ -39,4 +39,7 @@
     <string name="preference_asked_for_consent">asked_for_consent</string>
     <string name="preference_enable_analytics">enable_analytics</string>
     <string name="preference_enable_crash_reports">enable_crash_reports</string>
+    <string name="find_my_grid_square">Find my grid square</string>
+    <string name="utc">UTC</string>
+    <string name="settings">Settings</string>
 </resources>

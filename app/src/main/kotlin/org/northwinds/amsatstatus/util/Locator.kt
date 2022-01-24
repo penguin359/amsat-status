@@ -22,6 +22,8 @@
 
 package org.northwinds.amsatstatus.util
 
+import java.util.*
+
 data class Position(val latitude: Double, val longitude: Double)
 
 class Locator {
@@ -61,7 +63,7 @@ class Locator {
         }
 
         fun grid_to_coord(grid2: String, corner: String = ""): Position {
-            val grid = grid2.trim().toLowerCase()
+            val grid = grid2.trim().lowercase(Locale.getDefault())
             if (!setOf(2, 4, 6, 8, 10).contains(grid.length))
                 throw RuntimeException("Not a grid square")
             val field_lon = (grid[0] - 'a').toInt()

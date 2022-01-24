@@ -25,8 +25,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/reports"
         android:name="org.northwinds.amsatstatus.ui.dashboard.DashboardFragment"
         android:layout_width="match_parent"

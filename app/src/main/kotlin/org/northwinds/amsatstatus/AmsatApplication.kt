@@ -37,7 +37,7 @@ import javax.net.ssl.SSLContext
 @HiltAndroidApp
 class AmsatApplication : MultiDexApplication() {
     companion object {
-        private const val TAG = "AmsatStatus-AmsatApplication"
+        private const val TAG = "AmsatStatus-AmsatApp"
     }
 
     private lateinit var pref_enable_analytics: String
@@ -74,16 +74,16 @@ class AmsatApplication : MultiDexApplication() {
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(crash_reports)
 
         val default = SSLContext.getDefault()
-        val params = default.getDefaultSSLParameters()
-        Log.d(TAG, "Default Protocol: ${default.getProtocol()}")
-        Log.d(TAG, "Default Protocols: ${params.getProtocols().joinToString()}")
-        Log.d(TAG, "Default Ciphers: ${params.getCipherSuites().joinToString()}")
+        val params = default.defaultSSLParameters
+        Log.d(TAG, "Default Protocol: ${default.protocol}")
+        Log.d(TAG, "Default Protocols: ${params.protocols.joinToString()}")
+        Log.d(TAG, "Default Ciphers: ${params.cipherSuites.joinToString()}")
         val context = SSLContext.getInstance("TLSv1.2")
         context.init(null, null, null)
-        val params2 = context.getDefaultSSLParameters()
-        Log.d(TAG, "TLSv1.2 Protocol: ${context.getProtocol()}")
-        Log.d(TAG, "TLSv1.2 Protocols: ${params2.getProtocols().joinToString()}")
-        Log.d(TAG, "TLSv1.2 Ciphers: ${params2.getCipherSuites().joinToString()}")
+        val params2 = context.defaultSSLParameters
+        Log.d(TAG, "TLSv1.2 Protocol: ${context.protocol}")
+        Log.d(TAG, "TLSv1.2 Protocols: ${params2.protocols.joinToString()}")
+        Log.d(TAG, "TLSv1.2 Ciphers: ${params2.cipherSuites.joinToString()}")
         HttpsURLConnection.setDefaultSSLSocketFactory(context.socketFactory)
     }
 }
