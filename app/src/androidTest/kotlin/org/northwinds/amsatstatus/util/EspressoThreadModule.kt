@@ -22,18 +22,18 @@
 
 package org.northwinds.amsatstatus.util
 
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.android.components.ActivityRetainedComponent
-import dagger.hilt.android.scopes.ActivityRetainedScoped
-import dagger.hilt.testing.TestInstallIn
-
 import androidx.test.espresso.idling.concurrent.IdlingThreadPoolExecutor
 import dagger.Binds
+import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.components.SingletonComponent
-import java.lang.RuntimeException
-import java.util.concurrent.*
+import dagger.hilt.testing.TestInstallIn
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import java.util.concurrent.LinkedBlockingQueue
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Singleton
 

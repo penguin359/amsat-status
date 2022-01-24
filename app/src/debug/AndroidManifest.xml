@@ -5,10 +5,10 @@
     <application>
         <activity
             android:name=".testing.HiltFragmentScenario$HiltEmptyFragmentActivity"
-            android:theme="@style/FragmentScenarioEmptyFragmentActivityTheme"
-            android:taskAffinity=""
+            android:exported="false"
             android:multiprocess="true"
-            android:exported="false">
+            android:taskAffinity=""
+            android:theme="@style/FragmentScenarioEmptyFragmentActivityTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>

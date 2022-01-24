@@ -22,15 +22,14 @@
 
 package org.northwinds.amsatstatus.ui.dashboard.adapters
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-
-import org.northwinds.amsatstatus.SatReport
+import androidx.recyclerview.widget.RecyclerView
 import org.northwinds.amsatstatus.R
 import org.northwinds.amsatstatus.Report
+import org.northwinds.amsatstatus.SatReport
 
 /**
  * [RecyclerView.Adapter] that can display a [SatReport].

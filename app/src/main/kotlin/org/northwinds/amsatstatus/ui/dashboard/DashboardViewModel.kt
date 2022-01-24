@@ -22,14 +22,14 @@
 
 package org.northwinds.amsatstatus.ui.dashboard
 
-import java.util.concurrent.Executors
-
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import org.northwinds.amsatstatus.*
+import org.northwinds.amsatstatus.AmsatApi
+import org.northwinds.amsatstatus.SatReport
+import org.northwinds.amsatstatus.SatReportSlot
 import java.util.concurrent.ExecutorService
 import javax.inject.Inject
 

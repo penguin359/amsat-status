@@ -26,7 +26,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
-import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors

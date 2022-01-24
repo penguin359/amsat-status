@@ -25,43 +25,26 @@
  */
 package amsat
 
-import kotlin.test.Test
-import kotlin.test.assertNotNull
-import kotlin.test.assertEquals
-
-import java.text.SimpleDateFormat
-import java.text.ParseException
-import java.util.TimeZone
-import java.util.Calendar
-import java.util.GregorianCalendar
-import java.util.Date
-//import java.io.Reader
-import java.io.BufferedReader
-import java.io.InputStreamReader
-//import java.io.InputStream
-import java.io.BufferedInputStream
-import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets
-
-import org.json.JSONTokener
-import org.json.JSONObject
-import org.json.JSONArray
-
-//import org.junit.Test
-//import static org.junit.Assert.*
-
-//import org.apache.http.HttpEntity
-import org.apache.http.client.methods.HttpGet
-//import org.apache.http.client.methods.CloseableHttpResponse
-import org.apache.http.impl.client.CloseableHttpClient
-import org.apache.http.impl.client.HttpClients
-import org.apache.http.util.EntityUtils
-
-import com.google.api.client.http.apache.v2.ApacheHttpTransport
-
 import com.github.paweladamski.httpclientmock.HttpClientMock
 import com.google.api.client.http.GenericUrl
 import com.google.api.client.http.HttpRequest
+import com.google.api.client.http.apache.v2.ApacheHttpTransport
+import org.apache.http.client.methods.HttpGet
+import org.apache.http.impl.client.HttpClients
+import org.apache.http.util.EntityUtils
+import org.json.JSONArray
+import org.json.JSONObject
+import org.json.JSONTokener
+import java.io.BufferedInputStream
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 
 class AppTest {

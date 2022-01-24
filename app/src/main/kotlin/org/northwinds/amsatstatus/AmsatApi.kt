@@ -23,7 +23,6 @@
 package org.northwinds.amsatstatus
 
 import android.util.Log
-
 import com.google.api.client.http.GenericUrl
 import com.google.api.client.http.HttpTransport
 import com.google.api.client.http.UrlEncodedContent
@@ -35,7 +34,6 @@ import dagger.hilt.components.SingletonComponent
 import org.json.JSONArray
 import org.json.JSONObject
 import org.json.JSONTokener
-import javax.inject.Inject
 
 const val TAG = "AmsatStatus-AmsatApi"
 

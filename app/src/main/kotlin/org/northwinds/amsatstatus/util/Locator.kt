@@ -22,8 +22,6 @@
 
 package org.northwinds.amsatstatus.util
 
-import java.lang.RuntimeException
-
 data class Position(val latitude: Double, val longitude: Double)
 
 class Locator {

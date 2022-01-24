@@ -30,9 +30,6 @@ import android.content.res.Resources
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import java.util.Calendar
-import java.util.TimeZone
-
 import android.os.Build
 import android.os.Bundle
 import android.os.Looper
@@ -52,7 +49,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.northwinds.amsatstatus.*
 import org.northwinds.amsatstatus.util.Clock
 import org.northwinds.amsatstatus.util.Locator
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
+import kotlin.collections.indexOf
+import kotlin.collections.toTypedArray
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {

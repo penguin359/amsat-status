@@ -22,7 +22,6 @@
 
 package org.northwinds.amsatstatus
 
-import org.hamcrest.MatcherAssert.assertThat
 import kotlin.test.*
 
 class SatReportTest {

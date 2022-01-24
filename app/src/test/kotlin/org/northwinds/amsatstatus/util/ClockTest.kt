@@ -22,11 +22,9 @@
 
 package org.northwinds.amsatstatus.util
 
-import kotlin.test.*
-
-import java.util.Calendar
-import java.util.GregorianCalendar
-import java.util.TimeZone
+import java.util.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class ClockTest {
     @Test
@@ -52,7 +50,7 @@ class ClockTest {
     @Test
     fun testClockGetsCorrectUtcTime() {
         val expected = GregorianCalendar(TimeZone.getTimeZone("UTC"))
-        val clock = Clock()
+        val clock = MyClock()
         val actual = clock.utcCalendar
 
         assertEquals(expected.get(Calendar.YEAR), actual.get(Calendar.YEAR))
@@ -66,7 +64,7 @@ class ClockTest {
     @Test
     fun testClockGetsCorrectLocalTime() {
         val expected = GregorianCalendar()
-        val clock = Clock()
+        val clock = MyClock()
         val actual = clock.localCalendar
 
         assertEquals(expected.get(Calendar.YEAR), actual.get(Calendar.YEAR))
@@ -79,7 +77,7 @@ class ClockTest {
 
     @Test
     fun testClockGetsCorrectFixedUtcTime() {
-        val clock = Clock(1587610245L * 1000)
+        val clock = MyClock(1587610245L * 1000)
         val actual = clock.utcCalendar
 
         assertEquals(2020, actual.get(Calendar.YEAR))
@@ -93,7 +91,7 @@ class ClockTest {
     @Test
     fun testClockGetsCorrectFixedLocalTime() {
         TimeZone.setDefault(TimeZone.getTimeZone("GMT-09"))
-        val clock = Clock(1587610245L * 1000)
+        val clock = MyClock(1587610245L * 1000)
         val actual = clock.localCalendar
 
         assertEquals(2020, actual.get(Calendar.YEAR), "Bad year")
@@ -112,7 +110,7 @@ class ClockTest {
         val ref_timezone = "America/Los_Angeles"
 
         TimeZone.setDefault(TimeZone.getTimeZone(ref_timezone))
-        val clock = Clock(ref_time)
+        val clock = MyClock(ref_time)
         val utc = clock.utcCalendar
         assertEquals(2019, utc.get(Calendar.YEAR), "Bad year")
         assertEquals(1 - 1, utc.get(Calendar.MONTH), "Bad month")

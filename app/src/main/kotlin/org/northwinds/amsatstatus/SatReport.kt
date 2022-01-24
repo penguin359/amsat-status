@@ -23,11 +23,9 @@
 package org.northwinds.amsatstatus
 
 import android.nfc.FormatException
-import java.text.SimpleDateFormat
 import java.text.ParseException
-import java.util.Calendar
-import java.util.TimeZone
-import java.util.GregorianCalendar
+import java.text.SimpleDateFormat
+import java.util.*
 
 enum class Report(val value: String) {
     HEARD("Heard"),

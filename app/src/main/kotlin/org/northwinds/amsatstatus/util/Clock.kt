@@ -22,12 +22,7 @@
 
 package org.northwinds.amsatstatus.util
 
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import java.util.Calendar
-import java.util.TimeZone
+import java.util.*
 import javax.inject.Inject
 
 interface Clock {

@@ -22,17 +22,13 @@
 
 package org.northwinds.amsatstatus
 
-import java.util.Calendar
-import java.util.TimeZone
-
+import com.github.paweladamski.httpclientmock.HttpClientMock
+import com.google.api.client.http.apache.v2.ApacheHttpTransport
+import org.hamcrest.core.StringContains
+import java.util.*
 import kotlin.test.Ignore
 import kotlin.test.Test
-import kotlin.test.assertNotNull
 import kotlin.test.assertEquals
-import org.hamcrest.core.StringContains
-
-import com.google.api.client.http.apache.v2.ApacheHttpTransport
-import com.github.paweladamski.httpclientmock.HttpClientMock
 
 class AmsatApiTest {
     @Test

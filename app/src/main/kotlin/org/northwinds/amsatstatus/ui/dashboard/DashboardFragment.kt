@@ -23,26 +23,23 @@
 package org.northwinds.amsatstatus.ui.dashboard
 
 import android.os.Bundle
-import android.util.ArrayMap
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ExpandableListView
+import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import org.northwinds.amsatstatus.R
 import org.northwinds.amsatstatus.ui.dashboard.adapters.MultiDashboardViewAdapter
-
-import org.northwinds.amsatstatus.ui.dashboard.adapters.MyReportRecyclerViewAdapter
 
 private const val TAG = "AmsatStatus-Dashboard"
 

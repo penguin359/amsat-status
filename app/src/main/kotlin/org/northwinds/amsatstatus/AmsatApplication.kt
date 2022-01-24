@@ -22,20 +22,17 @@
 
 package org.northwinds.amsatstatus
 
-import javax.net.ssl.SSLContext
-import javax.net.ssl.HttpsURLConnection
-
-//import android.app.Application
 import android.content.SharedPreferences
 import android.util.Log
-import androidx.preference.PreferenceManager
 import androidx.multidex.MultiDexApplication
-
+import androidx.preference.PreferenceManager
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.HiltAndroidApp
+import javax.net.ssl.HttpsURLConnection
+import javax.net.ssl.SSLContext
 
 @HiltAndroidApp
 class AmsatApplication : MultiDexApplication() {

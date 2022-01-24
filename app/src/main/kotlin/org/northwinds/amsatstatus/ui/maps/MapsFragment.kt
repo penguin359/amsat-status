@@ -26,44 +26,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.Spinner
 import androidx.fragment.app.Fragment
-
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.preference.PreferenceManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-
-import org.northwinds.amsatstatus.databinding.FragmentMapsBinding
-import org.northwinds.amsatstatus.R
-import android.graphics.Color
-
-import androidx.core.graphics.drawable.DrawableCompat
-
-import android.graphics.Bitmap
-import android.graphics.Canvas
-
-import androidx.core.content.res.ResourcesCompat
-
-import android.graphics.drawable.Drawable
-import android.widget.AdapterView
-import android.widget.Spinner
-
-import androidx.annotation.ColorInt
-
-import androidx.annotation.DrawableRes
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.preference.PreferenceManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.model.*
-
 import com.google.android.gms.maps.model.BitmapDescriptorFactory.*
+import org.northwinds.amsatstatus.R
 import org.northwinds.amsatstatus.Report
+import org.northwinds.amsatstatus.databinding.FragmentMapsBinding
 import org.northwinds.amsatstatus.ui.dashboard.DashboardViewModel
-import org.northwinds.amsatstatus.ui.dashboard.adapters.MyReportRecyclerViewAdapter
 import org.northwinds.amsatstatus.util.Locator
-import org.northwinds.amsatstatus.util.Position
-import java.lang.RuntimeException
 
 
 class MapsFragment : Fragment(), OnMapReadyCallback {

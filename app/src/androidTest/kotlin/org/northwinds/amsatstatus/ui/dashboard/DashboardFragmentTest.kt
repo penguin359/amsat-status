@@ -27,11 +27,9 @@ import android.util.Log
 import android.view.View
 import android.widget.ExpandableListView
 import androidx.recyclerview.widget.RecyclerView
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingPolicies
-import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
@@ -39,9 +37,7 @@ import androidx.test.espresso.idling.concurrent.IdlingThreadPoolExecutor
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.internal.util.Checks
 import androidx.test.platform.app.InstrumentationRegistry
-import dagger.hilt.EntryPoints
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.BaseMatcher
@@ -55,8 +51,6 @@ import org.junit.runner.RunWith
 import org.northwinds.amsatstatus.R
 import org.northwinds.amsatstatus.testing.launchFragmentInHiltContainer
 import org.northwinds.amsatstatus.ui.dashboard.adapters.MyReportRecyclerViewAdapter
-import org.northwinds.amsatstatus.util.EspressoThreadModule
-import java.util.concurrent.ExecutorService
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
