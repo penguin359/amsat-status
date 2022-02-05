@@ -182,6 +182,8 @@ dependencies {
     kaptAndroidTest "com.google.dagger:hilt-compiler:2.40.5"
     //testImplementation "com.google.dagger:hilt-android-testing:2.40.5"
     //kaptTest "com.google.dagger:hilt-compiler:2.40.5"
+
+    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 }
 
 /**********************************************************************************

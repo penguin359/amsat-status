@@ -28,7 +28,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.NoActivityResumedException
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
@@ -36,6 +35,8 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Description
@@ -56,19 +57,15 @@ class SettingsSimpleTest {
     val hiltRule = HiltAndroidRule(this)
 
     @get:Rule
-    var mActivityTestRule = ActivityScenarioRule<SettingsActivity>(SettingsActivity::class.java)
+    var mActivityScenarioRule = ActivityScenarioRule(SettingsActivity::class.java)
 
-    @Test(expected = NoActivityResumedException::class)
-//    @Test
+    @Test
     fun settingsBackButtonExitTest() {
-//        try {
-        pressBack()
-//        } catch(ex: NoActivityResumedException) {
-//        }
-//        assertEquals(Lifecycle.State.DESTROYED, mActivityTestRule.scenario.state)
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        device.pressBack()
+        assertEquals(Lifecycle.State.DESTROYED, mActivityScenarioRule.scenario.state)
     }
 
-    //    @Test(expected = NoActivityResumedException::class)
     @Test
     fun settingsActionBarExitTest() {
         val appCompatImageButton = onView(
@@ -87,9 +84,10 @@ class SettingsSimpleTest {
                 isDisplayed()
             )
         )
+        Thread.sleep(300)
         appCompatImageButton.perform(click())
-        Thread.sleep(3400)
-        assertEquals(Lifecycle.State.DESTROYED, mActivityTestRule.scenario.state)
+        Thread.sleep(300)
+        assertEquals(Lifecycle.State.DESTROYED, mActivityScenarioRule.scenario.state)
     }
 
     private fun childAtPosition(

@@ -249,8 +249,6 @@ class MainActivityTest {
             )
         )
         appCompatButton2.perform(scrollTo(), click())
-//        Thread.sleep(300)
-//        pressBack()
 //        pressBack()
         val appCompatImageButton = onView(
             allOf(
