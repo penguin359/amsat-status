@@ -65,8 +65,10 @@ import org.northwinds.amsatstatus.Report
 import org.northwinds.amsatstatus.databinding.FragmentMapsBinding
 import org.northwinds.amsatstatus.ui.dashboard.DashboardViewModel
 import org.northwinds.amsatstatus.util.Locator
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
