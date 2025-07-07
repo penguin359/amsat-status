@@ -272,10 +272,10 @@ class DashboardMultiFragmentTest {
             .check(matches(withSpinnerText(containsString("DEMO"))))
         onView(withId(R.id.name))
             .perform(click())
-        onData(hasToString("MAYA-1"))
+        onData(hasToString("NO-45"))
             .perform(click())
         onView(withId(R.id.name))
-            .check(matches(withSpinnerText(containsString("MAYA-1"))))
+            .check(matches(withSpinnerText(containsString("NO-45"))))
 
         onView(withId(R.id.reports))
             .check { view, noViewFoundException ->
@@ -336,10 +336,10 @@ class DashboardMultiFragmentTest {
 
         onView(withId(R.id.name))
             .perform(click())
-        onData(hasToString("MAYA-1"))
+        onData(hasToString("NO-45"))
             .perform(click())
         onView(withId(R.id.name))
-            .check(matches(withSpinnerText(containsString("MAYA-1"))))
+            .check(matches(withSpinnerText(containsString("NO-45"))))
         onView(withId(R.id.reports))
             .check { view, noViewFoundException ->
                 if (view == null)

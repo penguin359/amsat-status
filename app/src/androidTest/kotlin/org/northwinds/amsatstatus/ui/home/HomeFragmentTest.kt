@@ -49,6 +49,7 @@ import org.hamcrest.Matchers.*
 import org.hamcrest.core.StringContains
 import org.junit.Assert.assertEquals
 import org.junit.Before
+//import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -346,7 +347,7 @@ class HomeFragmentMocksTest {
         assertEquals(expectedCallsign, arg.firstValue.callsign)
         assertEquals(expectedGridsquare, arg.firstValue.gridSquare)
         assertEquals(Report.CREW_ACTIVE, arg.firstValue.report)
-        assertEquals("[B]_AO-7", arg.firstValue.name)
+        assertEquals("AO-7[B]", arg.firstValue.name)
         val time = arg.firstValue.time
         // UTC:   2019-01-01T05:23:45Z
         assertEquals("Bad year", 2019, time.year)
@@ -444,9 +445,8 @@ class HomeFragmentMocksTest {
 
         onView(withId(R.id.crewActiveRadio)).perform(scrollTo(), click())
         onView(withId(R.id.satHeard)).perform(scrollTo(), click())
-        onData(allOf(`is`(instanceOf(String::class.java)),
-            `is`("Delfi-C3 (DO-64)"))).perform(click())
-        onView(withId(R.id.satHeard)).check(matches(withSpinnerText(containsString("Delfi-C3 (DO-64)"))))
+        onData(allOf(`is`(instanceOf(String::class.java)), `is`("AO-7 Mode A"))).perform(click())
+        onView(withId(R.id.satHeard)).check(matches(withSpinnerText(containsString("AO-7 Mode A"))))
         onView(withId(R.id.date_fixture)).perform(PickerActions.setDate(2022, 4, 28))
         onView(withId(R.id.time_fixture)).perform(PickerActions.setTime(23, 2))
         onView(withId(R.id.submit_button)).perform(scrollTo(), click())
@@ -456,7 +456,7 @@ class HomeFragmentMocksTest {
         assertEquals(expectedCallsign, arg.firstValue.callsign)
         assertEquals(expectedGridsquare, arg.firstValue.gridSquare)
         assertEquals(Report.CREW_ACTIVE, arg.firstValue.report)
-        assertEquals("Delfi-C3", arg.firstValue.name)
+        assertEquals("AO-7[A]", arg.firstValue.name)
         val time = arg.firstValue.time
         assertEquals("Bad year", 2022, time.year)
         assertEquals("Bad month", 4, time.month + 1)
@@ -481,9 +481,8 @@ class HomeFragmentMocksTest {
 
         onView(withId(R.id.notHeardRadio)).perform(scrollTo(), click())
         onView(withId(R.id.satHeard)).perform(scrollTo(), click())
-        onData(allOf(`is`(instanceOf(String::class.java)),
-            `is`("Delfi-C3 (DO-64)"))).perform(click())
-        onView(withId(R.id.satHeard)).check(matches(withSpinnerText(containsString("Delfi-C3 (DO-64)"))))
+        onData(allOf(`is`(instanceOf(String::class.java)), `is`("AO-7 Mode A"))).perform(click())
+        onView(withId(R.id.satHeard)).check(matches(withSpinnerText(containsString("AO-7 Mode A"))))
         onView(withId(R.id.date_fixture)).perform(PickerActions.setDate(2022, 12, 31))
         onView(withId(R.id.time_fixture)).perform(PickerActions.setTime(20, 1))
         onView(withId(R.id.submit_button)).perform(scrollTo(), click())
@@ -493,7 +492,7 @@ class HomeFragmentMocksTest {
         assertEquals(expectedCallsign, arg.firstValue.callsign)
         assertEquals(expectedGridsquare, arg.firstValue.gridSquare)
         assertEquals(Report.NOT_HEARD, arg.firstValue.report)
-        assertEquals("Delfi-C3", arg.firstValue.name)
+        assertEquals("AO-7[A]", arg.firstValue.name)
         val time = arg.firstValue.time
         assertEquals("Bad year", 2023, time.year)
         assertEquals("Bad month", 1, time.month + 1)
